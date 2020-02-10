@@ -4,7 +4,7 @@ import Home from '../screens/Rider/Home';
 
 const AppNavigation = createStackNavigator(
   {
-    Home: { screen: Home }
+    Home: { screen: Home, navigationOptions: { headerShown: false} },
   },
   {
     initialRouteName: 'Home'
