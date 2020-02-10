@@ -24,7 +24,7 @@ export default class DriverSignup extends Component {
       headerLeft: () => (
         <NavigationHeaderButtons>
           <Item
-            key="go-back"
+            title="Go Back"
             buttonWrapperStyle={{
               marginLeft: 12,
               marginTop: 10
@@ -90,7 +90,7 @@ export default class DriverSignup extends Component {
     const { passwordVisibility, passwordIcon } = this.state;
     return (
       <Container enabled behavior="padding">
-        <ScrollView>
+        <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
           <StyledHeadline>Become a Driver</StyledHeadline>
           <SubHeadline>Sign up to start your application process</SubHeadline>
           <Form

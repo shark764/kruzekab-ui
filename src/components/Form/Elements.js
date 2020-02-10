@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { View, KeyboardAvoidingView, Text } from 'react-native';
+import { View, KeyboardAvoidingView, Text, TouchableOpacity } from 'react-native';
 import HideWithKeyboard from 'react-native-hide-with-keyboard';
 
 export const Container = styled(KeyboardAvoidingView)`
@@ -42,6 +42,26 @@ export const ButtonContainer = styled(View)`
   margin-right: 25px;
   margin-bottom: 25px;
   margin-left: 25px;
+`;
+
+export const BottomContainer = styled(View)`
+  position: absolute;
+  bottom: 25px;
+  align-self: center;
+`;
+
+export const HelpButton = styled(TouchableOpacity)`
+  flex-direction: row;
+  align-items: center;
+  align-self: center;
+`;
+
+export const HelpButtonText = styled(Text)`
+  color: #5280e2;
+  font-family: Open Sans;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 15px;
 `;
 
 export const Label = styled(Text)`

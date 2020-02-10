@@ -31,7 +31,7 @@ export default class Home extends Component {
       headerLeft: () => (
         <NavigationHeaderButtons>
           <Item
-            key="go-back"
+            title="Go Back"
             buttonWrapperStyle={{
               marginLeft: 12,
               marginTop: 10

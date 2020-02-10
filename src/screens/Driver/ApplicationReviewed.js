@@ -69,7 +69,7 @@ export default class ApplicationReviewed extends Component {
 
     return (
       <Container enabled behavior="padding">
-        <ScrollView>
+        <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
           <StyledHeadline>Your application is being reviewed!</StyledHeadline>
           <StyledSubHeadline>We'll email you when you've been approved.</StyledSubHeadline>
 

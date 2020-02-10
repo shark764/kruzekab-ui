@@ -19,7 +19,7 @@ export default class VehicleRegister extends Component {
       headerLeft: () => (
         <NavigationHeaderButtons>
           <Item
-            key="go-back"
+            title="Go Back"
             buttonWrapperStyle={{
               marginLeft: 12,
               marginTop: 10
@@ -87,7 +87,7 @@ export default class VehicleRegister extends Component {
 
     return (
       <Container enabled behavior="padding">
-        <ScrollView>
+        <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
           <Headline>Vehicle Information</Headline>
 
           <Form

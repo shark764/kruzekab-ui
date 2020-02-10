@@ -1,9 +1,27 @@
 import React, { Component } from 'react';
-import { Button } from 'react-native-elements';
-import { Container, SubHeadline, Headline } from '../../../components/Form/Elements';
+import { ScrollView, TouchableOpacity } from 'react-native';
+import styled from 'styled-components';
+import {
+  Container,
+  SubHeadline,
+  Headline,
+  BottomContainer,
+  HelpButton,
+  HelpButtonText
+} from '../../../components/Form/Elements';
 import Form from './form';
 import { validationSchema } from './validation';
 import { NavigationHeaderButtons, Item } from '../../../components/Header/HeaderButton';
+
+const StyledHeadline = styled(Headline)`
+  margin-bottom: 0;
+`;
+const StyledSubHeadline = styled(SubHeadline)`
+  margin-bottom: 45px;
+`;
+const BolderHelpButtonText = styled(HelpButtonText)`
+  font-weight: bold;
+`;
 
 export default class Login extends Component {
   state = {
@@ -17,6 +35,7 @@ export default class Login extends Component {
       headerLeft: () => (
         <NavigationHeaderButtons>
           <Item
+            title="Go Back"
             buttonWrapperStyle={{
               marginLeft: 12,
               marginTop: 10
@@ -73,44 +92,41 @@ export default class Login extends Component {
     const { passwordVisibility, passwordIcon } = this.state;
     return (
       <Container>
-        <Headline>Welcome</Headline>
-        <SubHeadline>Login to your Account</SubHeadline>
-        <Form
-          handleOnSubmit={this.handleOnLogin}
-          initialValues={{
-            name: '',
-            lastName: '',
-            phoneNumber: '',
-            password: '',
-            email: '',
-            userType: '',
-            occupation: '',
-            maxSeats: '',
-            vehicleYear: '',
-            licenseNumber: '',
-            birthdate: '',
-            profilePicture: '',
-            licensePicture: '',
-            gender: ''
-          }}
-          validationSchema={validationSchema}
-          handlePasswordVisibility={this.handlePasswordVisibility}
-          passwordVisibility={passwordVisibility}
-          passwordIcon={passwordIcon}
-          goToSignup={this.goToSignup}
-          goToForgotPassword={this.goToForgotPassword}
-        />
-        <Button
-          title="Don't have an account? Sign Up"
-          onPress={this.goToSignup}
-          titleStyle={{
-            color: '#5280e2'
-          }}
-          type="clear"
-        />
-        {/* <TouchableOpacity onPress={this.goToSignup}>
-          <Text> Touch Here </Text>
-        </TouchableOpacity> */}
+        <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+          <StyledHeadline>Welcome</StyledHeadline>
+          <StyledSubHeadline>Login to your Account</StyledSubHeadline>
+          <Form
+            handleOnSubmit={this.handleOnLogin}
+            initialValues={{
+              name: '',
+              lastName: '',
+              phoneNumber: '',
+              password: '',
+              email: '',
+              userType: '',
+              occupation: '',
+              maxSeats: '',
+              vehicleYear: '',
+              licenseNumber: '',
+              birthdate: '',
+              profilePicture: '',
+              licensePicture: '',
+              gender: ''
+            }}
+            validationSchema={validationSchema}
+            handlePasswordVisibility={this.handlePasswordVisibility}
+            passwordVisibility={passwordVisibility}
+            passwordIcon={passwordIcon}
+            goToSignup={this.goToSignup}
+            goToForgotPassword={this.goToForgotPassword}
+          />
+          <BottomContainer>
+            <HelpButton onPress={this.goToSignup}>
+              <HelpButtonText>Don't have an account? </HelpButtonText>
+              <BolderHelpButtonText>Sign Up</BolderHelpButtonText>
+            </HelpButton>
+          </BottomContainer>
+        </ScrollView>
       </Container>
     );
   }

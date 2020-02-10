@@ -98,7 +98,7 @@ export default class VehicleRegister extends Component {
 
     return (
       <Container enabled behavior="padding">
-        <ScrollView>
+        <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
           <Headline>Vehicle Information</Headline>
 
           <Formik

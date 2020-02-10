@@ -65,7 +65,7 @@ export default class Signup extends Component {
     const { passwordVisibility, confirmPasswordVisibility, passwordIcon, confirmPasswordIcon } = this.state;
     return (
       <KeyboardAvoidingView style={styles.container} enabled behavior="padding">
-        <ScrollView>
+        <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
           <Formik
             initialValues={{
               name: '',

@@ -1,18 +1,28 @@
 import React, { Component } from 'react';
-import { ScrollView } from 'react-native';
+import { ScrollView, View } from 'react-native';
 import styled from 'styled-components';
 import { Button, Icon } from 'react-native-elements';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Form from './form';
 import { validationSchema } from './validation';
-import { Headline, SubHeadline, Container } from '../../../components/Form/Elements';
+import {
+  Headline,
+  SubHeadline,
+  Container,
+  BottomContainer,
+  HelpButton,
+  HelpButtonText
+} from '../../../components/Form/Elements';
 import { NavigationHeaderButtons, Item } from '../../../components/Header/HeaderButton';
 
 const StyledHeadline = styled(Headline)`
   margin-bottom: 0;
 `;
 const StyledSubHeadline = styled(SubHeadline)`
-  margin-bottom: 50px;
+  margin-bottom: 30px;
+`;
+const BolderHelpButtonText = styled(HelpButtonText)`
+  font-weight: bold;
 `;
 
 export default class Signup extends Component {
@@ -27,7 +37,7 @@ export default class Signup extends Component {
       headerLeft: () => (
         <NavigationHeaderButtons>
           <Item
-            key="go-back"
+            title="Go Back"
             buttonWrapperStyle={{
               marginLeft: 12,
               marginTop: 10
@@ -88,7 +98,7 @@ export default class Signup extends Component {
     const { passwordVisibility, passwordIcon } = this.state;
     return (
       <Container enabled behavior="padding">
-        <ScrollView>
+        <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
           <StyledHeadline>Sign Up</StyledHeadline>
           <StyledSubHeadline>You will receive a SMS verification code</StyledSubHeadline>
           <Form
@@ -115,14 +125,13 @@ export default class Signup extends Component {
             passwordIcon={passwordIcon}
             goToLogin={this.goToLogin}
           />
-          <Button
-            title="Already have an account? Login"
-            onPress={this.goToLogin}
-            titleStyle={{
-              color: '#5280e2'
-            }}
-            type="clear"
-          />
+
+          <BottomContainer>
+            <HelpButton onPress={this.goToLogin}>
+              <HelpButtonText>Already have an account? </HelpButtonText>
+              <BolderHelpButtonText>Log in</BolderHelpButtonText>
+            </HelpButton>
+          </BottomContainer>
         </ScrollView>
       </Container>
     );

@@ -4,7 +4,14 @@ import { Button, Icon } from 'react-native-elements';
 import styled from 'styled-components';
 import FormButton from '../components/Form/FormButton';
 import WelcomeLogo from '../components/Logo/WelcomeLogo';
-import { Headline, SubHeadline, ButtonContainer, Container, LogoContainer } from '../components/Form/Elements';
+import {
+  Headline,
+  SubHeadline,
+  ButtonContainer,
+  Container,
+  LogoContainer,
+  BottomContainer
+} from '../components/Form/Elements';
 
 const StyledHeadline = styled(Headline)`
   text-align: center;
@@ -23,9 +30,6 @@ const StyledSubHeadline = styled(SubHeadline)`
 const StyledButtonContainer = styled(ButtonContainer)`
   margin-top: 10px;
   margin-bottom: 5px;
-`;
-const BecomeDriver = styled(View)`
-  margin-top: 25px;
 `;
 
 export default class Initial extends Component {
@@ -53,7 +57,7 @@ export default class Initial extends Component {
         <StyledButtonContainer>
           <FormButton onPress={this.goToSignup} title="Sign Up" textColor="white" />
         </StyledButtonContainer>
-        <BecomeDriver>
+        <BottomContainer>
           <Button
             icon={<Icon name="drive-eta" size={25} color="#5280e2" />}
             title=" I want to become a Driver"
@@ -64,7 +68,7 @@ export default class Initial extends Component {
             }}
             type="clear"
           />
-        </BecomeDriver>
+        </BottomContainer>
       </Container>
     );
   }

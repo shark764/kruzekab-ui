@@ -1,11 +1,11 @@
 import React, { Fragment } from 'react';
-import { TouchableOpacity } from 'react-native';
+import { TouchableOpacity, Text } from 'react-native';
 import { Formik } from 'formik';
 import { Button, Icon } from 'react-native-elements';
 import styled from 'styled-components';
 import FormInput from '../../../components/Form/Fields/FormInput';
 import { FormattedError } from '../../../components/Form/ErrorMessage';
-import { ButtonContainer } from '../../../components/Form/Elements';
+import { ButtonContainer, HelpButton, HelpButtonText } from '../../../components/Form/Elements';
 
 const StyledButtonContainer = styled(ButtonContainer)`
   margin-right: 15px;
@@ -65,14 +65,9 @@ const Form = ({
           errors={errors}
         />
 
-        <Button
-          title="Forgot Password?"
-          onPress={goToForgotPassword}
-          titleStyle={{
-            color: '#5280e2'
-          }}
-          type="clear"
-        />
+        <HelpButton onPress={goToForgotPassword}>
+          <HelpButtonText>Forgot Password?</HelpButtonText>
+        </HelpButton>
 
         <StyledButtonContainer>
           <Icon

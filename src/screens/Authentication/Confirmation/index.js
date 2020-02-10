@@ -9,7 +9,7 @@ import { Container } from '../../../components/Form/Elements';
 import { NavigationHeaderButtons, Item } from '../../../components/Header/HeaderButton';
 
 const HeadlineContainer = styled(View)`
-  margin-top: 150px;
+  margin-top: 120px;
   margin-right: 0;
   margin-bottom: 0;
   margin-left: 0;
@@ -18,7 +18,7 @@ const Headline = styled(Text)`
   text-align: center;
   font-weight: normal;
   font-size: 16px;
-  color: #a8b4cd;
+  color: #6b768d;
   letter-spacing: 0.2px;
 `;
 
@@ -39,7 +39,7 @@ export default class Confirmation extends Component {
       headerLeft: () => (
         <NavigationHeaderButtons>
           <Item
-            key="go-back"
+            title="Go Back"
             buttonWrapperStyle={{
               marginLeft: 12,
               marginTop: 10

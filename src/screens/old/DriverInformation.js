@@ -110,7 +110,7 @@ export default class DriverInformation extends Component {
 
     return (
       <Container enabled behavior="padding">
-        <ScrollView>
+        <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
           <Headline>Driver Information</Headline>
 
           <Formik
