@@ -1,13 +1,43 @@
 import React, { Component } from 'react';
 import { ScrollView } from 'react-native';
 import ImagePicker from 'react-native-image-picker';
+import { Button, Icon } from 'react-native-elements';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import Form from './form';
 import { validationSchema } from './validation';
 import { Container, Headline } from '../../../components/Form/Elements';
+import { NavigationHeaderButtons, Item } from '../../../components/Header/HeaderButton';
 
 export default class VehicleRegister extends Component {
   state = {
     photo: null
+  };
+
+  static navigationOptions = ({ navigation, navigation: { state } }) => {
+    return {
+      headerTitle: () => null,
+      headerLeft: () => (
+        <NavigationHeaderButtons>
+          <Item
+            key="go-back"
+            buttonWrapperStyle={{
+              marginLeft: 12,
+              marginTop: 10
+            }}
+            useIconComponent={Ionicons}
+            iconName="md-arrow-back"
+            onPress={() => navigation.navigate('ProfilePhoto', { userType: 'driver' })}
+          />
+        </NavigationHeaderButtons>
+      ),
+      headerStyle: {
+        backgroundColor: '#fff',
+        elevation: 0,
+        shadowOpacity: 0,
+        borderBottomWidth: 0,
+        shadowColor: 'transparent'
+      }
+    };
   };
 
   goToLogin = () => this.props.navigation.navigate('Login', { userType: null });

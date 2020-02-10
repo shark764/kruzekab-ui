@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import { ScrollView } from 'react-native';
 import styled from 'styled-components';
+import { Button, Icon } from 'react-native-elements';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import Form from './form';
 import { validationSchema } from './validation';
 import { Headline, SubHeadline, Container } from '../../../components/Form/Elements';
-import { Button } from 'react-native-elements';
+import { NavigationHeaderButtons, Item } from '../../../components/Header/HeaderButton';
 
 const StyledHeadline = styled(Headline)`
   margin-bottom: 0;
@@ -17,6 +19,33 @@ export default class Signup extends Component {
   state = {
     passwordVisibility: true,
     passwordIcon: 'ios-eye'
+  };
+
+  static navigationOptions = ({ navigation, navigation: { state } }) => {
+    return {
+      headerTitle: () => null,
+      headerLeft: () => (
+        <NavigationHeaderButtons>
+          <Item
+            key="go-back"
+            buttonWrapperStyle={{
+              marginLeft: 12,
+              marginTop: 10
+            }}
+            useIconComponent={Ionicons}
+            iconName="md-arrow-back"
+            onPress={() => navigation.navigate('Initial', { userType: 'rider' })}
+          />
+        </NavigationHeaderButtons>
+      ),
+      headerStyle: {
+        backgroundColor: '#fff',
+        elevation: 0,
+        shadowOpacity: 0,
+        borderBottomWidth: 0,
+        shadowColor: 'transparent'
+      }
+    };
   };
 
   goToLogin = () => this.props.navigation.navigate('Login', { userType: 'rider' });

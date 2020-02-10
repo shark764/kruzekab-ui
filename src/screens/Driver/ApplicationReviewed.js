@@ -22,6 +22,20 @@ const StyledLogoContainer = styled(LogoContainer)`
 export default class ApplicationReviewed extends Component {
   state = {};
 
+  static navigationOptions = ({}) => {
+    return {
+      headerTitle: () => null,
+      headerLeft: () => null,
+      headerStyle: {
+        backgroundColor: '#fff',
+        elevation: 0,
+        shadowOpacity: 0,
+        borderBottomWidth: 0,
+        shadowColor: 'transparent'
+      }
+    };
+  };
+
   goToLogin = () => this.props.navigation.navigate('Login', { userType: null });
 
   goToConfirmation = () => this.props.navigation.navigate('Confirm', { userType: null });

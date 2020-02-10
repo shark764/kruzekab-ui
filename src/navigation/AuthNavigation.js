@@ -23,8 +23,8 @@ const AuthNavigation = createStackNavigator(
     Confirm: { screen: Confirmation }
   },
   {
-    initialRouteName: 'Login',
-    headerMode: 'none'
+    initialRouteName: 'Login'
+    // headerMode: 'none'
   }
 );
 

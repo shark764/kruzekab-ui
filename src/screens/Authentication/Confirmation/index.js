@@ -1,9 +1,12 @@
 import React, { Component, createRef } from 'react';
 import { View, Text, Alert } from 'react-native';
 import styled from 'styled-components';
+import { Button, Icon } from 'react-native-elements';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import Form from './form';
 import { validationSchema } from './validation';
 import { Container } from '../../../components/Form/Elements';
+import { NavigationHeaderButtons, Item } from '../../../components/Header/HeaderButton';
 
 const HeadlineContainer = styled(View)`
   margin-top: 150px;
@@ -29,6 +32,33 @@ export default class Confirmation extends Component {
       isFulfilled: false
     };
   }
+
+  static navigationOptions = ({ navigation, navigation: { state } }) => {
+    return {
+      headerTitle: () => null,
+      headerLeft: () => (
+        <NavigationHeaderButtons>
+          <Item
+            key="go-back"
+            buttonWrapperStyle={{
+              marginLeft: 12,
+              marginTop: 10
+            }}
+            useIconComponent={Ionicons}
+            iconName="md-arrow-back"
+            onPress={() => navigation.navigate('Signup')}
+          />
+        </NavigationHeaderButtons>
+      ),
+      headerStyle: {
+        backgroundColor: '#fff',
+        elevation: 0,
+        shadowOpacity: 0,
+        borderBottomWidth: 0,
+        shadowColor: 'transparent'
+      }
+    };
+  };
 
   handlerOnFulfill = code => {
     // TODO: call API to check code here

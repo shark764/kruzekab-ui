@@ -10,7 +10,7 @@ export const Container = styled(KeyboardAvoidingView)`
 export const Headline = styled(Text)`
   font-weight: bold;
   font-size: 30px;
-  margin-top: 50px;
+  margin-top: 15px;
   margin-right: 0;
   margin-bottom: 25px;
   margin-left: 25px;

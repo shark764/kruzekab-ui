@@ -1,18 +1,39 @@
 import React, { Component } from 'react';
-import styled from 'styled-components';
+import { Button } from 'react-native-elements';
 import { Container, SubHeadline, Headline } from '../../../components/Form/Elements';
 import Form from './form';
 import { validationSchema } from './validation';
-import { Button } from 'react-native-elements';
-
-const StyledHeadline = styled(Headline)`
-  margin-bottom: 0;
-`;
+import { NavigationHeaderButtons, Item } from '../../../components/Header/HeaderButton';
 
 export default class Login extends Component {
   state = {
     passwordVisibility: true,
     passwordIcon: 'ios-eye'
+  };
+
+  static navigationOptions = ({ navigation, navigation: { state } }) => {
+    return {
+      headerTitle: () => null,
+      headerLeft: () => (
+        <NavigationHeaderButtons>
+          <Item
+            buttonWrapperStyle={{
+              marginLeft: 12,
+              marginTop: 10
+            }}
+            iconName="md-arrow-back"
+            onPress={() => navigation.navigate('Initial', { userType: null })}
+          />
+        </NavigationHeaderButtons>
+      ),
+      headerStyle: {
+        backgroundColor: '#fff',
+        elevation: 0,
+        shadowOpacity: 0,
+        borderBottomWidth: 0,
+        shadowColor: 'transparent'
+      }
+    };
   };
 
   goToSignup = () => this.props.navigation.navigate('Signup', { userType: null });
