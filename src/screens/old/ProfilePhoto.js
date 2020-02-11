@@ -167,7 +167,7 @@ export default class ProfilePhoto extends Component {
                     reverse
                     name="md-person"
                     type="ionicon"
-                    color="#DDE5F7"
+                    color="#dde5f7"
                     reverseColor="#5280e2"
                     size={70}
                     onPress={this.handleChoosePhoto}

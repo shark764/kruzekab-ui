@@ -74,7 +74,8 @@ export default class Login extends Component {
       //   this.props.navigation.navigate('App', { userType: null });
       // }
       setTimeout(() => {
-        this.props.navigation.navigate('App', { userType: null });
+        // this.props.navigation.navigate('App', { userType: null });
+        this.props.navigation.navigate('Rider', { userType: null });
         // this.props.navigation.navigate('Signup', { userType: null });
       }, 1500);
     } catch (error) {

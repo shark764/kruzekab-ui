@@ -74,7 +74,7 @@ const Form = ({ handleOnSubmit, initialValues, validationSchema, handleChoosePho
             color: '#5280e2'
           }}
           type="clear"
-          icon={<Icon reverse raised name="add-a-photo" size={15} color="#DDE5F7" reverseColor="#5280e2" />}
+          icon={<Icon reverse raised name="add-a-photo" size={15} color="#dde5f7" reverseColor="#5280e2" />}
         />
 
         <FormRadioGroup

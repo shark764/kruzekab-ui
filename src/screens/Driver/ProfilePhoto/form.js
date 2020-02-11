@@ -35,7 +35,7 @@ const Form = ({ handleOnSubmit, initialValues, validationSchema, handleChoosePho
             reverse
             name="md-person"
             type="ionicon"
-            color="#DDE5F7"
+            color="#dde5f7"
             reverseColor="#5280e2"
             size={70}
             onPress={handleChoosePhoto}

@@ -1,17 +1,18 @@
 import { createStackNavigator } from 'react-navigation-stack';
-import { createDrawerNavigator } from 'react-navigation-drawer';
 import Home from '../screens/Rider/Home';
+import FamilyGroup from '../screens/Rider/Groups/Family';
 
-const AppNavigation = createStackNavigator(
+const RiderNavigation = createStackNavigator(
   {
-    Home: { screen: Home }
+    Home: { screen: Home },
+    FamilyGroup: { screen: FamilyGroup }
   },
   {
     initialRouteName: 'Home'
   }
 );
 
-// const AppNavigation = createDrawerNavigator(
+// const RiderNavigation = createDrawerNavigator(
 //   // Stack: { screen: Stack }
 //   {
 //     Home: { screen: Home }
@@ -21,4 +22,4 @@ const AppNavigation = createStackNavigator(
 //   }
 // );
 
-export default AppNavigation;
+export default RiderNavigation;

@@ -61,6 +61,11 @@ export default class Home extends Component {
       console.log(error);
     }
   };
+
+  _navigateTo = (destinationScreen, params = {}) => {
+    this.props.navigation.navigate(destinationScreen, params);
+  };
+
   render() {
     console.log('Nav param', 'Home', this.props.navigation.getParam('userType', null));
 
@@ -71,6 +76,13 @@ export default class Home extends Component {
         </ImageContainer>
         <View>
           <FormButton onPress={this.handleSignout} title="Sign out" textColor="white" />
+        </View>
+        <View>
+          <FormButton
+            onPress={() => this._navigateTo('FamilyGroup', { userType: 'rider' })}
+            title="Family"
+            textColor="white"
+          />
         </View>
       </StyledContainer>
     );
