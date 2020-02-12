@@ -89,7 +89,7 @@ export default class DriverSignup extends Component {
 
     const { passwordVisibility, passwordIcon } = this.state;
     return (
-      <Container enabled behavior="padding">
+      <Container enabled behavior="">
         <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
           <StyledHeadline>Become a Driver</StyledHeadline>
           <SubHeadline>Sign up to start your application process</SubHeadline>

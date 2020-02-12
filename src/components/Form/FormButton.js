@@ -11,7 +11,18 @@ const FormButton = ({ title, buttonType, buttonColor, textColor, ...rest }) => (
       { borderColor: buttonColor, borderRadius: 4 },
       buttonType !== 'outline' && { backgroundColor: '#5280e2' }
     ]}
-    titleStyle={{ color: textColor || buttonColor }}
+    titleStyle={{
+      color: textColor || buttonColor,
+      fontFamily: 'Open Sans',
+      fontStyle: 'normal',
+      fontWeight: '600',
+      fontSize: 14,
+      lineHeight: 16,
+      display: 'flex',
+      alignItems: 'center',
+      textAlign: 'center',
+      letterSpacing: 0.5
+    }}
   />
 );
 

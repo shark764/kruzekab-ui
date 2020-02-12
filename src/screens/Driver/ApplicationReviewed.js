@@ -68,7 +68,7 @@ export default class ApplicationReviewed extends Component {
     console.log('Nav param', 'ApplicationReviewed', this.props.navigation.getParam('userType', null));
 
     return (
-      <Container enabled behavior="padding">
+      <Container enabled behavior="">
         <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
           <StyledHeadline>Your application is being reviewed!</StyledHeadline>
           <StyledSubHeadline>We'll email you when you've been approved.</StyledSubHeadline>

@@ -15,7 +15,8 @@ const SwitchNavigator = createSwitchNavigator(
     // Driver: DriverNavigation
   },
   {
-    initialRouteName: 'Initial'
+    initialRouteName: 'Rider'
+    // initialRouteName: 'Initial'
     // initialRouteName: 'Auth'
   }
 );

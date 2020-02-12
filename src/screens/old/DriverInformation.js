@@ -109,7 +109,7 @@ export default class DriverInformation extends Component {
     const { passwordVisibility, passwordIcon, photo } = this.state;
 
     return (
-      <Container enabled behavior="padding">
+      <Container enabled behavior="">
         <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
           <Headline>Driver Information</Headline>
 

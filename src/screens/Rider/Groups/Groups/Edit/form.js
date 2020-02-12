@@ -1,15 +1,16 @@
 import React, { Fragment } from 'react';
-import { Image } from 'react-native';
+import { Image, View } from 'react-native';
 import { Formik } from 'formik';
 import { Button, Icon, Avatar } from 'react-native-elements';
 import styled from 'styled-components';
-import FormButton from '../../../components/Form/FormButton';
-import { FormattedError } from '../../../components/Form/ErrorMessage';
-import { ButtonContainer, BottomContainer } from '../../../components/Form/Elements';
+import FormButton from '../../../../../components/Form/FormButton';
+import { FormattedError } from '../../../../../components/Form/ErrorMessage';
+import { ButtonContainer, BottomContainer } from '../../../../../components/Form/Elements';
+import FormInput from '../../../../../components/Form/Fields/FormInput';
 
 const IconContainer = styled(ButtonContainer)`
-  margin-bottom: 80px;
-  margin-top: 70px;
+  margin-bottom: 5px;
+  margin-top: 120px;
   align-items: center;
 `;
 const SubIcon = styled(ButtonContainer)`
@@ -23,8 +24,13 @@ const StyledBottomContainer = styled(BottomContainer)`
   margin-left: 25px;
   margin-right: 25px;
 `;
+const DeleteContainer = styled(View)`
+  margin-left: 25px;
+  flex-direction: row;
+  justify-content: flex-start;
+`;
 
-const Form = ({ handleOnSubmit, initialValues, validationSchema, handleChoosePhoto, photo }) => (
+const Form = ({ handleOnSubmit, initialValues, validationSchema, handleChoosePhoto, photo, handleOnDelete }) => (
   <Formik
     initialValues={initialValues}
     onSubmit={(values, actions) => {
@@ -32,7 +38,7 @@ const Form = ({ handleOnSubmit, initialValues, validationSchema, handleChoosePho
       handleOnSubmit(values, actions);
     }}
     validationSchema={validationSchema}>
-    {({ handleSubmit, errors, isValid, isSubmitting }) => (
+    {({ handleChange, values, handleSubmit, errors, isValid, isSubmitting, touched, handleBlur }) => (
       <Fragment>
         <IconContainer>
           {photo && <Image source={{ uri: photo.uri }} style={{ width: 300, height: 300 }} />}
@@ -41,7 +47,7 @@ const Form = ({ handleOnSubmit, initialValues, validationSchema, handleChoosePho
             // source={{
             //   uri: 'https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg'
             // }}
-            // source={require('../../../../../assets/edit-rider.png')}
+            source={require('../../../../../assets/edit-rider.png')}
             showEditButton
             editButton={{
               name: 'photo-camera',
@@ -50,9 +56,9 @@ const Form = ({ handleOnSubmit, initialValues, validationSchema, handleChoosePho
               color: '#5280e2',
               reverseColor: '#fff',
               underlayColor: '#5280e2',
-              size: 17,
+              size: 15,
               marginRight: 20,
-              marginBottom: 25
+              marginBottom: 20
             }}
             icon={{
               name: 'md-person',
@@ -61,28 +67,52 @@ const Form = ({ handleOnSubmit, initialValues, validationSchema, handleChoosePho
             }}
             overlayContainerStyle={{ backgroundColor: '#dde5f7' }}
             activeOpacity={0.7}
-            size={120}
+            size={110}
             onPress={handleChoosePhoto}
             onEditPress={handleChoosePhoto}
             disabled={!isValid || isSubmitting}
             loading={isSubmitting}
           />
+        </IconContainer>
 
+        <FormInput
+          name="name"
+          label="Name"
+          value={values.name}
+          onChangeText={handleChange('name')}
+          onBlur={handleBlur('name')}
+          placeholder="name..."
+          autoCapitalize="none"
+          iconName="md-person"
+          iconColor="#2C384A"
+          touched={touched}
+          errors={errors}
+        />
+
+        <DeleteContainer>
           <Button
-            title="Add photo"
-            onPress={handleChoosePhoto}
+            icon={<Icon name="ios-trash" type="ionicon" size={25} color="#ee0000" />}
+            title=" Delete Group"
+            onPress={handleOnDelete}
             titleStyle={{
-              color: '#5280e2'
-              // textDecorationLine: 'underline'
+              color: '#ee0000',
+              fontFamily: 'Open Sans',
+              fontStyle: 'normal',
+              fontWeight: 'normal',
+              fontSize: 13,
+              lineHeight: 20,
+              display: 'flex',
+              alignItems: 'center',
+              textTransform: 'capitalize'
             }}
             type="clear"
           />
-        </IconContainer>
+        </DeleteContainer>
 
         <StyledBottomContainer>
           <FormButton
             onPress={handleSubmit}
-            title="Next"
+            title="Save Changes"
             textColor="white"
             disabled={!isValid || isSubmitting}
             loading={isSubmitting}

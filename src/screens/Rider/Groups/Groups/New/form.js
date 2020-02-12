@@ -3,13 +3,14 @@ import { Image } from 'react-native';
 import { Formik } from 'formik';
 import { Button, Icon, Avatar } from 'react-native-elements';
 import styled from 'styled-components';
-import FormButton from '../../../components/Form/FormButton';
-import { FormattedError } from '../../../components/Form/ErrorMessage';
-import { ButtonContainer, BottomContainer } from '../../../components/Form/Elements';
+import FormButton from '../../../../../components/Form/FormButton';
+import { FormattedError } from '../../../../../components/Form/ErrorMessage';
+import { ButtonContainer, BottomContainer } from '../../../../../components/Form/Elements';
+import FormInput from '../../../../../components/Form/Fields/FormInput';
 
 const IconContainer = styled(ButtonContainer)`
-  margin-bottom: 80px;
-  margin-top: 70px;
+  margin-bottom: 5px;
+  margin-top: 120px;
   align-items: center;
 `;
 const SubIcon = styled(ButtonContainer)`
@@ -32,7 +33,7 @@ const Form = ({ handleOnSubmit, initialValues, validationSchema, handleChoosePho
       handleOnSubmit(values, actions);
     }}
     validationSchema={validationSchema}>
-    {({ handleSubmit, errors, isValid, isSubmitting }) => (
+    {({ handleChange, values, handleSubmit, errors, isValid, isSubmitting, touched, handleBlur }) => (
       <Fragment>
         <IconContainer>
           {photo && <Image source={{ uri: photo.uri }} style={{ width: 300, height: 300 }} />}
@@ -50,9 +51,9 @@ const Form = ({ handleOnSubmit, initialValues, validationSchema, handleChoosePho
               color: '#5280e2',
               reverseColor: '#fff',
               underlayColor: '#5280e2',
-              size: 17,
+              size: 15,
               marginRight: 20,
-              marginBottom: 25
+              marginBottom: 20
             }}
             icon={{
               name: 'md-person',
@@ -61,28 +62,32 @@ const Form = ({ handleOnSubmit, initialValues, validationSchema, handleChoosePho
             }}
             overlayContainerStyle={{ backgroundColor: '#dde5f7' }}
             activeOpacity={0.7}
-            size={120}
+            size={110}
             onPress={handleChoosePhoto}
             onEditPress={handleChoosePhoto}
             disabled={!isValid || isSubmitting}
             loading={isSubmitting}
           />
-
-          <Button
-            title="Add photo"
-            onPress={handleChoosePhoto}
-            titleStyle={{
-              color: '#5280e2'
-              // textDecorationLine: 'underline'
-            }}
-            type="clear"
-          />
         </IconContainer>
+
+        <FormInput
+          name="name"
+          label="Name"
+          value={values.name}
+          onChangeText={handleChange('name')}
+          onBlur={handleBlur('name')}
+          placeholder="name..."
+          autoCapitalize="none"
+          iconName="md-person"
+          iconColor="#2C384A"
+          touched={touched}
+          errors={errors}
+        />
 
         <StyledBottomContainer>
           <FormButton
             onPress={handleSubmit}
-            title="Next"
+            title="Continue"
             textColor="white"
             disabled={!isValid || isSubmitting}
             loading={isSubmitting}

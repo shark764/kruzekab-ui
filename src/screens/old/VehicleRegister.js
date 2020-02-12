@@ -97,7 +97,7 @@ export default class VehicleRegister extends Component {
     const { passwordVisibility, passwordIcon, photo } = this.state;
 
     return (
-      <Container enabled behavior="padding">
+      <Container enabled behavior="">
         <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
           <Headline>Vehicle Information</Headline>
 

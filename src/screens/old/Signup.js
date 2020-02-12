@@ -94,7 +94,7 @@ export default class Signup extends Component {
 
     const { passwordVisibility, passwordIcon } = this.state;
     return (
-      <Container enabled behavior="padding">
+      <Container enabled behavior="">
         <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
           <Headline>Sign Up</Headline>
           <SubHeadline>You will receive a SMS verification code</SubHeadline>

@@ -1,54 +1,80 @@
 import React, { Component } from 'react';
-import { ScrollView, View, Image, StyleSheet } from 'react-native';
+import { ScrollView, View, Image, StyleSheet, Text } from 'react-native';
 import styled from 'styled-components';
 import { Icon } from 'react-native-elements';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import { ButtonContainer, Container, Headline } from '../../../../components/Form/Elements';
+import {
+  ButtonContainer,
+  Container,
+  Headline,
+  BottomContainer,
+  HelpButtonText,
+  HelpButton
+} from '../../../../components/Form/Elements';
 import { NavigationHeaderButtons, Item } from '../../../../components/Header/HeaderButton';
 import FormButton from '../../../../components/Form/FormButton';
 
+const StyledContainer = styled(Container)`
+  margin-top: 30px;
+`;
+const StyledHeadline = styled(Headline)`
+  font-weight: bold;
+  font-size: 18px;
+  line-height: 28px;
+  letter-spacing: 0.2px;
+  color: #212226;
+  margin-bottom: 10px;
+`;
 const IconContainer = styled(ButtonContainer)`
-  margin-bottom: 80px;
-  margin-top: 70px;
+  margin-bottom: 25px;
+  margin-top: 0;
+  flex-direction: row;
+  align-items: center;
+  margin-left: 18px;
+`;
+const LabelText = styled(Text)`
+  font-family: Open Sans;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 14px;
+  color: #6b768d;
+  justify-content: center;
   align-items: center;
 `;
+const StyledBottomContainer = styled(BottomContainer)`
+  left: 0;
+  right: 0;
+  margin-left: 25px;
+  margin-right: 25px;
+`;
 
-// const ImageHeader = props => (
-//   <View style={{ backgroundColor: '#eee' }}>
-//     <Image
-//       style={{ /* width, */ height: 10 * vh, position: 'absolute', top: 0, left: 0 }}
-//       source={{ uri: 'https://upload.wikimedia.org/wikipedia/commons/3/36/Hopetoun_falls.jpg' }}
-//     />
-//     <Header {...props} style={{ backgroundColor: 'transparent' }} />
-//   </View>
-// );
-
-export default class FamilyGroup extends Component {
+export default class Groups extends Component {
   state = {};
 
   static navigationOptions = ({ navigation, navigation: { state } }) => {
     return {
-      title: 'Your Family',
-      // headerTitle: () => 'Your Family',
+      title: 'Groups',
       headerLeft: () => (
         <NavigationHeaderButtons>
           <Item
             title="Go Back"
             buttonWrapperStyle={{
               marginLeft: 12,
-              marginTop: 10
-              // borderRadius: '50%'
+              marginTop: 30,
+              alignItems: 'center',
+              flexDirection: 'row',
+              justifyContent: 'flex-start'
             }}
-            // useIconComponent={Ionicons}
             ButtonElement={
               <Icon
                 raised
                 reverse
-                name="add-a-photo"
-                color="#dde5f7"
-                reverseColor="#5280e2"
-                size={70}
-                onPress={() => this._navigateTo('NewMember', { userType: 'rider' })}
+                type="ionicon"
+                name="ios-arrow-back"
+                color="#fff"
+                reverseColor="#212226"
+                size={18}
+                onPress={() => navigation.navigate('Home', { userType: 'rider' })}
                 disabled={false}
               />
             }
@@ -58,21 +84,35 @@ export default class FamilyGroup extends Component {
         </NavigationHeaderButtons>
       ),
       headerStyle: {
-        backgroundColor: '#f4511e',
         elevation: 0,
         shadowOpacity: 0,
         borderBottomWidth: 0,
-        shadowColor: 'transparent'
+        shadowColor: 'transparent',
+        backgroundColor: '#fff',
+        shadowColor: 'transparent',
+        shadowRadius: 0,
+        shadowOffset: {
+          height: 0
+        }
       },
-      headerTintColor: '#fff',
+      headerTintColor: '#3e4958',
       headerBackground: () => (
-        <Image
-          style={{ width: '100%', height: 80 }}
-          source={require('../../../../assets/map.png')}
-          // source={{ uri: 'https://upload.wikimedia.org/wikipedia/commons/3/36/Hopetoun_falls.jpg' }}
-        />
+        <Image style={{ width: '100%', height: 86 }} source={require('../../../../assets/map.png')} />
       ),
-      headerTitleStyle: { color: '#fff', fontWeight: 'bold' }
+      headerTitleAlign: 'center',
+      headerTitleStyle: {
+        fontFamily: 'Inter',
+        fontStyle: 'normal',
+        fontWeight: 'bold',
+        fontSize: 20,
+        letterSpacing: 0.2,
+        marginTop: 30,
+        color: '#3e4958',
+        alignSelf: 'center',
+        alignItems: 'center',
+        justifyContent: 'center'
+      },
+      headerLayoutPreset: 'center'
     };
   };
 
@@ -111,46 +151,29 @@ export default class FamilyGroup extends Component {
   };
 
   render() {
-    console.log('Nav param', 'FamilyGroup', this.props.navigation.getParam('userType', null));
+    console.log('Nav param', 'Groups', this.props.navigation.getParam('userType', null));
 
     return (
-      <Container enabled behavior="padding">
+      <StyledContainer enabled behavior="">
         <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
-          <Headline>Riders</Headline>
+          <StyledHeadline>Groups</StyledHeadline>
 
           <IconContainer>
             <Icon
               raised
               reverse
-              name="add-a-photo"
+              type="feather"
+              name="plus"
               color="#dde5f7"
               reverseColor="#5280e2"
-              size={70}
-              onPress={() => this._navigateTo('NewMember', { userType: 'rider' })}
+              size={25}
+              onPress={() => this._navigateTo('NewGroup', { userType: 'rider' })}
               disabled={false}
             />
+            <LabelText>Create new group</LabelText>
           </IconContainer>
-
-          <ButtonContainer>
-            <FormButton
-              onPress={() => this._navigateTo('NewMember', { userType: 'rider' })}
-              title="Next!!"
-              textColor="white"
-              disabled={false}
-              loading={false}
-            />
-          </ButtonContainer>
-
-          <View style={{ flex: 1, flexDirection: 'row' }}>
-            <Image
-              // style={StyleSheet.absoluteFill}
-              style={{ width: '100%', height: 80 }}
-              source={require('../../../../assets/map.png')}
-              // source={{ uri: 'https://upload.wikimedia.org/wikipedia/commons/3/36/Hopetoun_falls.jpg' }}
-            />
-          </View>
         </ScrollView>
-      </Container>
+      </StyledContainer>
     );
   }
 }

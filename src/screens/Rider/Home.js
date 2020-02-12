@@ -79,8 +79,15 @@ export default class Home extends Component {
         </View>
         <View>
           <FormButton
-            onPress={() => this._navigateTo('FamilyGroup', { userType: 'rider' })}
+            onPress={() => this._navigateTo('Riders', { userType: 'rider' })}
             title="Family"
+            textColor="white"
+          />
+        </View>
+        <View>
+          <FormButton
+            onPress={() => this._navigateTo('Groups', { userType: 'rider' })}
+            title="Groups"
             textColor="white"
           />
         </View>

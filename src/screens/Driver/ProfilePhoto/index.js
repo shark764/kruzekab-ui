@@ -94,7 +94,7 @@ export default class ProfilePhoto extends Component {
     const { photo } = this.state;
 
     return (
-      <Container enabled behavior="padding">
+      <Container enabled behavior="">
         <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
           <Headline>Add a profile photo</Headline>
           <SubHeadline>Please add a profile photo so your riders can see who you are</SubHeadline>
