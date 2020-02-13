@@ -92,7 +92,7 @@ const Form = ({ handleOnSubmit, initialValues, validationSchema, handleChoosePho
         <DeleteContainer>
           <Button
             icon={<Icon name="ios-trash" type="ionicon" size={25} color="#ee0000" />}
-            title=" Delete Rider"
+            title="  Delete Rider"
             onPress={handleOnDelete}
             titleStyle={{
               color: '#ee0000',

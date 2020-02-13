@@ -56,7 +56,7 @@ export default class NewGroup extends Component {
 
   static navigationOptions = ({ navigation, navigation: { state } }) => {
     return {
-      title: 'Create a new group',
+      title: 'Create a group',
       headerLeft: () => (
         <NavigationHeaderButtons>
           <Item
@@ -170,14 +170,23 @@ export default class NewGroup extends Component {
 
     const { photo } = this.state;
 
+    const ridersList = [
+      { key: 'edit-rider1', imgPath: require('../../../../../assets/edit-rider.png'), name: 'Claire' },
+      { key: 'edit-rider2', imgPath: require('../../../../../assets/edit-rider2.png'), name: 'Ben' }
+    ];
+
     return (
       <StyledContainer enabled behavior="">
         <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+          <StyledHeadline>General</StyledHeadline>
+
           <Form
             handleOnSubmit={this.handleOnSubmit}
             initialValues={{
               userType: 2,
-              name: ''
+              name: '',
+              isDefault: false,
+              riders: ridersList
             }}
             validationSchema={validationSchema}
             handleChoosePhoto={this.handleChoosePhoto}

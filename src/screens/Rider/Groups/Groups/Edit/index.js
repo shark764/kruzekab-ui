@@ -18,7 +18,7 @@ import Form from './form';
 import { validationSchema } from './validation';
 
 const StyledContainer = styled(Container)`
-  margin-top: 130px;
+  margin-top: 30px;
 `;
 const StyledHeadline = styled(Headline)`
   font-weight: bold;
@@ -186,14 +186,23 @@ export default class EditGroup extends Component {
 
     const { photo } = this.state;
 
+    const ridersList = [
+      { key: 'edit-rider1', imgPath: require('../../../../../assets/edit-rider.png'), name: 'Claire' },
+      { key: 'edit-rider2', imgPath: require('../../../../../assets/edit-rider2.png'), name: 'Ben' }
+    ];
+
     return (
       <StyledContainer enabled behavior="">
         <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+          <StyledHeadline>General</StyledHeadline>
+
           <Form
             handleOnSubmit={this.handleOnSubmit}
             initialValues={{
               userType: 2,
-              name: ''
+              name: '',
+              isDefault: false,
+              riders: ridersList
             }}
             validationSchema={validationSchema}
             handleChoosePhoto={this.handleChoosePhoto}

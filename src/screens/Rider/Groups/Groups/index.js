@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { ScrollView, View, Image, StyleSheet, Text } from 'react-native';
 import styled from 'styled-components';
-import { Icon } from 'react-native-elements';
+import { Icon, Avatar } from 'react-native-elements';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {
   ButtonContainer,
@@ -26,11 +26,15 @@ const StyledHeadline = styled(Headline)`
   margin-bottom: 10px;
 `;
 const IconContainer = styled(ButtonContainer)`
-  margin-bottom: 25px;
-  margin-top: 0;
+  margin-top: -6px;
+  margin-bottom: 15px;
   flex-direction: row;
   align-items: center;
   margin-left: 18px;
+`;
+const GroupContainer = styled(IconContainer)`
+  margin-top: 0;
+  margin-left: 25px;
 `;
 const LabelText = styled(Text)`
   font-family: Open Sans;
@@ -153,10 +157,38 @@ export default class Groups extends Component {
   render() {
     console.log('Nav param', 'Groups', this.props.navigation.getParam('userType', null));
 
+    const groupsList = [
+      { key: 'edit-rider1', name: 'Soccer Team' },
+      { key: 'edit-rider2', name: "Ben's Class" }
+    ];
+
     return (
       <StyledContainer enabled behavior="">
         <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
           <StyledHeadline>Groups</StyledHeadline>
+
+          {groupsList.map((groupItem, index) => (
+            <GroupContainer key={index}>
+              <Avatar
+                rounded
+                // source={{
+                //   uri: 'https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg'
+                // }}
+                showEditButton={false}
+                icon={{
+                  name: 'group',
+                  type: 'material',
+                  color: '#5280e2'
+                }}
+                overlayContainerStyle={{ backgroundColor: '#dde5f7' }}
+                activeOpacity={0.7}
+                size={53}
+                onPress={() => this._navigateTo('EditGroup', { userType: 'rider', rider: groupItem })}
+                disabled={false}
+              />
+              <LabelText>{`  ${groupItem.name}`}</LabelText>
+            </GroupContainer>
+          ))}
 
           <IconContainer>
             <Icon
