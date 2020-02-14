@@ -10,7 +10,7 @@ const SwitchNavigator = createSwitchNavigator(
   {
     Initial: Initial,
     Auth: AuthNavigation,
-    // App: AppNavigation,
+    // App: AppNavigation
     Rider: RiderNavigation
     // Driver: DriverNavigation
   },

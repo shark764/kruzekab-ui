@@ -80,12 +80,12 @@ export default class Groups extends Component {
                 color="#fff"
                 reverseColor="#212226"
                 size={18}
-                onPress={() => navigation.navigate('Home', { userType: 'rider' })}
+                onPress={() => navigation.navigate('Request Ride', { userType: 'rider' })}
                 disabled={false}
               />
             }
             iconName="ios-arrow-back"
-            onPress={() => navigation.navigate('Home', { userType: 'rider' })}
+            onPress={() => navigation.navigate('Request Ride', { userType: 'rider' })}
           />
         </NavigationHeaderButtons>
       ),

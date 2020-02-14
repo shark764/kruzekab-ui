@@ -1,5 +1,13 @@
 import React, { Component, Fragment } from 'react';
-import { View, Image, Text, StyleSheet, PermissionsAndroid } from 'react-native';
+import {
+  View,
+  Image,
+  Text,
+  StyleSheet,
+  PermissionsAndroid,
+  TouchableOpacity,
+  TouchableWithoutFeedback
+} from 'react-native';
 import styled from 'styled-components';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { Container } from '../../components/Form/Elements';
@@ -12,8 +20,8 @@ import axios from 'axios';
 
 const styles = StyleSheet.create({
   map: {
-    ...StyleSheet.absoluteFillObject,
-  },
+    ...StyleSheet.absoluteFillObject
+  }
 });
 
 const StyledContainer = styled(Container)`
@@ -35,14 +43,12 @@ const LocationView = styled(View)`
   left: 13px;
   right: 14px;
   bottom: 44px;
-  background: #FFFFFF;
+  background: #ffffff;
   box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.14);
   border-radius: 2px;
 `;
 
-const LineView = styled(View)`
-
-`;
+const LineView = styled(View)``;
 
 const WhereToView = styled(View)`
   padding-top 20px;
@@ -78,7 +84,28 @@ export default class Home extends Component {
        }
      };
    };*/
-  decode = (t, e) => { for (var n, o, u = 0, l = 0, r = 0, d = [], h = 0, i = 0, a = null, c = Math.pow(10, e || 5); u < t.length;) { a = null, h = 0, i = 0; do a = t.charCodeAt(u++) - 63, i |= (31 & a) << h, h += 5; while (a >= 32); n = 1 & i ? ~(i >> 1) : i >> 1, h = i = 0; do a = t.charCodeAt(u++) - 63, i |= (31 & a) << h, h += 5; while (a >= 32); o = 1 & i ? ~(i >> 1) : i >> 1, l += n, r += o, d.push([l / c, r / c]) } return d = d.map(function (t) { return { latitude: t[0], longitude: t[1] } }) }
+
+  // static navigationOptions = ({ navigation }) => {
+  //   return {
+  //     drawerIcon: () => null,
+  //     drawerLabel: () => null
+  //   };
+  // };
+
+  decode = (t, e) => {
+    for (var n, o, u = 0, l = 0, r = 0, d = [], h = 0, i = 0, a = null, c = Math.pow(10, e || 5); u < t.length; ) {
+      (a = null), (h = 0), (i = 0);
+      do (a = t.charCodeAt(u++) - 63), (i |= (31 & a) << h), (h += 5);
+      while (a >= 32);
+      (n = 1 & i ? ~(i >> 1) : i >> 1), (h = i = 0);
+      do (a = t.charCodeAt(u++) - 63), (i |= (31 & a) << h), (h += 5);
+      while (a >= 32);
+      (o = 1 & i ? ~(i >> 1) : i >> 1), (l += n), (r += o), d.push([l / c, r / c]);
+    }
+    return (d = d.map(function(t) {
+      return { latitude: t[0], longitude: t[1] };
+    }));
+  };
 
   drawRoute = async () => {
     const mode = 'driving'; // 'walking';
@@ -86,13 +113,13 @@ export default class Home extends Component {
     const destination = `${this.state.selectedAddress.to.geometry.location.lat},${this.state.selectedAddress.to.geometry.location.lng}`;
     const APIKEY = 'AIzaSyCH7pW8XhPRvUzm-JQ0f7aWVhN3QAUQO78';
     const url = `https://maps.googleapis.com/maps/api/directions/json?origin=${origin}&destination=${destination}&key=${APIKEY}&mode=${mode}`;
-   let { data } = await axios.get(url);
-   if(data.routes.length){
-     this.setState({
-      coords: this.decode(data.routes[0].overview_polyline.points) // definition below
-     });
-   }
-  }
+    let { data } = await axios.get(url);
+    if (data.routes.length) {
+      this.setState({
+        coords: this.decode(data.routes[0].overview_polyline.points) // definition below
+      });
+    }
+  };
 
   componentDidMount = async () => {
     Geolocation.getCurrentPosition(info => {
@@ -101,13 +128,12 @@ export default class Home extends Component {
           longitude: info.coords.longitude,
           latitude: info.coords.latitude
         },
-        mapLoaded: true,
-      })
+        mapLoaded: true
+      });
     }),
       error => console.error(error),
-      { enableHighAccuracy: true, timeout: 10000 }
-
-  }
+      { enableHighAccuracy: true, timeout: 10000 };
+  };
 
   handleSignout = async () => {
     try {
@@ -129,93 +155,115 @@ export default class Home extends Component {
     coords: null,
     currentPosition: {
       longitude: 90,
-      latitude: 180,
+      latitude: 180
     },
     mapLoaded: false,
     selectedAddress: {
       from: {
-        alias: 'Current location',
+        alias: 'Current location'
       },
-      to: {},
+      to: {}
     }
-  }
+  };
 
-  setSelectedAddress = (selectedAddress) => {
+  setSelectedAddress = selectedAddress => {
     this.setState(prevState => ({
       selectedAddress: {
         ...prevState.selectedAddress,
-        [this.state.location]: selectedAddress,
+        [this.state.location]: selectedAddress
       }
     }));
-    if(this.state.selectedAddress.to.name){
+    if (this.state.selectedAddress.to.name) {
       this.drawRoute();
     }
-  }
+  };
+
+  handleOpenDrawer = () => {
+    this.props.navigation.openDrawer();
+  };
 
   render() {
     return (
       <StyledContainer>
         <ImageContainer>
-          {
-            this.state.mapLoaded === true ? (
-              <MapView
-                provider={PROVIDER_GOOGLE} // remove if not using Google Maps
-                style={styles.map}
-                region={{
+          {this.state.mapLoaded === true ? (
+            <MapView
+              provider={PROVIDER_GOOGLE} // remove if not using Google Maps
+              style={styles.map}
+              region={{
+                latitude: this.state.currentPosition.latitude || 37.78825,
+                longitude: this.state.currentPosition.longitude || -122.4324,
+                latitudeDelta: 0.015,
+                longitudeDelta: 0.0121
+              }}>
+              <Marker
+                coordinate={{
                   latitude: this.state.currentPosition.latitude || 37.78825,
-                  longitude: this.state.currentPosition.longitude || -122.4324,
-                  latitudeDelta: 0.015,
-                  longitudeDelta: 0.0121,
+                  longitude: this.state.currentPosition.longitude || -122.4324
                 }}
-              >
+                pinColor="red"></Marker>
+
+              {this.state.selectedAddress.to.name && (
                 <Marker
                   coordinate={{
-                    latitude: this.state.currentPosition.latitude || 37.78825,
-                    longitude: this.state.currentPosition.longitude || -122.4324,
+                    latitude: this.state.selectedAddress.to.geometry.location.lat || 37.78825,
+                    longitude: this.state.selectedAddress.to.geometry.location.lng || -122.4324
                   }}
-                  pinColor='red'>
+                  pinColor="blue"></Marker>
+              )}
 
-                </Marker>
-
-                {this.state.selectedAddress.to.name && (
-                  <Marker
-                    coordinate={{
-                      latitude: this.state.selectedAddress.to.geometry.location.lat || 37.78825,
-                      longitude: this.state.selectedAddress.to.geometry.location.lng || -122.4324,
-                    }}
-                    pinColor='blue'>
-
-                  </Marker>
-                )}
-
-                {this.state.coords && (
-                  <Polyline
+              {this.state.coords && (
+                <Polyline
                   coordinates={[
-                      {latitude: this.state.currentPosition.latitude, longitude: this.state.currentPosition.longitude}, // optional
-                      ...this.state.coords,
-                      {latitude: this.state.selectedAddress.to.geometry.location.lat,
-                      longitude: this.state.selectedAddress.to.geometry.location.lng }, // optional
+                    { latitude: this.state.currentPosition.latitude, longitude: this.state.currentPosition.longitude }, // optional
+                    ...this.state.coords,
+                    {
+                      latitude: this.state.selectedAddress.to.geometry.location.lat,
+                      longitude: this.state.selectedAddress.to.geometry.location.lng
+                    } // optional
                   ]}
                   strokeWidth={4}
-                  strokeColor='#6B768D'
-              />
-                )}
-              </MapView>
-            ) : (
-                <Text>Loading...</Text>
-              )
-          }
+                  strokeColor="#6B768D"
+                />
+              )}
+            </MapView>
+          ) : (
+            <Text>Loading...</Text>
+          )}
         </ImageContainer>
-        <View style={{
-          position: 'absolute',
-          right: 20,
-          bottom: 190
-        }}>
+        <View
+          style={{
+            position: 'absolute',
+            left: 25,
+            top: 25
+          }}>
           <Avatar
             rounded
-            size='medium'
+            size="medium"
+            icon={{
+              name: 'md-menu',
+              type: 'ionicon',
+              color: '#212226'
+            }}
+            onPress={this.handleOpenDrawer}
+            activeOpacity={0.7}
+            containerStyle={{ flex: 2 }}
+            overlayContainerStyle={{
+              backgroundColor: '#ffffff'
+            }}
+          />
+        </View>
+        <View
+          style={{
+            position: 'absolute',
+            right: 20,
+            bottom: 190
+          }}>
+          <Avatar
+            rounded
+            size="medium"
             icon={{ name: 'crosshairs-gps', type: 'material-community', color: '#000000' }}
-            onPress={() => console.log("Works!")}
+            onPress={() => console.log('Works!')}
             activeOpacity={0.7}
             containerStyle={{ flex: 2, marginLeft: 20, marginTop: 115 }}
             overlayContainerStyle={{
@@ -223,20 +271,6 @@ export default class Home extends Component {
             }}
           />
         </View>
-        {/* <View>
-          <FormButton
-            onPress={() => this._navigateTo('Riders', { userType: 'rider' })}
-            title="Family"
-            textColor="white"
-          />
-        </View>
-        <View>
-          <FormButton
-            onPress={() => this._navigateTo('Groups', { userType: 'rider' })}
-            title="Groups"
-            textColor="white"
-          />
-       </View>*/ }
         <LocationView>
           <LineView>
             <Text
@@ -256,7 +290,7 @@ export default class Home extends Component {
                 position: 'absolute',
                 height: 40,
                 left: 20,
-                top: 35,
+                top: 35
               }}
             />
             <Text
@@ -266,42 +300,45 @@ export default class Home extends Component {
                 fontSize: 15,
                 left: 13,
                 top: 70,
-                color: this.state.location === 'to' ? '#5280E2' : '#212226',
+                color: this.state.location === 'to' ? '#5280E2' : '#212226'
               }}>
               ▼
             </Text>
           </LineView>
           <WhereToView>
             <Input
-              placeholder='from ?'
+              placeholder="from ?"
               value={this.state.selectedAddress.from.alias || this.state.selectedAddress.from.name}
               onFocus={() => {
                 this.setState({
                   location: 'from'
                 });
 
-                this.props.navigation.navigate('SelectAddress', { addressPlaceholder: 'Where from?', setSelectedAddress: this.setSelectedAddress });
+                this.props.navigation.navigate('SelectAddress', {
+                  addressPlaceholder: 'Where from?',
+                  setSelectedAddress: this.setSelectedAddress
+                });
               }}
               inputContainerStyle={{
                 borderColor: 'white'
-              }}>
-
-            </Input>
+              }}></Input>
             <Divider></Divider>
             <Input
-              placeholder='Where to?'
+              placeholder="Where to?"
               value={this.state.selectedAddress.to.alias || this.state.selectedAddress.to.name}
               onFocus={() => {
                 this.setState({
                   location: 'to'
                 });
-                this._navigateTo('SelectAddress', { addressPlaceholder: 'Where to?', setSelectedAddress: this.setSelectedAddress, currentPosition: this.state.currentPosition });
+                this._navigateTo('SelectAddress', {
+                  addressPlaceholder: 'Where to?',
+                  setSelectedAddress: this.setSelectedAddress,
+                  currentPosition: this.state.currentPosition
+                });
               }}
               inputContainerStyle={{
                 borderColor: 'white'
-              }}>
-
-            </Input>
+              }}></Input>
           </WhereToView>
         </LocationView>
       </StyledContainer>

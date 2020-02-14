@@ -167,6 +167,48 @@ export default class EditGroup extends Component {
     });
   };
 
+  handleOnAddRider = async (values, actions) => {
+    try {
+      setTimeout(() => {
+        this.props.navigation.navigate('NewRider', { userType: 'rider' });
+      }, 1500);
+    } catch (error) {
+      actions.setFieldError('general', error.message);
+    } finally {
+      // TODO:
+      // This is avoiding submit button loading icon
+      // actions.setSubmitting(false);
+    }
+  };
+
+  handleOnImportRider = async (values, actions) => {
+    try {
+      setTimeout(() => {
+        this.props.navigation.navigate('ImportRider', { userType: 'rider' });
+      }, 1500);
+    } catch (error) {
+      actions.setFieldError('general', error.message);
+    } finally {
+      // TODO:
+      // This is avoiding submit button loading icon
+      // actions.setSubmitting(false);
+    }
+  };
+
+  handleOnEditNewRider = async (values, actions) => {
+    try {
+      setTimeout(() => {
+        this.props.navigation.navigate('EditRider', { userType: 'rider' });
+      }, 1500);
+    } catch (error) {
+      actions.setFieldError('general', error.message);
+    } finally {
+      // TODO:
+      // This is avoiding submit button loading icon
+      // actions.setSubmitting(false);
+    }
+  };
+
   handleOnDelete = async () => {
     try {
       setTimeout(() => {
@@ -209,6 +251,9 @@ export default class EditGroup extends Component {
             validationSchema={validationSchema}
             handleChoosePhoto={this.handleChoosePhoto}
             photo={photo}
+            handleOnAddRider={this.handleOnAddRider}
+            handleOnEditNewRider={this.handleOnEditNewRider}
+            handleOnImportRider={this.handleOnImportRider}
             handleOnDelete={this.handleOnDelete}
             goToLogin={this.goToLogin}
             goToConfirmation={this.goToConfirmation}
