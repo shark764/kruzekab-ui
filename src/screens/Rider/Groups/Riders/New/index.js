@@ -100,7 +100,7 @@ export default class NewRider extends Component {
       },
       headerTintColor: '#3e4958',
       headerBackground: () => (
-        <Image style={{ width: '100%', height: 270 }} source={require('../../../../../assets/map.png')} />
+        <Image style={{ width: '100%', height: 250 }} source={require('../../../../../assets/map.png')} />
       ),
       headerTitleAlign: 'center',
       headerTitleStyle: {

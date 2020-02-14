@@ -71,6 +71,8 @@ const Form = ({
           errors={errors}
         />
 
+        {errors.general && <FormattedError errorValue={errors.general} />}
+
         <ButtonContainer>
           <FormButton
             onPress={handleSubmit}
@@ -80,8 +82,6 @@ const Form = ({
             loading={isSubmitting}
           />
         </ButtonContainer>
-
-        {errors.general && <FormattedError errorValue={errors.general} />}
       </Fragment>
     )}
   </Formik>

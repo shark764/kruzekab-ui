@@ -69,6 +69,8 @@ const Form = ({
           <HelpButtonText>Forgot Password?</HelpButtonText>
         </HelpButton>
 
+        {errors.general && <FormattedError errorValue={errors.general} />}
+
         <StyledButtonContainer>
           <Icon
             raised
@@ -82,8 +84,6 @@ const Form = ({
             loading={isSubmitting}
           />
         </StyledButtonContainer>
-
-        {errors.general && <FormattedError errorValue={errors.general} />}
       </Fragment>
     )}
   </Formik>

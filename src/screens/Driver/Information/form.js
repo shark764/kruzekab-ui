@@ -7,7 +7,7 @@ import FormButton from '../../../components/Form/FormButton';
 import { FormattedError } from '../../../components/Form/ErrorMessage';
 import FormRadioGroup from '../../../components/Form/Fields/FormRadioGroup';
 import FormCheckbox from '../../../components/Form/Fields/FormCheckbox';
-import { ButtonContainer } from '../../../components/Form/Elements';
+import { ButtonContainer, BottomButtonContainer } from '../../../components/Form/Elements';
 
 const Form = ({ handleOnSubmit, initialValues, validationSchema, handleChoosePhoto, photo }) => (
   <Formik
@@ -104,7 +104,9 @@ const Form = ({ handleOnSubmit, initialValues, validationSchema, handleChoosePho
           errors={errors}
         />
 
-        <ButtonContainer>
+        {errors.general && <FormattedError errorValue={errors.general} />}
+
+        <BottomButtonContainer>
           <FormButton
             onPress={handleSubmit}
             title="Next"
@@ -112,9 +114,7 @@ const Form = ({ handleOnSubmit, initialValues, validationSchema, handleChoosePho
             disabled={!isValid || isSubmitting}
             loading={isSubmitting}
           />
-        </ButtonContainer>
-
-        {errors.general && <FormattedError errorValue={errors.general} />}
+        </BottomButtonContainer>
       </Fragment>
     )}
   </Formik>

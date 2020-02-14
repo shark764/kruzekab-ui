@@ -9,10 +9,10 @@ import {
   ButtonContainer,
   Container,
   BottomButtonContainer
-} from '../../components/Form/Elements';
-import { FormattedError } from '../../components/Form/ErrorMessage';
-import FormButton from '../../components/Form/FormButton';
-import WelcomeLogo from '../../components/Logo/WelcomeLogo';
+} from '../../../components/Form/Elements';
+import { FormattedError } from '../../../components/Form/ErrorMessage';
+import FormButton from '../../../components/Form/FormButton';
+import WelcomeLogo from '../../../components/Logo/WelcomeLogo';
 
 const StyledHeadline = styled(Headline)`
   margin-bottom: 0;
@@ -25,8 +25,8 @@ const StyledLogoContainer = styled(LogoContainer)`
   margin-top: 50px;
 `;
 
-// class ApplicationReviewed extends Component {
-export default class ApplicationReviewed extends Component {
+// class PasswordChanged extends Component {
+export default class PasswordChanged extends Component {
   state = {};
 
   static navigationOptions = ({}) => {
@@ -72,13 +72,13 @@ export default class ApplicationReviewed extends Component {
   };
 
   render() {
-    console.log('Nav param', 'ApplicationReviewed', this.props.navigation.getParam('userType', null));
+    console.log('Nav param', 'PasswordChanged', this.props.navigation.getParam('userType', null));
 
     return (
       <Container enabled behavior="">
         <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
-          <StyledHeadline>Your application is being reviewed!</StyledHeadline>
-          <StyledSubHeadline>We'll email you when you've been approved.</StyledSubHeadline>
+          <StyledHeadline>Your password was succesfully changed!</StyledHeadline>
+          <StyledSubHeadline>Log in to your account</StyledSubHeadline>
 
           <Formik
             initialValues={{}}
@@ -95,7 +95,7 @@ export default class ApplicationReviewed extends Component {
                 <BottomButtonContainer>
                   <FormButton
                     onPress={handleSubmit}
-                    title="Done"
+                    title="Log in"
                     textColor="white"
                     disabled={!isValid || isSubmitting}
                     loading={isSubmitting}

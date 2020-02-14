@@ -40,6 +40,10 @@ target 'KruzeKabUI' do
 
   pod 'react-native-image-picker', :path => '../node_modules/react-native-image-picker'
 
+  pod 'RNReanimated', :path => '../node_modules/react-native-reanimated'
+
+  pod 'RNGestureHandler', :path => '../node_modules/react-native-gesture-handler'
+
   target 'KruzeKabUITests' do
     inherit! :search_paths
     # Pods for testing

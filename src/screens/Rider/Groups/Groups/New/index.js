@@ -165,6 +165,48 @@ export default class NewGroup extends Component {
     });
   };
 
+  handleOnAddRider = async (values, actions) => {
+    try {
+      setTimeout(() => {
+        this.props.navigation.navigate('NewRider', { userType: 'rider' });
+      }, 1500);
+    } catch (error) {
+      actions.setFieldError('general', error.message);
+    } finally {
+      // TODO:
+      // This is avoiding submit button loading icon
+      // actions.setSubmitting(false);
+    }
+  };
+
+  handleOnImportRider = async (values, actions) => {
+    try {
+      setTimeout(() => {
+        this.props.navigation.navigate('ImportRider', { userType: 'rider' });
+      }, 1500);
+    } catch (error) {
+      actions.setFieldError('general', error.message);
+    } finally {
+      // TODO:
+      // This is avoiding submit button loading icon
+      // actions.setSubmitting(false);
+    }
+  };
+
+  handleOnEditNewRider = async (values, actions) => {
+    try {
+      setTimeout(() => {
+        this.props.navigation.navigate('ImportRider', { userType: 'rider' });
+      }, 1500);
+    } catch (error) {
+      actions.setFieldError('general', error.message);
+    } finally {
+      // TODO:
+      // This is avoiding submit button loading icon
+      // actions.setSubmitting(false);
+    }
+  };
+
   render() {
     console.log('Nav param', 'NewGroup', this.props.navigation.getParam('userType', null));
 
@@ -190,6 +232,9 @@ export default class NewGroup extends Component {
             }}
             validationSchema={validationSchema}
             handleChoosePhoto={this.handleChoosePhoto}
+            handleOnAddRider={this.handleOnAddRider}
+            handleOnEditNewRider={this.handleOnEditNewRider}
+            handleOnImportRider={this.handleOnImportRider}
             photo={photo}
             goToLogin={this.goToLogin}
             goToConfirmation={this.goToConfirmation}

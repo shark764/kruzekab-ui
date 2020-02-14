@@ -53,7 +53,9 @@ const StyledBottomContainer = styled(BottomContainer)`
 `;
 
 export default class Groups extends Component {
-  state = {};
+  state = {
+    groupsList: []
+  };
 
   static navigationOptions = ({ navigation, navigation: { state } }) => {
     return {

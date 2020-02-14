@@ -6,7 +6,7 @@ import FormInput from '../../../components/Form/Fields/FormInput';
 import FormPicker from '../../../components/Form/Fields/FormPicker';
 import FormButton from '../../../components/Form/FormButton';
 import { FormattedError } from '../../../components/Form/ErrorMessage';
-import { ButtonContainer } from '../../../components/Form/Elements';
+import { ButtonContainer, BottomButtonContainer } from '../../../components/Form/Elements';
 
 const Form = ({ handleOnSubmit, initialValues, validationSchema, handleChoosePhoto, photo }) => (
   <Formik
@@ -18,7 +18,20 @@ const Form = ({ handleOnSubmit, initialValues, validationSchema, handleChoosePho
     validationSchema={validationSchema}>
     {({ handleChange, values, handleSubmit, errors, isValid, isSubmitting, touched, handleBlur }) => (
       <Fragment>
-        <FormPicker
+        <FormInput
+          name="car"
+          label="Car"
+          value={values.car}
+          onChangeText={handleChange('car')}
+          onBlur={handleBlur('car')}
+          placeholder="vehicle branch..."
+          autoCapitalize="none"
+          iconName="md-car"
+          iconColor="#2C384A"
+          touched={touched}
+          errors={errors}
+        />
+        {/* <FormPicker
           // mode="dropdown"
           name="car"
           label="Car"
@@ -38,9 +51,22 @@ const Form = ({ handleOnSubmit, initialValues, validationSchema, handleChoosePho
           useNativeAndroidPickerStyle={false}
           touched={touched}
           errors={errors}
-        />
+        /> */}
 
-        <FormPicker
+        <FormInput
+          name="model"
+          label="Model"
+          value={values.model}
+          onChangeText={handleChange('model')}
+          onBlur={handleBlur('model')}
+          placeholder="vehicle model..."
+          autoCapitalize="none"
+          iconName="md-car"
+          iconColor="#2C384A"
+          touched={touched}
+          errors={errors}
+        />
+        {/* <FormPicker
           // mode="dropdown"
           name="model"
           label="Model"
@@ -64,7 +90,7 @@ const Form = ({ handleOnSubmit, initialValues, validationSchema, handleChoosePho
           useNativeAndroidPickerStyle={false}
           touched={touched}
           errors={errors}
-        />
+        /> */}
 
         <FormInput
           name="vehicleYear"
@@ -111,7 +137,9 @@ const Form = ({ handleOnSubmit, initialValues, validationSchema, handleChoosePho
           icon={<Icon reverse raised name="add-a-photo" size={15} color="#dde5f7" reverseColor="#5280e2" />}
         />
 
-        <ButtonContainer>
+        {errors.general && <FormattedError errorValue={errors.general} />}
+
+        <BottomButtonContainer>
           <FormButton
             onPress={handleSubmit}
             title="Next"
@@ -119,9 +147,7 @@ const Form = ({ handleOnSubmit, initialValues, validationSchema, handleChoosePho
             disabled={!isValid || isSubmitting}
             loading={isSubmitting}
           />
-        </ButtonContainer>
-
-        {errors.general && <FormattedError errorValue={errors.general} />}
+        </BottomButtonContainer>
       </Fragment>
     )}
   </Formik>

@@ -5,7 +5,12 @@ import { Button, Icon, Avatar, CheckBox } from 'react-native-elements';
 import styled from 'styled-components';
 import FormButton from '../../../../../components/Form/FormButton';
 import ErrorMessage, { FormattedError } from '../../../../../components/Form/ErrorMessage';
-import { ButtonContainer, BottomContainer, Headline } from '../../../../../components/Form/Elements';
+import {
+  ButtonContainer,
+  BottomContainer,
+  Headline,
+  BottomButtonContainer
+} from '../../../../../components/Form/Elements';
 import FormInput from '../../../../../components/Form/Fields/FormInput';
 import FormCheckbox from '../../../../../components/Form/Fields/FormCheckbox';
 
@@ -173,7 +178,9 @@ const Form = ({ handleOnSubmit, initialValues, validationSchema, handleOnDelete 
           <DeleteLabelText>Delete Group</DeleteLabelText>
         </IconContainer>
 
-        <StyledBottomContainer>
+        {errors.general && <FormattedError errorValue={errors.general} />}
+
+        <BottomButtonContainer>
           <FormButton
             onPress={handleSubmit}
             title="Save Changes"
@@ -181,8 +188,7 @@ const Form = ({ handleOnSubmit, initialValues, validationSchema, handleOnDelete 
             disabled={!isValid || isSubmitting}
             loading={isSubmitting}
           />
-        </StyledBottomContainer>
-        {errors.general && <FormattedError errorValue={errors.general} />}
+        </BottomButtonContainer>
       </Fragment>
     )}
   </Formik>

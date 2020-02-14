@@ -9,6 +9,7 @@ import Confirmation from '../screens/Authentication/Confirmation';
 import DriverInformation from '../screens/Driver/Information';
 import ProfilePhoto from '../screens/Driver/ProfilePhoto';
 import ApplicationReviewed from '../screens/Driver/ApplicationReviewed';
+import PasswordChanged from '../screens/Authentication/ForgotPassword/PasswordChanged';
 
 const AuthNavigation = createStackNavigator(
   {
@@ -20,6 +21,7 @@ const AuthNavigation = createStackNavigator(
     ProfilePhoto: { screen: ProfilePhoto },
     ApplicationReviewed: { screen: ApplicationReviewed },
     ForgotPassword: { screen: ForgotPassword },
+    PasswordChanged: { screen: PasswordChanged },
     Confirm: { screen: Confirmation }
   },
   {

@@ -5,7 +5,12 @@ import { Button, Icon, Avatar, CheckBox } from 'react-native-elements';
 import styled from 'styled-components';
 import FormButton from '../../../../../components/Form/FormButton';
 import ErrorMessage, { FormattedError } from '../../../../../components/Form/ErrorMessage';
-import { ButtonContainer, BottomContainer, Headline } from '../../../../../components/Form/Elements';
+import {
+  ButtonContainer,
+  BottomContainer,
+  Headline,
+  BottomButtonContainer
+} from '../../../../../components/Form/Elements';
 import FormInput from '../../../../../components/Form/Fields/FormInput';
 import FormCheckbox from '../../../../../components/Form/Fields/FormCheckbox';
 
@@ -57,7 +62,15 @@ const FieldContainer = styled(View)`
   margin-left: 15px;
 `;
 
-const Form = ({ handleOnSubmit, initialValues, validationSchema, handleOnDelete }) => (
+const Form = ({
+  handleOnSubmit,
+  initialValues,
+  validationSchema,
+  handleOnDelete,
+  handleOnEditNewRider,
+  handleOnAddRider,
+  handleOnImportRider
+}) => (
   <Formik
     initialValues={initialValues}
     onSubmit={(values, actions) => {
@@ -121,7 +134,7 @@ const Form = ({ handleOnSubmit, initialValues, validationSchema, handleOnDelete 
               overlayContainerStyle={{ backgroundColor: '#dde5f7' }}
               activeOpacity={0.7}
               size={53}
-              onPress={() => this._navigateTo('EditRider', { userType: 'rider', rider: riderItem })}
+              onPress={() => handleOnEditNewRider({ userType: 'rider', rider: riderItem })}
               disabled={false}
             />
             <LabelText>{`  ${riderItem.name}`}</LabelText>
@@ -137,7 +150,7 @@ const Form = ({ handleOnSubmit, initialValues, validationSchema, handleOnDelete 
             color="#dde5f7"
             reverseColor="#5280e2"
             size={25}
-            onPress={() => this._navigateTo('NewRider', { userType: 'rider' })}
+            onPress={handleOnAddRider}
             disabled={false}
           />
           <LabelText>Create new rider</LabelText>
@@ -152,13 +165,15 @@ const Form = ({ handleOnSubmit, initialValues, validationSchema, handleOnDelete 
             color="#dde5f7"
             reverseColor="#5280e2"
             size={25}
-            onPress={() => this._navigateTo('NewRider', { userType: 'rider' })}
+            onPress={handleOnImportRider}
             disabled={false}
           />
           <LabelText>Import user's riders</LabelText>
         </IconContainer>
 
-        <StyledBottomContainer>
+        {errors.general && <FormattedError errorValue={errors.general} />}
+
+        <BottomButtonContainer>
           <FormButton
             onPress={handleSubmit}
             title="Next"
@@ -166,8 +181,7 @@ const Form = ({ handleOnSubmit, initialValues, validationSchema, handleOnDelete 
             disabled={!isValid || isSubmitting}
             loading={isSubmitting}
           />
-        </StyledBottomContainer>
-        {errors.general && <FormattedError errorValue={errors.general} />}
+        </BottomButtonContainer>
       </Fragment>
     )}
   </Formik>

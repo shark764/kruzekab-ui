@@ -1,11 +1,23 @@
 import React, { Fragment } from 'react';
+import { TouchableOpacity, ScrollView } from 'react-native';
 import { Formik } from 'formik';
+import { Icon } from 'react-native-elements';
 import FormInput from '../../../components/Form/Fields/FormInput';
 import FormButton from '../../../components/Form/FormButton';
 import { FormattedError } from '../../../components/Form/ErrorMessage';
-import { ButtonContainer } from '../../../components/Form/Elements';
+import { ButtonContainer, BottomButtonContainer } from '../../../components/Form/Elements';
 
-const Form = ({ handleOnSubmit, initialValues, validationSchema }) => (
+const Form = ({
+  handleOnSubmit,
+  initialValues,
+  validationSchema,
+  handlePasswordVisibility,
+  passwordVisibility,
+  passwordIcon,
+  handleConfirmPasswordVisibility,
+  confirmPasswordVisibility,
+  confirmPasswordIcon
+}) => (
   <Formik
     initialValues={initialValues}
     onSubmit={(values, actions) => {
@@ -13,7 +25,7 @@ const Form = ({ handleOnSubmit, initialValues, validationSchema }) => (
       handleOnSubmit(values, actions);
     }}
     validationSchema={validationSchema}>
-    {({ handleChange, values, handleSubmit, errors, isValid, touched, handleBlur, isSubmitting }) => (
+    {({ handleChange, values, handleSubmit, errors, isValid, isSubmitting, touched, handleBlur }) => (
       <Fragment>
         <FormInput
           name="phoneNumber"
@@ -29,29 +41,55 @@ const Form = ({ handleOnSubmit, initialValues, validationSchema }) => (
           errors={errors}
         />
 
-        {/* <FormInput
-          name="email"
-          value={values.email}
-          onChangeText={handleChange('email')}
-          placeholder="example@domain.com"
-          autoCapitalize="none"
-          iconName="ios-mail"
+        <FormInput
+          name="newPassword"
+          label="New Password"
+          value={values.newPassword}
+          onChangeText={handleChange('newPassword')}
+          onBlur={handleBlur('newPassword')}
+          placeholder="new password..."
+          secureTextEntry={passwordVisibility}
+          rightIcon={
+            <TouchableOpacity onPress={handlePasswordVisibility}>
+              <Icon name={passwordIcon} type="ionicon" size={28} color="grey" />
+            </TouchableOpacity>
+          }
+          iconName="ios-lock"
           iconColor="#2C384A"
-          onBlur={handleBlur('email')}
           touched={touched}
           errors={errors}
-        /> */}
+        />
 
-        <ButtonContainer>
+        <FormInput
+          name="confirmNewPassword"
+          label="Confirm New Password"
+          value={values.confirmNewPassword}
+          onChangeText={handleChange('confirmNewPassword')}
+          onBlur={handleBlur('confirmNewPassword')}
+          placeholder="confirm new password..."
+          secureTextEntry={confirmPasswordVisibility}
+          rightIcon={
+            <TouchableOpacity onPress={handleConfirmPasswordVisibility}>
+              <Icon name={confirmPasswordIcon} type="ionicon" size={28} color="grey" />
+            </TouchableOpacity>
+          }
+          iconName="ios-lock"
+          iconColor="#2C384A"
+          touched={touched}
+          errors={errors}
+        />
+
+        {errors.general && <FormattedError errorValue={errors.general} />}
+
+        <BottomButtonContainer>
           <FormButton
             onPress={handleSubmit}
-            title="Send SMS"
+            title="Continue"
             textColor="white"
             disabled={!isValid || isSubmitting}
             loading={isSubmitting}
           />
-        </ButtonContainer>
-        {errors.general && <FormattedError errorValue={errors.general} />}
+        </BottomButtonContainer>
       </Fragment>
     )}
   </Formik>

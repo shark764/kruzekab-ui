@@ -5,7 +5,7 @@ import { Avatar } from 'react-native-elements';
 import styled from 'styled-components';
 import FormButton from '../../../../../components/Form/FormButton';
 import { FormattedError } from '../../../../../components/Form/ErrorMessage';
-import { ButtonContainer, BottomContainer } from '../../../../../components/Form/Elements';
+import { ButtonContainer, BottomContainer, BottomButtonContainer } from '../../../../../components/Form/Elements';
 import FormInput from '../../../../../components/Form/Fields/FormInput';
 
 const IconContainer = styled(ButtonContainer)`
@@ -46,8 +46,8 @@ const Form = ({ handleOnSubmit, initialValues, validationSchema, handleChoosePho
               color: '#5280e2',
               reverseColor: '#fff',
               underlayColor: '#5280e2',
-              size: 15,
-              marginRight: 20,
+              size: 17,
+              marginRight: 18,
               marginBottom: 20
             }}
             icon={{
@@ -79,7 +79,9 @@ const Form = ({ handleOnSubmit, initialValues, validationSchema, handleChoosePho
           errors={errors}
         />
 
-        <StyledBottomContainer>
+        {errors.general && <FormattedError errorValue={errors.general} />}
+
+        <BottomButtonContainer>
           <FormButton
             onPress={handleSubmit}
             title="Continue"
@@ -87,9 +89,7 @@ const Form = ({ handleOnSubmit, initialValues, validationSchema, handleChoosePho
             disabled={!isValid || isSubmitting}
             loading={isSubmitting}
           />
-        </StyledBottomContainer>
-
-        {errors.general && <FormattedError errorValue={errors.general} />}
+        </BottomButtonContainer>
       </Fragment>
     )}
   </Formik>

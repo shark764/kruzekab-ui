@@ -5,7 +5,7 @@ import { Button, Icon, Avatar } from 'react-native-elements';
 import styled from 'styled-components';
 import FormButton from '../../../components/Form/FormButton';
 import { FormattedError } from '../../../components/Form/ErrorMessage';
-import { ButtonContainer, BottomContainer } from '../../../components/Form/Elements';
+import { ButtonContainer, BottomContainer, BottomButtonContainer } from '../../../components/Form/Elements';
 
 const IconContainer = styled(ButtonContainer)`
   margin-bottom: 80px;
@@ -51,8 +51,8 @@ const Form = ({ handleOnSubmit, initialValues, validationSchema, handleChoosePho
               reverseColor: '#fff',
               underlayColor: '#5280e2',
               size: 17,
-              marginRight: 20,
-              marginBottom: 25
+              marginRight: 18,
+              marginBottom: 20
             }}
             icon={{
               name: 'md-person',
@@ -79,7 +79,9 @@ const Form = ({ handleOnSubmit, initialValues, validationSchema, handleChoosePho
           />
         </IconContainer>
 
-        <StyledBottomContainer>
+        {errors.general && <FormattedError errorValue={errors.general} />}
+
+        <BottomButtonContainer>
           <FormButton
             onPress={handleSubmit}
             title="Next"
@@ -87,9 +89,7 @@ const Form = ({ handleOnSubmit, initialValues, validationSchema, handleChoosePho
             disabled={!isValid || isSubmitting}
             loading={isSubmitting}
           />
-        </StyledBottomContainer>
-
-        {errors.general && <FormattedError errorValue={errors.general} />}
+        </BottomButtonContainer>
       </Fragment>
     )}
   </Formik>

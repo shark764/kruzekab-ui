@@ -52,7 +52,9 @@ const StyledBottomContainer = styled(BottomContainer)`
 `;
 
 export default class EditGroup extends Component {
-  state = {};
+  state = {
+    ridersList: []
+  };
 
   static navigationOptions = ({ navigation, navigation: { state } }) => {
     return {

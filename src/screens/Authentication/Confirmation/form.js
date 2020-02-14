@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import CodeInput from 'react-native-confirmation-code-field';
 import FormButton from '../../../components/Form/FormButton';
 import { FormattedError } from '../../../components/Form/ErrorMessage';
-import { ButtonContainer, HelpButton, HelpButtonText } from '../../../components/Form/Elements';
+import { ButtonContainer, HelpButton, HelpButtonText, BottomButtonContainer } from '../../../components/Form/Elements';
 import { Button } from 'react-native-elements';
 
 const CodeContainer = styled(View)`
@@ -76,10 +76,14 @@ const Form = ({
             }}
           />
         </CodeContainer>
+
         <HelpButton onPress={handleOnResendCode}>
           <StyledHelpButtonText>Resend code</StyledHelpButtonText>
         </HelpButton>
-        <StyledButtonContainer>
+
+        {errors.general && <FormattedError errorValue={errors.general} />}
+
+        <BottomButtonContainer>
           <FormButton
             onPress={handleSubmit}
             title="Verify"
@@ -87,8 +91,7 @@ const Form = ({
             disabled={!isFulfilled || isSubmitting}
             loading={isSubmitting}
           />
-        </StyledButtonContainer>
-        {errors.general && <FormattedError errorValue={errors.general} />}
+        </BottomButtonContainer>
       </Fragment>
     )}
   </Formik>

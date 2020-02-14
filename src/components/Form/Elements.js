@@ -21,6 +21,8 @@ export const Headline = styled(Text)`
 `;
 
 export const SubHeadline = styled(Text)`
+  font-family: Open Sans;
+  font-style: normal;
   font-weight: normal;
   font-size: 16px;
   margin-top: 0;
@@ -29,6 +31,15 @@ export const SubHeadline = styled(Text)`
   margin-left: 25px;
   color: #6b768d;
   letter-spacing: 0.2px;
+`;
+
+export const HeaderMessage = styled(Text)`
+  font-family: Open Sans;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 15px;
+  color: #212226;
+  margin-left: 25px;
 `;
 
 export const Title = styled(Text)`
@@ -45,9 +56,17 @@ export const ButtonContainer = styled(View)`
 `;
 
 export const BottomContainer = styled(View)`
-  position: absolute;
-  bottom: 25px;
-  align-self: center;
+  flex: 1;
+  justify-content: flex-end;
+  margin-bottom: 25px;
+  margin-top: 25px;
+`;
+
+export const BottomButtonContainer = styled(BottomContainer)`
+  left: 0;
+  right: 0;
+  margin-left: 25px;
+  margin-right: 25px;
 `;
 
 export const HelpButton = styled(TouchableOpacity)`

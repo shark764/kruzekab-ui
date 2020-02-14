@@ -1,11 +1,11 @@
 import React, { Fragment } from 'react';
-import { TouchableOpacity } from 'react-native';
+import { TouchableOpacity, ScrollView } from 'react-native';
 import { Formik } from 'formik';
 import { Icon } from 'react-native-elements';
 import FormInput from '../../../components/Form/Fields/FormInput';
 import FormButton from '../../../components/Form/FormButton';
 import { FormattedError } from '../../../components/Form/ErrorMessage';
-import { ButtonContainer } from '../../../components/Form/Elements';
+import { ButtonContainer, BottomButtonContainer } from '../../../components/Form/Elements';
 
 const Form = ({
   handleOnSubmit,
@@ -114,7 +114,9 @@ const Form = ({
           errors={errors}
         />
 
-        <ButtonContainer>
+        {errors.general && <FormattedError errorValue={errors.general} />}
+
+        <BottomButtonContainer>
           <FormButton
             onPress={handleSubmit}
             title="Next"
@@ -122,9 +124,7 @@ const Form = ({
             disabled={!isValid || isSubmitting}
             loading={isSubmitting}
           />
-        </ButtonContainer>
-
-        {errors.general && <FormattedError errorValue={errors.general} />}
+        </BottomButtonContainer>
       </Fragment>
     )}
   </Formik>
