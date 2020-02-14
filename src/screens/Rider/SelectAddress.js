@@ -23,14 +23,15 @@ const StyledHeadline = styled(Text)`
     letter-spacing: 0.2px;
 `;
 
-const searchPlace = text => axios
-  .get(`https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=13.6999513,-89.2300212&radius=500&types=food&name=${text}&key=AIzaSyCH7pW8XhPRvUzm-JQ0f7aWVhN3QAUQO78`)
+const searchPlace = (text, currentPosition) =>  axios
+  .get(`https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${currentPosition.latitude},${currentPosition.longitude}&radius=500&types=food&name=${text}&key=AIzaSyCH7pW8XhPRvUzm-JQ0f7aWVhN3QAUQO78`)
 
 const debouncedSearchPlace = AwesomeDebouncePromise(
   searchPlace,
   500,
 );
 export default class SelectAddress extends Component {
+  currentPosition = this.props.navigation.state.params.currentPosition;
 
   state = {
     addressPlaceholder: this.props.navigation.state.params.addressPlaceholder,
@@ -243,7 +244,7 @@ export default class SelectAddress extends Component {
               onChangeText={async query => {
                 this.setState({ firstQuery: query });
                 if (query.length > 4) {
-                  const { data } = await debouncedSearchPlace(query);
+                  const { data } = await debouncedSearchPlace(query, this.currentPosition);
                   console.log(data.results);
                   this.setState({
                     searchedPlaces: data.results,

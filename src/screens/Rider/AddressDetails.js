@@ -62,7 +62,7 @@ export default class AddressDetails extends Component {
   state = {
     selectedAddress: this.props.navigation.state.params.selectedAddress,
     setSelectedAddress: this.props.navigation.state.params.setSelectedAddress,
-    address1: `${this.address[0]}, ${this.address[1]}`,
+    address1: (this.address[0] && `${this.address[0]}` || '') + (this.address[1] && `, ${this.address[1]}` || ''),
     address2: (this.address[2] && `${this.address[2]}` || '') + (this.address[3] && `, ${this.address[3]}` || ''),
     address3: '',
     saveStatus: 'Save Address',
