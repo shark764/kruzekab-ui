@@ -12,6 +12,8 @@ import {
 import Form from './form';
 import { validationSchema } from './validation';
 import { NavigationHeaderButtons, Item } from '../../../components/Header/HeaderButton';
+import Axios from 'axios';
+// import bcrypt from 'bcrypt';
 
 const StyledHeadline = styled(Headline)`
   margin-bottom: 0;
@@ -68,16 +70,35 @@ export default class Login extends Component {
 
   handleOnLogin = async (values, actions) => {
     try {
-      // const response = await this.props.firebase.loginWithEmail(email, password);
+      const { phoneNumber, password } = values;
 
-      // if (response.user) {
-      //   this.props.navigation.navigate('App', { userType: null });
-      // }
-      setTimeout(() => {
-        // this.props.navigation.navigate('App', { userType: null });
+      // const rounds = 10;
+      // const hash = await bcrypt.hash(`${phoneNumber}:${password}`, rounds);
+
+      let res = await Axios.post(
+        'https://api.kruzekab.com/api/login',
+        {},
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: '$2y$10$Yxl4lSH6PSLvjuNwhNAcS.e8mK8iaU5C52RRfppBscDm8zjuaP5PK'
+          }
+        }
+      );
+
+      console.log(`Status code: ${res.status}`);
+      console.log(`Status text: ${res.statusText}`);
+      console.log(`Request method: ${res.request.method}`);
+      console.log(`Path: ${res.request.path}`);
+
+      console.log(`Date: ${res.headers.date}`);
+      console.log(`Data: ${res.data}`);
+
+      if (res.status === 200) {
         this.props.navigation.navigate('Rider', { userType: null });
-        // this.props.navigation.navigate('Signup', { userType: null });
-      }, 1500);
+      } else {
+        actions.setFieldError('general', res.statusText);
+      }
     } catch (error) {
       actions.setFieldError('general', error.message);
     } finally {

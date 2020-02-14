@@ -62,12 +62,12 @@ const Form = ({
                 // backgroundColor: '#030c31',
                 fontSize: 40,
                 fontWeight: 'bold',
-                lineHeight: 40,
+                lineHeight: 30,
                 // textShadow: '1px 0 #888888',
                 // textShadowColor: '#5280e2',
                 // textShadowOffset: { width: -1, height: 1 },
                 // textShadowRadius: 0,
-                letterSpacing: 2
+                letterSpacing: 8
                 // textShadowColor: '#5280e2',
                 // textShadowOffset: { width: -1, height: 1 },
                 // textShadowRadius: 10

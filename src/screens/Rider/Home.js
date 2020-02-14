@@ -277,9 +277,9 @@ export default class Home extends Component {
               style={{
                 color: this.state.location === 'from' ? '#5280E2' : '#212226',
                 position: 'absolute',
-                left: 16,
+                left: 12,
                 fontSize: 15,
-                top: 17
+                top: 15
               }}>
               ●
             </Text>

@@ -196,7 +196,7 @@ export default class NewGroup extends Component {
   handleOnEditNewRider = async (values, actions) => {
     try {
       setTimeout(() => {
-        this.props.navigation.navigate('ImportRider', { userType: 'rider' });
+        this.props.navigation.navigate('EditRider', { userType: 'rider' });
       }, 1500);
     } catch (error) {
       actions.setFieldError('general', error.message);

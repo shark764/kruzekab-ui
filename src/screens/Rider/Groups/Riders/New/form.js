@@ -20,6 +20,33 @@ const StyledBottomContainer = styled(BottomContainer)`
   margin-right: 25px;
 `;
 
+const PhotoAvatar = props => (
+  <Avatar
+    rounded
+    showEditButton
+    editButton={{
+      name: 'photo-camera',
+      type: 'material',
+      reverse: true,
+      color: '#5280e2',
+      reverseColor: '#fff',
+      underlayColor: '#5280e2',
+      size: 17,
+      marginRight: 18,
+      marginBottom: 20
+    }}
+    icon={{
+      name: 'md-person',
+      type: 'ionicon',
+      color: '#5280e2'
+    }}
+    overlayContainerStyle={{ backgroundColor: '#dde5f7' }}
+    activeOpacity={0.7}
+    size={110}
+    {...props}
+  />
+);
+
 const Form = ({ handleOnSubmit, initialValues, validationSchema, handleChoosePhoto, photo }) => (
   <Formik
     initialValues={initialValues}
@@ -31,38 +58,24 @@ const Form = ({ handleOnSubmit, initialValues, validationSchema, handleChoosePho
     {({ handleChange, values, handleSubmit, errors, isValid, isSubmitting, touched, handleBlur }) => (
       <Fragment>
         <IconContainer>
-          {photo && <Image source={{ uri: photo.uri }} style={{ width: 300, height: 300 }} />}
-          <Avatar
-            rounded
-            // source={{
-            //   uri: 'https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg'
-            // }}
-            // source={require('../../../../../assets/edit-rider.png')}
-            showEditButton
-            editButton={{
-              name: 'photo-camera',
-              type: 'material',
-              reverse: true,
-              color: '#5280e2',
-              reverseColor: '#fff',
-              underlayColor: '#5280e2',
-              size: 17,
-              marginRight: 18,
-              marginBottom: 20
-            }}
-            icon={{
-              name: 'md-person',
-              type: 'ionicon',
-              color: '#5280e2'
-            }}
-            overlayContainerStyle={{ backgroundColor: '#dde5f7' }}
-            activeOpacity={0.7}
-            size={110}
-            onPress={handleChoosePhoto}
-            onEditPress={handleChoosePhoto}
-            disabled={!isValid || isSubmitting}
-            loading={isSubmitting}
-          />
+          {photo ? (
+            <PhotoAvatar
+              source={{
+                uri: photo.uri
+              }}
+              onPress={handleChoosePhoto}
+              onEditPress={handleChoosePhoto}
+              disabled={!isValid || isSubmitting}
+              loading={isSubmitting}
+            />
+          ) : (
+            <PhotoAvatar
+              onPress={handleChoosePhoto}
+              onEditPress={handleChoosePhoto}
+              disabled={!isValid || isSubmitting}
+              loading={isSubmitting}
+            />
+          )}
         </IconContainer>
 
         <FormInput

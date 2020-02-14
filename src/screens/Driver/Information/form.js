@@ -1,13 +1,19 @@
 import React, { Fragment } from 'react';
-import { Image } from 'react-native';
+import { View, ActivityIndicator } from 'react-native';
 import { Formik } from 'formik';
-import { Button, Icon } from 'react-native-elements';
+import { Image, Button, Icon } from 'react-native-elements';
 import FormInput from '../../../components/Form/Fields/FormInput';
 import FormButton from '../../../components/Form/FormButton';
 import { FormattedError } from '../../../components/Form/ErrorMessage';
 import FormRadioGroup from '../../../components/Form/Fields/FormRadioGroup';
 import FormCheckbox from '../../../components/Form/Fields/FormCheckbox';
 import { ButtonContainer, BottomButtonContainer } from '../../../components/Form/Elements';
+import styled from 'styled-components';
+
+const ImageContainer = styled(View)`
+  margin-left: 40px;
+  margin-right: 40px;
+`;
 
 const Form = ({ handleOnSubmit, initialValues, validationSchema, handleChoosePhoto, photo }) => (
   <Formik
@@ -62,9 +68,8 @@ const Form = ({ handleOnSubmit, initialValues, validationSchema, handleChoosePho
           errors={errors}
         />
 
-        {photo && <Image source={{ uri: photo.uri }} style={{ width: 300, height: 300 }} />}
         <Button
-          title="Upload proof of car insurance"
+          title="Upload photo of Driver's License"
           onPress={handleChoosePhoto}
           titleStyle={{
             fontFamily: 'Open Sans',
@@ -76,6 +81,15 @@ const Form = ({ handleOnSubmit, initialValues, validationSchema, handleChoosePho
           type="clear"
           icon={<Icon reverse raised name="add-a-photo" size={15} color="#dde5f7" reverseColor="#5280e2" />}
         />
+        {photo && (
+          <View style={{ marginLeft: 'auto', marginRight: 'auto', flex: 1 }}>
+            <Image
+              source={{ uri: photo.uri }}
+              style={{ width: 100, height: 100 }}
+              PlaceholderContent={<ActivityIndicator />}
+            />
+          </View>
+        )}
 
         <FormRadioGroup
           name="trafficViolation"

@@ -1,12 +1,13 @@
 import React, { Fragment } from 'react';
-import { Image } from 'react-native';
 import { Formik } from 'formik';
-import { Button, Icon } from 'react-native-elements';
+import { Button, Icon, Image } from 'react-native-elements';
 import FormInput from '../../../components/Form/Fields/FormInput';
 import FormPicker from '../../../components/Form/Fields/FormPicker';
 import FormButton from '../../../components/Form/FormButton';
 import { FormattedError } from '../../../components/Form/ErrorMessage';
 import { ButtonContainer, BottomButtonContainer } from '../../../components/Form/Elements';
+import { View } from 'react-native';
+import { ActivityIndicator } from 'react-native';
 
 const Form = ({ handleOnSubmit, initialValues, validationSchema, handleChoosePhoto, photo }) => (
   <Formik
@@ -122,7 +123,6 @@ const Form = ({ handleOnSubmit, initialValues, validationSchema, handleChoosePho
           errors={errors}
         />
 
-        {photo && <Image source={{ uri: photo.uri }} style={{ width: 300, height: 300 }} />}
         <Button
           title="Upload proof of car insurance"
           onPress={handleChoosePhoto}
@@ -136,6 +136,15 @@ const Form = ({ handleOnSubmit, initialValues, validationSchema, handleChoosePho
           type="clear"
           icon={<Icon reverse raised name="add-a-photo" size={15} color="#dde5f7" reverseColor="#5280e2" />}
         />
+        {photo && (
+          <View style={{ marginLeft: 'auto', marginRight: 'auto', flex: 1 }}>
+            <Image
+              source={{ uri: photo.uri }}
+              style={{ width: 100, height: 100 }}
+              PlaceholderContent={<ActivityIndicator />}
+            />
+          </View>
+        )}
 
         {errors.general && <FormattedError errorValue={errors.general} />}
 

@@ -83,6 +83,18 @@ const RiderNavigation = createDrawerNavigator(
     drawerCloseRoute: 'DrawerClose',
     drawerToggleRoute: 'DrawerToggle'
   }
+  // {
+  //   contentComponent: props => (
+  //     <SafeAreaView style={styles.container}>
+  //       <View style={{ height: 100, alignItems: 'center', justifyContent: 'center' }}>
+  //         <Text style={{ fontSize: 32 }}>LOGO</Text>
+  //       </View>
+  //       <ScrollView>
+  //         <DrawerItems {...props} />
+  //       </ScrollView>
+  //     </SafeAreaView>
+  //   )
+  // }
 );
 
 export default RiderNavigation;
