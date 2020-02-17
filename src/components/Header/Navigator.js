@@ -1,5 +1,7 @@
+import React from 'react';
 import { NavigationHeaderButtons, Item } from './HeaderButton';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import { Icon } from 'react-native-elements';
 
 export const GoBackButton = props => (
   <NavigationHeaderButtons>

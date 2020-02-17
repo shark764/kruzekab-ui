@@ -14,6 +14,7 @@ import {
   HelpButtonText
 } from '../../../components/Form/Elements';
 import { NavigationHeaderButtons, Item } from '../../../components/Header/HeaderButton';
+import { GoBackButton } from '../../../components/Header/Navigator';
 
 const StyledHeadline = styled(Headline)`
   margin-bottom: 0;
