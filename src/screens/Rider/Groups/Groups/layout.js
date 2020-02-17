@@ -90,7 +90,9 @@ export default class Groups extends Component {
       actions.setFieldError('general', error.message);
     } finally {
       // This is avoiding submit button loading icon
-      actions.setSubmitting(false);
+      setTimeout(() => {
+        actions.setSubmitting(false);
+      }, 1500);
     }
   };
 

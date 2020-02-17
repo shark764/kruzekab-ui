@@ -47,7 +47,7 @@ export default class DriverSignup extends Component {
     }));
   };
 
-  handleOnSignup = async (values, actions) => {
+  handleOnSubmit = async (values, actions) => {
     try {
       // const response = await this.props.firebase.signupWithEmail(email, password);
       const { phoneNumber } = values;
@@ -60,7 +60,9 @@ export default class DriverSignup extends Component {
       actions.setFieldError('general', error.message);
     } finally {
       // This is avoiding submit button loading icon
-      actions.setSubmitting(false);
+      setTimeout(() => {
+        actions.setSubmitting(false);
+      }, 1500);
     }
   };
 
@@ -74,7 +76,7 @@ export default class DriverSignup extends Component {
           <StyledHeadline>Reset your password</StyledHeadline>
           <SubHeadline>You will receive a SMS verification code</SubHeadline>
           <Form
-            handleOnSubmit={this.handleOnSignup}
+            handleOnSubmit={this.handleOnSubmit}
             initialValues={{
               userType: 2,
               phoneNumber: '',

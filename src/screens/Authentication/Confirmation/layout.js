@@ -82,6 +82,11 @@ export default class Confirmation extends Component {
       }, 1500);
     } catch (error) {
       actions.setFieldError('general', error.message);
+    } finally {
+      // This is avoiding submit button loading icon
+      setTimeout(() => {
+        actions.setSubmitting(false);
+      }, 1500);
     }
   };
 
