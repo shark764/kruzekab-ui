@@ -64,3 +64,8 @@ export const removeRiderFromGroup = (groupId, riderId) => ({
   groupId,
   riderId
 });
+
+export const addToNewGroup = payload => ({
+  type: 'ADD_TO_NEW_GROUP',
+  payload
+});

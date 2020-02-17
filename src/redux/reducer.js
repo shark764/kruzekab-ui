@@ -7,7 +7,8 @@ const INITIAL_STATE = fromJS({
   userData: {},
   riders: [],
   groups: [],
-  newUser: {}
+  newUser: {},
+  newGroup: {}
 });
 
 const getItemIndex = (state, entity, itemId) => state.get(entity).findIndex(item => item.get('id') === itemId);
@@ -61,6 +62,8 @@ const appReducer = (state = INITIAL_STATE, action) => {
         return riders;
       });
     }
+    case 'ADD_TO_NEW_GROUP':
+      return state.mergeIn(['newGroup'], fromJS(action.payload));
     default:
       return state;
   }

@@ -1,6 +1,16 @@
 import { connect } from 'react-redux';
 import Layout from './layout';
+import { getAllGroups } from '../../../../redux/selectors';
+import { addGroup, updateGroup, removeGroup } from '../../../../redux/actions';
 
-const mapStateToProps = () => ({});
+const mapStateToProps = (state, props) => ({
+  groups: getAllGroups(state)
+});
 
-export default connect(mapStateToProps)(Layout);
+const actions = {
+  addGroup,
+  updateGroup,
+  removeGroup
+};
+
+export default connect(mapStateToProps, actions)(Layout);
