@@ -57,7 +57,7 @@ export default class Groups extends Component {
     groupsList: []
   };
 
-  static navigationOptions = ({        navigation, navigation: { state } }) => {
+  static navigationOptions = ({ navigation, navigation: { state } }) => {
     return {
       title: 'Groups',
       headerLeft: () => (
@@ -91,7 +91,7 @@ export default class Groups extends Component {
       ),
       headerBackground: () => (
         <Image style={{ width: '100%', height: 86 }} source={require('../../../../assets/map.png')} />
-      ),
+      )
     };
   };
 

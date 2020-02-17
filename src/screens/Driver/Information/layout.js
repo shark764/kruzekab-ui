@@ -14,7 +14,7 @@ export default class DriverInformation extends Component {
     photo: null
   };
 
-  static navigationOptions = ({        navigation, navigation: { state } }) => {
+  static navigationOptions = ({ navigation, navigation: { state } }) => {
     return {
       headerLeft: () => <GoBackButton onPress={() => navigation.navigate('Confirm', { userType: 'driver' })} />
     };

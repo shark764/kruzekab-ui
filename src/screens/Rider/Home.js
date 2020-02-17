@@ -57,7 +57,7 @@ const WhereToView = styled(View)`
 `;
 
 export default class Home extends Component {
-  /*static navigationOptions = ({        navigation, navigation: { state } }) => {
+  /*static navigationOptions = ({             navigation, navigation: { state } }) => {
      return {
        headerShown: false,
        headerTitle: () => null,
@@ -85,7 +85,7 @@ export default class Home extends Component {
      };
    };*/
 
-  // static navigationOptions = ({        navigation }) => {
+  // static navigationOptions = ({             navigation }) => {
   //   return {
   //     drawerIcon: () => null,
   //     drawerLabel: () => null

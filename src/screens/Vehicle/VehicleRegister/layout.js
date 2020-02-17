@@ -11,7 +11,7 @@ export default class VehicleRegister extends Component {
     photo: null
   };
 
-  static navigationOptions = ({        navigation }) => {
+  static navigationOptions = ({ navigation }) => {
     return {
       headerLeft: () => <GoBackButton onPress={() => navigation.navigate('ProfilePhoto', { userType: 'driver' })} />
     };

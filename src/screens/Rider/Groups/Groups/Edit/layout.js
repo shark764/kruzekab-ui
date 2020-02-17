@@ -56,7 +56,7 @@ export default class EditGroup extends Component {
     ridersList: []
   };
 
-  static navigationOptions = ({        navigation, navigation: { state } }) => {
+  static navigationOptions = ({ navigation, navigation: { state } }) => {
     return {
       title: 'Edit group',
       headerLeft: () => (
@@ -87,7 +87,7 @@ export default class EditGroup extends Component {
             onPress={() => navigation.navigate('Groups', { userType: 'rider' })}
           />
         </NavigationHeaderButtons>
-      ),
+      )
     };
   };
 

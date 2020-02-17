@@ -58,7 +58,7 @@ export default class Riders extends Component {
     ridersList: []
   };
 
-  static navigationOptions = ({        navigation, navigation: { state } }) => {
+  static navigationOptions = ({ navigation, navigation: { state } }) => {
     return {
       title: 'My Riders',
       headerLeft: () => (
@@ -92,7 +92,7 @@ export default class Riders extends Component {
       ),
       headerBackground: () => (
         <Image style={{ width: '100%', height: 86 }} source={require('../../../../assets/map.png')} />
-      ),
+      )
     };
   };
 

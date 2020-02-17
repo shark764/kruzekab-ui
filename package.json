@@ -15,9 +15,8 @@
     }
   },
   "lint-staged": {
-    "./src/*.{js,jsx,ts,tsx}": [
+    "src/**/*.{js,jsx,json,css}": [
       "npx prettier --single-quote --write --print-width 120",
-      "eslint src/*.js --fix-dry-run",
       "git add"
     ]
   },

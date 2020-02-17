@@ -54,7 +54,7 @@ const StyledBottomContainer = styled(BottomContainer)`
 export default class NewRider extends Component {
   state = {};
 
-  static navigationOptions = ({        navigation, navigation: { state } }) => {
+  static navigationOptions = ({ navigation, navigation: { state } }) => {
     return {
       title: 'Create a new rider',
       headerLeft: () => (
@@ -88,7 +88,7 @@ export default class NewRider extends Component {
       ),
       headerBackground: () => (
         <Image style={{ width: '100%', height: 250 }} source={require('../../../../../assets/map.png')} />
-      ),
+      )
     };
   };
 
