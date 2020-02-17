@@ -9,9 +9,15 @@
     "type": "git",
     "url": "https://gitlab.com/kruzekab-mobile-app/kruzekab-ui"
   },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
   "lint-staged": {
-    "src/**/*.{js,jsx,json,css}": [
-      "prettier --single-quote --write --print-width 120",
+    "./src/*.{js,jsx,ts,tsx}": [
+      "npx prettier --single-quote --write --print-width 120",
+      "eslint src/*.js --fix-dry-run",
       "git add"
     ]
   },
