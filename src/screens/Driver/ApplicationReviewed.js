@@ -29,7 +29,7 @@ const StyledLogoContainer = styled(LogoContainer)`
 export default class ApplicationReviewed extends Component {
   state = {};
 
-  static navigationOptions = ({}) => {
+  static navigationOptions = ({       }) => {
     return {
       headerLeft: () => null,
     };

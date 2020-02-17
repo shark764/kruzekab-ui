@@ -59,7 +59,7 @@ const StyledBottomContainer = styled(BottomContainer)`
 export default class ImportRider extends Component {
   state = {};
 
-  static navigationOptions = ({ navigation, navigation: { state } }) => {
+  static navigationOptions = ({        navigation, navigation: { state } }) => {
     return {
       title: 'Import riders',
       headerLeft: () => (

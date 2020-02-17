@@ -57,7 +57,7 @@ export default class Groups extends Component {
     groupsList: []
   };
 
-  static navigationOptions = ({ navigation, navigation: { state } }) => {
+  static navigationOptions = ({        navigation, navigation: { state } }) => {
     return {
       title: 'Groups',
       headerLeft: () => (

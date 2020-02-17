@@ -58,7 +58,7 @@ export default class Riders extends Component {
     ridersList: []
   };
 
-  static navigationOptions = ({ navigation, navigation: { state } }) => {
+  static navigationOptions = ({        navigation, navigation: { state } }) => {
     return {
       title: 'My Riders',
       headerLeft: () => (

@@ -19,7 +19,7 @@ export default class DriverSignup extends Component {
     passwordIcon: 'ios-eye'
   };
 
-  static navigationOptions = ({ navigation, navigation: { state } }) => {
+  static navigationOptions = ({        navigation, navigation: { state } }) => {
     return {
       headerLeft: () => <GoBackButton onPress={() => navigation.navigate('Initial', { userType: 'driver' })} />
     };

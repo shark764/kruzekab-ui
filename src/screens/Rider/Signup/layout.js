@@ -31,7 +31,7 @@ export default class Signup extends Component {
     passwordIcon: 'ios-eye'
   };
 
-  static navigationOptions = ({ navigation, navigation: { state } }) => {
+  static navigationOptions = ({        navigation, navigation: { state } }) => {
     return {
       headerLeft: () => <GoBackButton onPress={() => navigation.navigate('Initial', { userType: 'rider' })} />
     };

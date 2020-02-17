@@ -54,7 +54,7 @@ const StyledBottomContainer = styled(BottomContainer)`
 export default class EditRider extends Component {
   state = {};
 
-  static navigationOptions = ({ navigation, navigation: { state } }) => {
+  static navigationOptions = ({        navigation, navigation: { state } }) => {
     return {
       title: 'Edit rider',
       headerLeft: () => (
