@@ -92,7 +92,7 @@ const RequestStack = createStackNavigator(
 
 const RiderNavigation = createDrawerNavigator(
   {
-    'Request Ride': { screen: RequestStack },
+    Ride: { screen: RequestStack },
     'My Riders': { screen: RiderStack },
     'My Groups': { screen: GroupStack }
   },
