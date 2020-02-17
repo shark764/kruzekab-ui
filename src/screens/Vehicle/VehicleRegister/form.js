@@ -11,6 +11,7 @@ import { ActivityIndicator } from 'react-native';
 
 const Form = ({ handleOnSubmit, initialValues, validationSchema, handleChoosePhoto, photo }) => (
   <Formik
+    enableReinitialize
     initialValues={initialValues}
     onSubmit={(values, actions) => {
       console.log('values =>', values);
@@ -32,27 +33,6 @@ const Form = ({ handleOnSubmit, initialValues, validationSchema, handleChoosePho
           touched={touched}
           errors={errors}
         />
-        {/* <FormPicker
-          // mode="dropdown"
-          name="car"
-          label="Car"
-          placeholder={{
-            label: 'Choose vehicle branch...',
-            value: '',
-            color: '#9ea0a4'
-          }}
-          selectedValue={values.car}
-          onValueChange={handleChange('car')}
-          onBlur={handleBlur('car')}
-          items={[
-            { label: 'Toyota', value: 'toyota' },
-            { label: 'Honda', value: 'honda' },
-            { label: 'Nissan', value: 'nissan' }
-          ]}
-          useNativeAndroidPickerStyle={false}
-          touched={touched}
-          errors={errors}
-        /> */}
 
         <FormInput
           name="model"
@@ -67,31 +47,6 @@ const Form = ({ handleOnSubmit, initialValues, validationSchema, handleChoosePho
           touched={touched}
           errors={errors}
         />
-        {/* <FormPicker
-          // mode="dropdown"
-          name="model"
-          label="Model"
-          // prompt="Choose model model..."
-          placeholder={{
-            label: 'Choose vehicle model...',
-            value: '',
-            color: '#9ea0a4'
-          }}
-          selectedValue={values.model}
-          onValueChange={handleChange('model')}
-          onBlur={handleBlur('model')}
-          items={[
-            { label: 'Corolla', value: 'corolla' },
-            { label: 'Yaris', value: 'yaris' },
-            { label: 'Civic', value: 'civic' },
-            { label: 'Accord', value: 'accord' },
-            { label: 'Sentra', value: 'sentra' },
-            { label: 'Altima', value: 'altima' }
-          ]}
-          useNativeAndroidPickerStyle={false}
-          touched={touched}
-          errors={errors}
-        /> */}
 
         <FormInput
           name="vehicleYear"

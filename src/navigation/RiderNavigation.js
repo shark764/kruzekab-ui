@@ -12,9 +12,40 @@ import AppNavigation from './AppNavigation';
 import Home from '../screens/Rider/Home';
 import SelectAddress from '../screens/Rider/SelectAddress';
 import AddressDetails from '../screens/Rider/AddressDetails';
-import { SafeAreaView, View } from 'react-native';
+import { SafeAreaView, View, Image } from 'react-native';
 import { Button } from 'react-native-elements';
 import { HelpButton, HelpButtonText } from '../components/Form/Elements';
+
+const defaultNavigationOptions = {
+  headerStyle: {
+    elevation: 0,
+    shadowOpacity: 0,
+    borderBottomWidth: 0,
+    shadowColor: 'transparent',
+    backgroundColor: '#fff',
+    shadowColor: 'transparent',
+    shadowRadius: 0,
+    shadowOffset: {
+      height: 0
+    }
+  },
+  headerTintColor: '#3e4958',
+  headerBackground: () => <Image style={{ width: '100%', height: 86 }} source={require('../assets/map.png')} />,
+  headerTitleAlign: 'center',
+  headerTitleStyle: {
+    fontFamily: 'Inter',
+    fontStyle: 'normal',
+    fontWeight: 'bold',
+    fontSize: 20,
+    letterSpacing: 0.2,
+    marginTop: 30,
+    color: '#3e4958',
+    alignSelf: 'center',
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  headerLayoutPreset: 'center'
+};
 
 const RiderStack = createStackNavigator(
   {
@@ -23,7 +54,8 @@ const RiderStack = createStackNavigator(
     EditRider: { screen: EditRider }
   },
   {
-    initialRouteName: 'Riders'
+    initialRouteName: 'Riders',
+    defaultNavigationOptions
   }
 );
 
@@ -35,7 +67,8 @@ const GroupStack = createStackNavigator(
     ImportRider: { screen: ImportRider }
   },
   {
-    initialRouteName: 'Groups'
+    initialRouteName: 'Groups',
+    defaultNavigationOptions
   }
 );
 
@@ -52,7 +85,8 @@ const RequestStack = createStackNavigator(
     AddressDetails: { screen: AddressDetails, navigationOptions: { headerShown: false } }
   },
   {
-    initialRouteName: 'Home'
+    initialRouteName: 'Home',
+    defaultNavigationOptions
   }
 );
 
@@ -83,18 +117,6 @@ const RiderNavigation = createDrawerNavigator(
     drawerCloseRoute: 'DrawerClose',
     drawerToggleRoute: 'DrawerToggle'
   }
-  // {
-  //   contentComponent: props => (
-  //     <SafeAreaView style={styles.container}>
-  //       <View style={{ height: 100, alignItems: 'center', justifyContent: 'center' }}>
-  //         <Text style={{ fontSize: 32 }}>LOGO</Text>
-  //       </View>
-  //       <ScrollView>
-  //         <DrawerItems {...props} />
-  //       </ScrollView>
-  //     </SafeAreaView>
-  //   )
-  // }
 );
 
 export default RiderNavigation;

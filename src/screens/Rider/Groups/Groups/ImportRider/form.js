@@ -64,6 +64,7 @@ const FieldContainer = styled(View)`
 
 const Form = ({ handleOnSubmit, initialValues, validationSchema }) => (
   <Formik
+    enableReinitialize
     initialValues={initialValues}
     onSubmit={(values, actions) => {
       console.log('values =>', values);

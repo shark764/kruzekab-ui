@@ -90,36 +90,9 @@ export default class Riders extends Component {
           />
         </NavigationHeaderButtons>
       ),
-      headerStyle: {
-        elevation: 0,
-        shadowOpacity: 0,
-        borderBottomWidth: 0,
-        shadowColor: 'transparent',
-        backgroundColor: '#fff',
-        shadowColor: 'transparent',
-        shadowRadius: 0,
-        shadowOffset: {
-          height: 0
-        }
-      },
-      headerTintColor: '#3e4958',
       headerBackground: () => (
         <Image style={{ width: '100%', height: 86 }} source={require('../../../../assets/map.png')} />
       ),
-      headerTitleAlign: 'center',
-      headerTitleStyle: {
-        fontFamily: 'Inter',
-        fontStyle: 'normal',
-        fontWeight: 'bold',
-        fontSize: 20,
-        letterSpacing: 0.2,
-        marginTop: 30,
-        color: '#3e4958',
-        alignSelf: 'center',
-        alignItems: 'center',
-        justifyContent: 'center'
-      },
-      headerLayoutPreset: 'center'
     };
   };
 
@@ -137,23 +110,14 @@ export default class Riders extends Component {
     try {
       // const response = await this.props.firebase.signupWithEmail(email, password);
 
-      // if (response.user.uid) {
-      //   const { uid } = response.user;
-      //   const userData = { email, name, uid };
-      //   await this.props.firebase.createNewUser(userData);
-      //   this.props.navigation.navigate('App', { userType: null });
-      // }
       setTimeout(() => {
         this.props.navigation.navigate('VehicleRegister', { userType: 'rider' });
-        // this.props.navigation.navigate('Login', { userType: null });
       }, 1500);
     } catch (error) {
-      // console.error(error)
       actions.setFieldError('general', error.message);
     } finally {
-      // TODO:
       // This is avoiding submit button loading icon
-      // actions.setSubmitting(false);
+      actions.setSubmitting(false);
     }
   };
 

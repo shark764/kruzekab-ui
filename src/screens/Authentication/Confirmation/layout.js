@@ -7,6 +7,7 @@ import Form from './form';
 import { validationSchema } from './validation';
 import { Container } from '../../../components/Form/Elements';
 import { NavigationHeaderButtons, Item } from '../../../components/Header/HeaderButton';
+import { GoBackButton } from '../../../components/Header/Navigator';
 
 const HeadlineContainer = styled(View)`
   margin-top: 120px;
@@ -35,28 +36,7 @@ export default class Confirmation extends Component {
 
   static navigationOptions = ({ navigation, navigation: { state } }) => {
     return {
-      headerTitle: () => null,
-      headerLeft: () => (
-        <NavigationHeaderButtons>
-          <Item
-            title="Go Back"
-            buttonWrapperStyle={{
-              marginLeft: 12,
-              marginTop: 10
-            }}
-            useIconComponent={Ionicons}
-            iconName="md-arrow-back"
-            onPress={() => navigation.navigate('Signup')}
-          />
-        </NavigationHeaderButtons>
-      ),
-      headerStyle: {
-        backgroundColor: '#fff',
-        elevation: 0,
-        shadowOpacity: 0,
-        borderBottomWidth: 0,
-        shadowColor: 'transparent'
-      }
+      headerLeft: () => <GoBackButton onPress={() => navigation.navigate('Signup')} />
     };
   };
 

@@ -16,6 +16,7 @@ const Form = ({
   passwordIcon
 }) => (
   <Formik
+    enableReinitialize
     initialValues={initialValues}
     onSubmit={(values, actions) => {
       console.log('values =>', values);

@@ -59,6 +59,7 @@ const PhotoAvatar = props => (
 
 const Form = ({ handleOnSubmit, initialValues, validationSchema, handleChoosePhoto, photo, handleOnDelete }) => (
   <Formik
+    enableReinitialize
     initialValues={initialValues}
     onSubmit={(values, actions) => {
       console.log('values =>', values);

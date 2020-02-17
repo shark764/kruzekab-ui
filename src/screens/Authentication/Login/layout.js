@@ -13,6 +13,7 @@ import {
 import Form from './form';
 import { validationSchema } from './validation';
 import { NavigationHeaderButtons, Item } from '../../../components/Header/HeaderButton';
+import { GoBackButton } from '../../../components/Header/Navigator';
 // import bcrypt from 'bcrypt';
 
 const StyledHeadline = styled(Headline)`
@@ -33,27 +34,7 @@ export default class Login extends Component {
 
   static navigationOptions = ({ navigation, navigation: { state } }) => {
     return {
-      headerTitle: () => null,
-      headerLeft: () => (
-        <NavigationHeaderButtons>
-          <Item
-            title="Go Back"
-            buttonWrapperStyle={{
-              marginLeft: 12,
-              marginTop: 10
-            }}
-            iconName="md-arrow-back"
-            onPress={() => navigation.navigate('Initial', { userType: null })}
-          />
-        </NavigationHeaderButtons>
-      ),
-      headerStyle: {
-        backgroundColor: '#fff',
-        elevation: 0,
-        shadowOpacity: 0,
-        borderBottomWidth: 0,
-        shadowColor: 'transparent'
-      }
+      headerLeft: () => <GoBackButton onPress={() => navigation.navigate('Initial', { userType: null })} />
     };
   };
 
@@ -102,9 +83,8 @@ export default class Login extends Component {
     } catch (error) {
       actions.setFieldError('general', error.message);
     } finally {
-      // TODO:
       // This is avoiding submit button loading icon
-      // actions.setSubmitting(false);
+      actions.setSubmitting(false);
     }
   };
 

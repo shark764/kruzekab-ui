@@ -25,7 +25,17 @@ const AuthNavigation = createStackNavigator(
     Confirm: { screen: Confirmation }
   },
   {
-    initialRouteName: 'Login'
+    initialRouteName: 'Login',
+    defaultNavigationOptions: {
+      headerTitle: () => null,
+      headerStyle: {
+        backgroundColor: '#fff',
+        elevation: 0,
+        shadowOpacity: 0,
+        borderBottomWidth: 0,
+        shadowColor: 'transparent'
+      }
+    }
     // headerMode: 'none'
   }
 );
