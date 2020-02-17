@@ -12,7 +12,7 @@ import {
   HelpButtonText,
   HelpButton
 } from '../../../../../components/Form/Elements';
-import { NavigationHeaderButtons, Item } from '../../../../../components/Header/HeaderButton';
+import { ExtendedGoBackButton } from '../../../../../components/Header/Navigator';
 import FormButton from '../../../../../components/Form/FormButton';
 import Form from './form';
 import { validationSchema } from './validation';

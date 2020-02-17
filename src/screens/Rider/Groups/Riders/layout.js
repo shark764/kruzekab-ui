@@ -12,7 +12,7 @@ import {
   HelpButton,
   BottomButtonContainer
 } from '../../../../components/Form/Elements';
-import { NavigationHeaderButtons, Item } from '../../../../components/Header/HeaderButton';
+import { ExtendedGoBackButton } from '../../../../components/Header/Navigator';
 import FormButton from '../../../../components/Form/FormButton';
 
 const StyledContainer = styled(Container)`
