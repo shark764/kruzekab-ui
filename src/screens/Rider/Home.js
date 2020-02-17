@@ -1,22 +1,13 @@
 import React, { Component, Fragment } from 'react';
-import {
-  View,
-  Image,
-  Text,
-  StyleSheet,
-  PermissionsAndroid,
-  TouchableOpacity,
-  TouchableWithoutFeedback
-} from 'react-native';
+import { View, Text, StyleSheet, Image } from 'react-native';
 import styled from 'styled-components';
-import Ionicons from 'react-native-vector-icons/Ionicons';
 import { Container } from '../../components/Form/Elements';
-import FormButton from '../../components/Form/FormButton';
-import { NavigationHeaderButtons, Item } from '../../components/Header/HeaderButton';
 import { Input, Divider, Avatar } from 'react-native-elements';
-import MapView, { PROVIDER_GOOGLE, Marker, Polyline } from 'react-native-maps';
+import MapView, { PROVIDER_GOOGLE, Marker, Polyline, Circle } from 'react-native-maps';
 import Geolocation from '@react-native-community/geolocation';
 import axios from 'axios';
+import goal from '../../assets/goal.png';
+import pin from '../../assets/ic_dest.png';
 
 const styles = StyleSheet.create({
   map: {
@@ -91,6 +82,7 @@ export default class Home extends Component {
   //     drawerLabel: () => null
   //   };
   // };
+  mapRef = null;
 
   decode = (t, e) => {
     for (var n, o, u = 0, l = 0, r = 0, d = [], h = 0, i = 0, a = null, c = Math.pow(10, e || 5); u < t.length; ) {
@@ -109,30 +101,55 @@ export default class Home extends Component {
 
   drawRoute = async () => {
     const mode = 'driving'; // 'walking';
-    const origin = `${this.state.currentPosition.latitude},${this.state.currentPosition.longitude}`;
-    const destination = `${this.state.selectedAddress.to.geometry.location.lat},${this.state.selectedAddress.to.geometry.location.lng}`;
+    const origin = `${this.state.selectedAddress.from.latitude},${this.state.selectedAddress.from.longitude}`;
+    const destination = `${this.state.selectedAddress.to.latitude},${this.state.selectedAddress.to.longitude}`;
     const APIKEY = 'AIzaSyCH7pW8XhPRvUzm-JQ0f7aWVhN3QAUQO78';
     const url = `https://maps.googleapis.com/maps/api/directions/json?origin=${origin}&destination=${destination}&key=${APIKEY}&mode=${mode}`;
     let { data } = await axios.get(url);
     if (data.routes.length) {
+      const coords = this.decode(data.routes[0].overview_polyline.points);
       this.setState({
-        coords: this.decode(data.routes[0].overview_polyline.points) // definition below
+        coords
       });
+      this.mapRef.fitToCoordinates(coords, { edgePadding: { top: 0, right: 0, bottom: 25, left: 0 }, animated: false });
     }
   };
 
-  componentDidMount = async () => {
-    Geolocation.getCurrentPosition(info => {
-      this.setState({
-        currentPosition: {
-          longitude: info.coords.longitude,
-          latitude: info.coords.latitude
-        },
-        mapLoaded: true
-      });
-    }),
+  getCurrentPosition = () => {
+    Geolocation.getCurrentPosition(
+      info =>
+        this.setState({
+          currentPosition: {
+            longitude: info.coords.longitude,
+            latitude: info.coords.latitude
+          }
+        }),
       error => console.error(error),
-      { enableHighAccuracy: true, timeout: 10000 };
+      { enableHighAccuracy: true, timeout: 10000 }
+    );
+  };
+
+  componentDidMount = () => {
+    Geolocation.getCurrentPosition(
+      info =>
+        this.setState({
+          currentPosition: {
+            longitude: info.coords.longitude,
+            latitude: info.coords.latitude
+          },
+          selectedAddress: {
+            to: {},
+            from: {
+              longitude: info.coords.longitude,
+              latitude: info.coords.latitude,
+              name: 'Current position'
+            }
+          },
+          mapLoaded: true
+        }),
+      error => console.error(error),
+      { enableHighAccuracy: true, timeout: 10000 }
+    );
   };
 
   handleSignout = async () => {
@@ -153,6 +170,10 @@ export default class Home extends Component {
   state = {
     location: 'to',
     coords: null,
+    latitudeDelta: 0.01,
+    longitudeDelta: 0.0004,
+    regionLatitude: null,
+    regionLongitude: null,
     currentPosition: {
       longitude: 90,
       latitude: 180
@@ -189,37 +210,67 @@ export default class Home extends Component {
           {this.state.mapLoaded === true ? (
             <MapView
               provider={PROVIDER_GOOGLE} // remove if not using Google Maps
+              ref={ref => (this.mapRef = ref)}
               style={styles.map}
+              showsCompass={false}
+              loadingEnabled={true}
               region={{
-                latitude: this.state.currentPosition.latitude || 37.78825,
-                longitude: this.state.currentPosition.longitude || -122.4324,
-                latitudeDelta: 0.015,
-                longitudeDelta: 0.0121
+                latitude: this.state.regionLatitude || this.state.currentPosition.latitude,
+                longitude: this.state.regionLongitude || this.state.currentPosition.longitude,
+                latitudeDelta: this.state.latitudeDelta,
+                longitudeDelta: this.state.longitudeDelta
               }}>
-              <Marker
-                coordinate={{
-                  latitude: this.state.currentPosition.latitude || 37.78825,
-                  longitude: this.state.currentPosition.longitude || -122.4324
-                }}
-                pinColor="red"></Marker>
+              <Circle
+                key={(this.state.currentPosition.latitude + this.state.currentPosition.longitude).toString()}
+                center={this.state.currentPosition}
+                radius={20}
+                strokeWidth={1}
+                strokeColor={'#4CCA8D'}
+                fillColor={'rgba(134, 227, 154, 0.58)'}
+              />
+
+              <Circle
+                key={(this.state.currentPosition.latitude + this.state.currentPosition.longitude + 1).toString()}
+                center={this.state.currentPosition}
+                radius={8}
+                strokeWidth={4}
+                strokeColor={'#FDFDFD'}
+                fillColor={'#4CCA8D'}
+              />
 
               {this.state.selectedAddress.to.name && (
                 <Marker
                   coordinate={{
-                    latitude: this.state.selectedAddress.to.geometry.location.lat || 37.78825,
-                    longitude: this.state.selectedAddress.to.geometry.location.lng || -122.4324
+                    latitude: this.state.selectedAddress.to.latitude || 37.78825,
+                    longitude: this.state.selectedAddress.to.longitude || -122.4324
                   }}
-                  pinColor="blue"></Marker>
+                  pinColor="red">
+                  <Image source={goal} style={{ height: 30, width: 30 }} />
+                </Marker>
+              )}
+
+              {this.state.selectedAddress.from.name && (
+                <Marker
+                  coordinate={{
+                    latitude: this.state.selectedAddress.from.latitude || 37.78825,
+                    longitude: this.state.selectedAddress.from.longitude || -122.4324
+                  }}
+                  pinColor="blue">
+                  <Image source={pin} style={{ height: 40, width: 25 }} />
+                </Marker>
               )}
 
               {this.state.coords && (
                 <Polyline
                   coordinates={[
-                    { latitude: this.state.currentPosition.latitude, longitude: this.state.currentPosition.longitude }, // optional
+                    {
+                      latitude: this.state.selectedAddress.from.latitude,
+                      longitude: this.state.selectedAddress.from.longitude
+                    }, // optional
                     ...this.state.coords,
                     {
-                      latitude: this.state.selectedAddress.to.geometry.location.lat,
-                      longitude: this.state.selectedAddress.to.geometry.location.lng
+                      latitude: this.state.selectedAddress.to.latitude,
+                      longitude: this.state.selectedAddress.to.longitude
                     } // optional
                   ]}
                   strokeWidth={4}
@@ -263,7 +314,7 @@ export default class Home extends Component {
             rounded
             size="medium"
             icon={{ name: 'crosshairs-gps', type: 'material-community', color: '#000000' }}
-            onPress={() => console.log('Works!')}
+            onPress={this.getCurrentPosition}
             activeOpacity={0.7}
             containerStyle={{ flex: 2, marginLeft: 20, marginTop: 115 }}
             overlayContainerStyle={{
@@ -316,7 +367,8 @@ export default class Home extends Component {
 
                 this.props.navigation.navigate('SelectAddress', {
                   addressPlaceholder: 'Where from?',
-                  setSelectedAddress: this.setSelectedAddress
+                  setSelectedAddress: this.setSelectedAddress,
+                  currentPosition: this.state.currentPosition
                 });
               }}
               inputContainerStyle={{
