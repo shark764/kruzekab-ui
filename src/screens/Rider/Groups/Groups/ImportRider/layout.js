@@ -63,33 +63,10 @@ export default class ImportRider extends Component {
     return {
       title: 'Import riders',
       headerLeft: () => (
-        <NavigationHeaderButtons>
-          <Item
-            title="Go Back"
-            buttonWrapperStyle={{
-              marginLeft: 12,
-              marginTop: 30,
-              alignItems: 'center',
-              flexDirection: 'row',
-              justifyContent: 'flex-start'
-            }}
-            ButtonElement={
-              <Icon
-                raised
-                reverse
-                type="ionicon"
-                name="ios-arrow-back"
-                color="#fff"
-                reverseColor="#212226"
-                size={18}
-                onPress={() => navigation.navigate('Groups', { userType: 'rider' })}
-                disabled={false}
-              />
-            }
-            iconName="ios-arrow-back"
-            onPress={() => navigation.navigate('Groups', { userType: 'rider' })}
-          />
-        </NavigationHeaderButtons>
+        <ExtendedGoBackButton
+          iconOnPress={() => navigation.navigate('Groups', { userType: 'rider' })}
+          itemOnPress={() => navigation.navigate('Groups', { userType: 'rider' })}
+        />
       )
     };
   };

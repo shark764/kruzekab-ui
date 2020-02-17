@@ -58,33 +58,10 @@ export default class EditRider extends Component {
     return {
       title: 'Edit rider',
       headerLeft: () => (
-        <NavigationHeaderButtons>
-          <Item
-            title="Go Back"
-            buttonWrapperStyle={{
-              marginLeft: 12,
-              marginTop: 30,
-              alignItems: 'center',
-              flexDirection: 'row',
-              justifyContent: 'flex-start'
-            }}
-            ButtonElement={
-              <Icon
-                raised
-                reverse
-                type="ionicon"
-                name="ios-arrow-back"
-                color="#fff"
-                reverseColor="#212226"
-                size={18}
-                onPress={() => navigation.navigate('Riders', { userType: 'rider' })}
-                disabled={false}
-              />
-            }
-            iconName="ios-arrow-back"
-            onPress={() => navigation.navigate('Riders', { userType: 'rider' })}
-          />
-        </NavigationHeaderButtons>
+        <ExtendedGoBackButton
+          iconOnPress={() => navigation.navigate('Riders', { userType: 'rider' })}
+          itemOnPress={() => navigation.navigate('Riders', { userType: 'rider' })}
+        />
       ),
       headerBackground: () => (
         <Image style={{ width: '100%', height: 250 }} source={require('../../../../../assets/map.png')} />

@@ -15,3 +15,35 @@ export const GoBackButton = props => (
     />
   </NavigationHeaderButtons>
 );
+
+export const ExtendedGoBackButton = props => (
+  <NavigationHeaderButtons>
+    <Item
+      title="Go Back"
+      buttonWrapperStyle={{
+        marginLeft: 12,
+        marginTop: 30,
+        alignItems: 'center',
+        flexDirection: 'row',
+        justifyContent: 'flex-start'
+      }}
+      ButtonElement={
+        <Icon
+          raised
+          reverse
+          type="ionicon"
+          name="ios-arrow-back"
+          color="#fff"
+          reverseColor="#212226"
+          size={18}
+          disabled={false}
+          onPress={props.iconOnPress}
+          {...props.icon}
+        />
+      }
+      iconName="ios-arrow-back"
+      onPress={props.itemOnPress}
+      {...props.item}
+    />
+  </NavigationHeaderButtons>
+);

@@ -62,36 +62,10 @@ export default class Riders extends Component {
     return {
       title: 'My Riders',
       headerLeft: () => (
-        <NavigationHeaderButtons>
-          <Item
-            title="Go Back"
-            buttonWrapperStyle={{
-              marginLeft: 12,
-              marginTop: 30,
-              alignItems: 'center',
-              flexDirection: 'row',
-              justifyContent: 'flex-start'
-            }}
-            ButtonElement={
-              <Icon
-                raised
-                reverse
-                type="ionicon"
-                name="ios-arrow-back"
-                color="#fff"
-                reverseColor="#212226"
-                size={18}
-                onPress={() => navigation.navigate('Request Ride', { userType: 'rider' })}
-                disabled={false}
-              />
-            }
-            iconName="ios-arrow-back"
-            onPress={() => navigation.navigate('Request Ride', { userType: 'rider' })}
-          />
-        </NavigationHeaderButtons>
-      ),
-      headerBackground: () => (
-        <Image style={{ width: '100%', height: 86 }} source={require('../../../../assets/map.png')} />
+        <ExtendedGoBackButton
+          iconOnPress={() => navigation.navigate('Request Ride', { userType: 'rider' })}
+          itemOnPress={() => navigation.navigate('Request Ride', { userType: 'rider' })}
+        />
       )
     };
   };
