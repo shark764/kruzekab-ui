@@ -117,7 +117,7 @@ export default class EditRider extends Component {
     }
   };
 
-  handleChoosePhoto = hey => {
+  handleChoosePhoto = () => {
     const options = {
       noData: true
     };
