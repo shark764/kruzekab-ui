@@ -1,6 +1,13 @@
 import { connect } from 'react-redux';
 import Layout from './layout';
+import { addRider, updateRider, removeRider } from '../../../../redux/actions';
 
 const mapStateToProps = () => ({});
 
-export default connect(mapStateToProps)(Layout);
+const actions = {
+  addRider,
+  updateRider,
+  removeRider
+};
+
+export default connect(mapStateToProps, actions)(Layout);
