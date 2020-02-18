@@ -8,8 +8,6 @@ import RiderNavigation from './RiderNavigation';
 const AppNavigation = createStackNavigator(
   {
     Home: { screen: Home, navigationOptions: { headerShown: false } },
-    SelectAddress: { screen: SelectAddress, navigationOptions: { headerShown: false } },
-    AddressDetails: { screen: AddressDetails, navigationOptions: { headerShown: false } },
     Rider: RiderNavigation
   },
   {
