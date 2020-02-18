@@ -23,6 +23,7 @@ const GroupTitle = styled(Text)`
 `;
 const IconContainer = styled(View)`
   margin-top: 30px;
+  margin-bottom: 20px;
   align-items: center;
   justify-content: center;
   flex-direction: row;
@@ -30,7 +31,7 @@ const IconContainer = styled(View)`
 
 export default class SelectRiders extends Component {
   state = {
-    selected: null
+    selected: []
   };
 
   static navigationOptions = ({ navigation }) => {
@@ -38,8 +39,8 @@ export default class SelectRiders extends Component {
       title: 'Select riders',
       headerLeft: () => (
         <ExtendedGoBackButton
-          iconOnPress={() => navigation.navigate('AddressDetails', { userType: 'rider' })}
-          itemOnPress={() => navigation.navigate('AddressDetails', { userType: 'rider' })}
+          iconOnPress={() => navigation.navigate('SelectGroup', { userType: 'rider' })}
+          itemOnPress={() => navigation.navigate('SelectGroup', { userType: 'rider' })}
         />
       )
     };
@@ -85,7 +86,9 @@ export default class SelectRiders extends Component {
 
   handleOnSelected = key => {
     this.setState(prevState => ({
-      selected: prevState.selected !== key ? key : null
+      selected: prevState.selected.includes(key)
+        ? prevState.selected.splice(prevState.selected.indexOf(key), 1)
+        : [...prevState.selected, key]
     }));
   };
 

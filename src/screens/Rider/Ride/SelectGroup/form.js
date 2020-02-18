@@ -94,7 +94,7 @@ const Listview = ({ groupList, handleOnSelected, selected }) => (
       data={groupList}
       renderItem={({ item }) => (
         <ListRow
-          key={item.key}
+          key={`${item.key}`}
           id={item.key}
           title={item.title}
           handleOnSelected={handleOnSelected}

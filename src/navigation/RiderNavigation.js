@@ -15,6 +15,8 @@ import AddressDetails from '../screens/Rider/AddressDetails';
 import { SafeAreaView, View, Image } from 'react-native';
 import { Button } from 'react-native-elements';
 import { HelpButton, HelpButtonText } from '../components/Form/Elements';
+import SelectGroup from '../screens/Rider/Ride/SelectGroup';
+import SelectRiders from '../screens/Rider/Ride/SelectRiders';
 
 const defaultNavigationOptions = {
   headerStyle: {
@@ -82,7 +84,9 @@ const RequestStack = createStackNavigator(
       }
     },
     SelectAddress: { screen: SelectAddress, navigationOptions: { headerShown: false } },
-    AddressDetails: { screen: AddressDetails, navigationOptions: { headerShown: false } }
+    AddressDetails: { screen: AddressDetails, navigationOptions: { headerShown: false } },
+    SelectGroup: { screen: SelectGroup },
+    SelectRiders: { screen: SelectRiders }
   },
   {
     initialRouteName: 'Home',

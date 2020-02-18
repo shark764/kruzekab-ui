@@ -63,8 +63,8 @@ export default class Riders extends Component {
       title: 'My Riders',
       headerLeft: () => (
         <ExtendedGoBackButton
-          iconOnPress={() => navigation.navigate('Request Ride', { userType: 'rider' })}
-          itemOnPress={() => navigation.navigate('Request Ride', { userType: 'rider' })}
+          iconOnPress={() => navigation.navigate('Home', { userType: 'rider' })}
+          itemOnPress={() => navigation.navigate('Home', { userType: 'rider' })}
         />
       )
     };

@@ -1,45 +1,54 @@
 import React, { Fragment } from 'react';
 import { View, Text, FlatList, TouchableOpacity } from 'react-native';
 import { Formik } from 'formik';
-import { Icon } from 'react-native-elements';
+import { Icon, Avatar } from 'react-native-elements';
 import styled from 'styled-components';
 import FormButton from '../../../../components/Form/FormButton';
 import { FormattedError } from '../../../../components/Form/ErrorMessage';
-import { ButtonContainer, BottomButtonContainer } from '../../../../components/Form/Elements';
+import { BottomButtonContainer } from '../../../../components/Form/Elements';
 
-const SelectRidersContainer = styled(View)`
-  flex: 1;
+const SelectionContainer = styled(View)`
+  flex-direction: row;
+  ${'' /* flex-wrap: wrap; */}
+  ${'' /* display: flex; */}
+  ${'' /* flex-direction: row; */}
+  ${'' /* align-items: center; */}
+  ${'' /* justify-content: center; */}
+  ${'' /* align-items: center; */}
+  margin-left: 35px;
+  margin-right: 35px;
 `;
 const ListContainer = styled(View)`
-  margin-left: 25px;
-  margin-right: 25px;
+  flex: 1;
+  margin-left: 35px;
+  margin-right: 35px;
+  flex-direction: row;
+  ${'' /* flex-wrap: wrap; */}
+  ${'' /* display: flex; */}
+  justify-content: center;
+  ${'' /* align-items: center; */}
 `;
 const OptionContainer = styled(View)`
-  flex-direction: row;
+  ${'' /* flex-direction: column; */}
   margin-top: 10px;
   margin-bottom: 5px;
   padding-left: 5px;
   padding-right: 5px;
-  padding-top: 2px;
-  padding-bottom: 2px;
+  padding-top: 20px;
+  padding-bottom: 10px;
   background: #ffffff;
   border: ${props => (props.selected ? '1px solid #5280E2;' : '1px solid #dde5f7')};
   box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.08);
-  border-radius: 2px;
-`;
-const LabelText = styled(Text)`
-  font-family: Open Sans;
-  font-style: normal;
-  font-weight: normal;
-  font-size: 14px;
-  color: #6b768d;
-  justify-content: center;
+  border-radius: 6px;
+  ${'' /* justify-content: center; */}
   align-items: center;
+  height: 150px;
+  width: 155px;
 `;
 const ContainerText = styled(View)`
   flex: 1;
+  align-items: center;
   flex-direction: column;
-  margin-left: 12px;
   justify-content: center;
 `;
 const RiderTitle = styled(Text)`
@@ -52,60 +61,25 @@ const RiderTitle = styled(Text)`
   color: ${props => (props.selected ? '#5280e2' : '#6b768d')};
 `;
 
-const ListRow = ({ id, title, handleOnSelected, selected }) => (
-  <TouchableOpacity onPress={() => handleOnSelected(id)}>
-    <OptionContainer selected={selected === id}>
-      <Icon
-        raised
-        reverse
-        type="material"
-        name="group"
-        color="#dde5f7"
-        reverseColor="#5280e2"
-        size={15}
-        onPress={() => handleOnSelected(id)}
-        disabled={false}
-      />
-      <ContainerText>
-        <RiderTitle selected={selected === id}>{title}</RiderTitle>
-      </ContainerText>
-      {selected === id && (
-        <Icon
-          raised
-          reverse
-          type="antdesign"
-          name="check"
-          color="#5280e2"
-          size={10}
-          onPress={() => handleOnSelected(id)}
-          disabled={false}
-        />
-      )}
-    </OptionContainer>
-  </TouchableOpacity>
+const PhotoAvatar = props => (
+  <Avatar
+    rounded
+    icon={{
+      name: 'md-person',
+      type: 'ionicon',
+      color: '#5280e2'
+    }}
+    overlayContainerStyle={{ backgroundColor: '#dde5f7' }}
+    activeOpacity={0.7}
+    size={80}
+    {...props}
+  />
 );
 
-const Listview = ({ groupList, handleOnSelected, selected }) => (
-  <ListContainer>
-    <FlatList
-      data={groupList}
-      renderItem={({ item }) => (
-        <ListRow
-          key={item.key}
-          id={item.key}
-          title={item.title}
-          handleOnSelected={handleOnSelected}
-          selected={selected}
-        />
-      )}
-    />
-  </ListContainer>
-);
-
-const getData = [
-  { key: 1, title: 'Soccer Team' },
-  { key: 2, title: "Ben's Class" },
-  { key: 3, title: "Nancy's theater classes" }
+const riders = [{ key: 1, title: 'Ben', imgPath: require('../../../../assets/edit-rider2.png') }];
+const riders2 = [
+  { key: 2, title: 'Claire', imgPath: require('../../../../assets/edit-rider.png') },
+  { key: 3, title: 'Amelia', imgPath: require('../../../../assets/edit-rider3.png') }
 ];
 
 const Form = ({
@@ -126,30 +100,47 @@ const Form = ({
     validationSchema={validationSchema}>
     {({ handleSubmit, errors, isValid, isSubmitting }) => (
       <Fragment>
-        <ListContainer>
-          <TouchableOpacity onPress={handleOnAddRiderToGroup}>
-            <OptionContainer>
-              <Icon
-                raised
-                reverse
-                type="ionicon"
-                name="md-person-add"
-                color="#dde5f7"
-                reverseColor="#5280e2"
-                size={15}
-                onPress={handleOnAddRiderToGroup}
-                disabled={false}
-              />
-              <ContainerText>
-                <RiderTitle>Add rider</RiderTitle>
-              </ContainerText>
-            </OptionContainer>
-          </TouchableOpacity>
-        </ListContainer>
+        <SelectionContainer>
+          <ListContainer>
+            <TouchableOpacity onPress={handleOnAddRiderToGroup}>
+              <OptionContainer>
+                <PhotoAvatar />
 
-        <SelectRidersContainer>
-          <Listview groupList={getData} handleOnSelected={handleOnSelected} selected={selected} />
-        </SelectRidersContainer>
+                <ContainerText>
+                  <RiderTitle>Add rider</RiderTitle>
+                </ContainerText>
+              </OptionContainer>
+            </TouchableOpacity>
+          </ListContainer>
+
+          {riders.map(rider => (
+            <ListContainer key={rider.key}>
+              <TouchableOpacity onPress={() => handleOnSelected(rider.key)}>
+                <OptionContainer selected={selected.includes(rider.key)}>
+                  <PhotoAvatar source={rider.imgPath} />
+                  <ContainerText>
+                    <RiderTitle selected={selected.includes(rider.key)}>{rider.title}</RiderTitle>
+                  </ContainerText>
+                </OptionContainer>
+              </TouchableOpacity>
+            </ListContainer>
+          ))}
+        </SelectionContainer>
+
+        <SelectionContainer>
+          {riders2.map(rider => (
+            <ListContainer key={rider.key}>
+              <TouchableOpacity onPress={() => handleOnSelected(rider.key)}>
+                <OptionContainer selected={selected.includes(rider.key)}>
+                  <PhotoAvatar source={rider.imgPath} />
+                  <ContainerText>
+                    <RiderTitle selected={selected.includes(rider.key)}>{rider.title}</RiderTitle>
+                  </ContainerText>
+                </OptionContainer>
+              </TouchableOpacity>
+            </ListContainer>
+          ))}
+        </SelectionContainer>
 
         {errors.general && <FormattedError errorValue={errors.general} />}
 

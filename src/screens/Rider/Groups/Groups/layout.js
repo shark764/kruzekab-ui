@@ -62,8 +62,8 @@ export default class Groups extends Component {
       title: 'Groups',
       headerLeft: () => (
         <ExtendedGoBackButton
-          iconOnPress={() => navigation.navigate('Request Ride', { userType: 'rider' })}
-          itemOnPress={() => navigation.navigate('Request Ride', { userType: 'rider' })}
+          iconOnPress={() => navigation.navigate('Home', { userType: 'rider' })}
+          itemOnPress={() => navigation.navigate('Home', { userType: 'rider' })}
         />
       )
     };
