@@ -1,11 +1,11 @@
 import React, { Fragment } from 'react';
-import { View, Text, FlatList, TouchableOpacity } from 'react-native';
+import { View, Text, FlatList, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { Formik } from 'formik';
-import { Icon } from 'react-native-elements';
+import { Icon, Image } from 'react-native-elements';
 import styled from 'styled-components';
 import FormButton from '../../../../components/Form/FormButton';
 import { FormattedError } from '../../../../components/Form/ErrorMessage';
-import { ButtonContainer, BottomButtonContainer } from '../../../../components/Form/Elements';
+import { BottomButtonContainer } from '../../../../components/Form/Elements';
 
 const SelectGroupContainer = styled(View)`
   margin-top: 120px;
@@ -17,7 +17,6 @@ const ListContainer = styled(View)`
   margin-right: 25px;
 `;
 const OptionContainer = styled(View)`
-  flex: 1;
   flex-direction: row;
   margin-top: 10px;
   margin-bottom: 5px;
@@ -29,15 +28,6 @@ const OptionContainer = styled(View)`
   border: ${props => (props.selected ? '1px solid #5280E2;' : '1px solid #dde5f7')};
   box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.08);
   border-radius: 2px;
-`;
-const LabelText = styled(Text)`
-  font-family: Open Sans;
-  font-style: normal;
-  font-weight: normal;
-  font-size: 14px;
-  color: #6b768d;
-  justify-content: center;
-  align-items: center;
 `;
 const ContainerText = styled(View)`
   flex: 1;
@@ -82,6 +72,10 @@ const ListRow = ({ id, title, handleOnSelected, selected }) => (
           size={10}
           onPress={() => handleOnSelected(id)}
           disabled={false}
+          containerStyle={{
+            marginTop: 5
+          }}
+          // ImageComponent={<Image PlaceholderContent={<ActivityIndicator />} />}
         />
       )}
     </OptionContainer>
@@ -89,10 +83,10 @@ const ListRow = ({ id, title, handleOnSelected, selected }) => (
 );
 
 const Listview = ({ groupList, handleOnSelected, selected }) => (
-  <ListContainer>
-    <FlatList
-      data={groupList}
-      renderItem={({ item }) => (
+  <FlatList
+    data={groupList}
+    renderItem={({ item }) => (
+      <ListContainer>
         <ListRow
           key={`${item.key}`}
           id={item.key}
@@ -100,9 +94,9 @@ const Listview = ({ groupList, handleOnSelected, selected }) => (
           handleOnSelected={handleOnSelected}
           selected={selected}
         />
-      )}
-    />
-  </ListContainer>
+      </ListContainer>
+    )}
+  />
 );
 
 const getData = [
@@ -124,28 +118,28 @@ const Form = ({ handleOnSubmit, initialValues, validationSchema, handleOnSelecte
       <Fragment>
         <SelectGroupContainer>
           <Listview groupList={getData} handleOnSelected={handleOnSelected} selected={selected} />
-        </SelectGroupContainer>
 
-        <ListContainer>
-          <TouchableOpacity onPress={handleOnAddGroup}>
-            <OptionContainer>
-              <Icon
-                raised
-                reverse
-                type="material"
-                name="group"
-                color="#dde5f7"
-                reverseColor="#5280e2"
-                size={15}
-                onPress={handleOnAddGroup}
-                disabled={false}
-              />
-              <ContainerText>
-                <GroupTitle>Create new group</GroupTitle>
-              </ContainerText>
-            </OptionContainer>
-          </TouchableOpacity>
-        </ListContainer>
+          <ListContainer>
+            <TouchableOpacity onPress={handleOnAddGroup}>
+              <OptionContainer>
+                <Icon
+                  raised
+                  reverse
+                  type="material"
+                  name="group"
+                  color="#dde5f7"
+                  reverseColor="#5280e2"
+                  size={15}
+                  onPress={handleOnAddGroup}
+                  disabled={false}
+                />
+                <ContainerText>
+                  <GroupTitle>Create new group</GroupTitle>
+                </ContainerText>
+              </OptionContainer>
+            </TouchableOpacity>
+          </ListContainer>
+        </SelectGroupContainer>
 
         {errors.general && <FormattedError errorValue={errors.general} />}
 

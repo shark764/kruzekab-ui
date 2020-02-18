@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react';
 import { View, Text, StyleSheet, Image } from 'react-native';
 import styled from 'styled-components';
 import { Container } from '../../components/Form/Elements';
-import { Input, Divider, Avatar } from 'react-native-elements';
+import { Input, Divider, Avatar, Overlay, Icon } from 'react-native-elements';
 import MapView, { PROVIDER_GOOGLE, Marker, Polyline, Circle } from 'react-native-maps';
 import Geolocation from '@react-native-community/geolocation';
 import axios from 'axios';
@@ -393,6 +393,65 @@ export default class Home extends Component {
               }}></Input>
           </WhereToView>
         </LocationView>
+
+        {this.state.mapLoaded && this.state.selectedAddress.to.name && this.state.coords && (
+          <Overlay
+            isVisible={true}
+            windowBackgroundColor="rgba(0, 0, 0, 0.8)"
+            overlayBackgroundColor="rgba(0, 0, 0, 0)"
+            overlayStyle={{ elevation: 0 }}
+            width="auto"
+            height="auto">
+            <View
+              style={{
+                position: 'absolute',
+                left: -75,
+                top: -295
+              }}>
+              <Avatar
+                rounded
+                size="medium"
+                icon={{
+                  name: 'md-close',
+                  type: 'ionicon',
+                  color: '#212226'
+                }}
+                onPress={this.handleOpenDrawer}
+                activeOpacity={0.7}
+                containerStyle={{ flex: 2 }}
+                overlayContainerStyle={{
+                  backgroundColor: '#ffffff'
+                }}
+              />
+            </View>
+            <View style={{ alignItems: 'center' }}>
+              <View
+                style={{
+                  width: 100,
+                  height: 100,
+                  borderRadius: 100 / 2,
+                  backgroundColor: 'rgba(134, 227, 154, 0.58)',
+                  boxSizing: 'border-box'
+                }}>
+                <Image source={pin} style={{ height: 40, width: 25, left: 37, top: 20 }} />
+              </View>
+              <Text
+                style={{
+                  marginTop: 20,
+                  fontFamily: 'Open Sans',
+                  fontStyle: 'normal',
+                  fontWeight: 'bold',
+                  fontSize: 20,
+                  lineHeight: 28,
+                  textAlign: 'center',
+                  letterSpacing: 0.2,
+                  color: '#ffffff'
+                }}>
+                Searching drivers...
+              </Text>
+            </View>
+          </Overlay>
+        )}
       </StyledContainer>
     );
   }
