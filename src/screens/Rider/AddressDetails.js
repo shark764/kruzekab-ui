@@ -64,7 +64,7 @@ export default class AddressDetails extends Component {
       this.props.navigation.state.params.selectedAddress.vicinity.split(','));
   state = {
     selectedAddress: this.props.navigation.state.params.selectedAddress,
-    setSelectedAddress: this.props.navigation.state.params.setSelectedAddress,
+    //setSelectedAddress: this.props.navigation.state.params.setSelectedAddress,
     address1: ((this.address[0] && `${this.address[0]}`) || '') + ((this.address[1] && `, ${this.address[1]}`) || ''),
     address2: ((this.address[2] && `${this.address[2]}`) || '') + ((this.address[3] && `, ${this.address[3]}`) || ''),
     address3: '',
@@ -131,8 +131,11 @@ export default class AddressDetails extends Component {
                 notes: this.state.notes,
                 address
               };
-              this.state.setSelectedAddress(selectedAddress);
-              this.props.navigation.navigate('Home', {});
+
+              this.props.navigation.navigate('SelectGroup', {
+                setSelectedAddress: this.props.navigation.state.params.setSelectedAddress,
+                selectedAddress: selectedAddress
+              });
             }}>
             {({ handleSubmit, values, errors, handleChange }) => (
               <Fragment>
