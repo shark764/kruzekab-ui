@@ -84,7 +84,7 @@ export default class NewRider extends Component {
       // const response = await this.props.firebase.signupWithEmail(email, password);
 
       setTimeout(() => {
-        this.props.navigation.navigate('Riders', { userType: 'rider' });
+        this.props.navigation.navigate('Riders', { userType: 'rider', action: 'new' });
       }, 1500);
     } catch (error) {
       actions.setFieldError('general', error.message);

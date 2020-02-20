@@ -156,6 +156,13 @@ export default class EditGroup extends Component {
       { key: 'edit-rider1', imgPath: require('../../../../../assets/edit-rider.png'), name: 'Claire' },
       { key: 'edit-rider2', imgPath: require('../../../../../assets/edit-rider2.png'), name: 'Ben' }
     ];
+    if (this.props.navigation.getParam('action', null) === 'import') {
+      ridersList.push({
+        key: 'edit-rider3',
+        imgPath: require('../../../../../assets/edit-rider3.png'),
+        name: 'Amelia'
+      });
+    }
 
     return (
       <StyledContainer enabled behavior="">
@@ -166,8 +173,8 @@ export default class EditGroup extends Component {
             handleOnSubmit={this.handleOnSubmit}
             initialValues={{
               userType: 2,
-              name: '',
-              isDefault: false,
+              name: "Kid's School",
+              isDefault: true,
               riders: ridersList
             }}
             validationSchema={validationSchema}

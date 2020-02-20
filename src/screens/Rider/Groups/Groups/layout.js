@@ -101,7 +101,9 @@ export default class Groups extends Component {
 
     const groupsList = [
       { key: 'edit-rider1', name: 'Soccer Team' },
-      { key: 'edit-rider2', name: "Ben's Class" }
+      { key: 'edit-rider2', name: "Ben's Class" },
+      { key: 'edit-rider3', name: "Nancy's theater classes" },
+      { key: 'edit-rider4', name: "Kid's School" }
     ];
 
     return (

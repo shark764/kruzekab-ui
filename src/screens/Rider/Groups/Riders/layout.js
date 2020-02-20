@@ -102,8 +102,16 @@ export default class Riders extends Component {
 
     const ridersList = [
       { key: 'edit-rider1', imgPath: require('../../../../assets/edit-rider.png'), name: 'Claire' },
-      { key: 'edit-rider2', imgPath: require('../../../../assets/edit-rider2.png'), name: 'Ben' }
+      { key: 'edit-rider2', imgPath: require('../../../../assets/edit-rider2.png'), name: 'Ben' },
+      { key: 'edit-rider3', imgPath: require('../../../../assets/edit-rider3.png'), name: 'Amelia' }
     ];
+    if (this.props.navigation.getParam('action', null) === 'new') {
+      ridersList.push({
+        key: 'edit-rider4',
+        imgPath: require('../../../../assets/edit-rider4.jpg'),
+        name: 'Daniel'
+      });
+    }
 
     return (
       <StyledContainer enabled behavior="">

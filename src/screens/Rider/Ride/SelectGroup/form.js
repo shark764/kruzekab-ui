@@ -102,7 +102,8 @@ const Listview = ({ groupList, handleOnSelected, selected }) => (
 const getData = [
   { key: 1, title: 'Soccer Team' },
   { key: 2, title: "Ben's Class" },
-  { key: 3, title: "Nancy's theater classes" }
+  { key: 3, title: "Nancy's theater classes" },
+  { key: 4, title: "Kid's School" }
 ];
 
 const Form = ({ handleOnSubmit, initialValues, validationSchema, handleOnSelected, selected, handleOnAddGroup }) => (

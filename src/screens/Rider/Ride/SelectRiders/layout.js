@@ -117,7 +117,7 @@ export default class SelectRiders extends Component {
               disabled={false}
             />
 
-            <GroupTitle>Family</GroupTitle>
+            <GroupTitle>Kid's School</GroupTitle>
           </IconContainer>
 
           <Form

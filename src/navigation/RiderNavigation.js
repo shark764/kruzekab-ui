@@ -17,6 +17,11 @@ import { Button } from 'react-native-elements';
 import { HelpButton, HelpButtonText } from '../components/Form/Elements';
 import SelectGroup from '../screens/Rider/Ride/SelectGroup';
 import SelectRiders from '../screens/Rider/Ride/SelectRiders';
+import RideAccepted from '../screens/Rider/Ride/RideAccepted';
+import RideArrived from '../screens/Rider/Ride/RideArrived';
+import RideOnTrip from '../screens/Rider/Ride/RideOnTrip';
+import Streaming from '../screens/Rider/Ride/Streaming';
+import RideFinished from '../screens/Rider/Ride/RideFinished';
 
 const defaultNavigationOptions = {
   headerStyle: {
@@ -86,10 +91,16 @@ const RequestStack = createStackNavigator(
     SelectAddress: { screen: SelectAddress, navigationOptions: { headerShown: false } },
     AddressDetails: { screen: AddressDetails, navigationOptions: { headerShown: false } },
     SelectGroup: { screen: SelectGroup },
-    SelectRiders: { screen: SelectRiders }
+    SelectRiders: { screen: SelectRiders },
+    RideAccepted: { screen: RideAccepted },
+    RideArrived: { screen: RideArrived },
+    RideOnTrip: { screen: RideOnTrip },
+    Streaming: { screen: Streaming, navigationOptions: { headerShown: false } },
+    RideFinished: { screen: RideFinished }
   },
   {
-    initialRouteName: 'Home',
+    // initialRouteName: 'Home',
+    initialRouteName: 'SelectGroup',
     defaultNavigationOptions
   }
 );

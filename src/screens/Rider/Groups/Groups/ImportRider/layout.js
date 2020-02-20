@@ -64,8 +64,8 @@ export default class ImportRider extends Component {
       title: 'Import riders',
       headerLeft: () => (
         <ExtendedGoBackButton
-          iconOnPress={() => navigation.navigate('Groups', { userType: 'rider' })}
-          itemOnPress={() => navigation.navigate('Groups', { userType: 'rider' })}
+          iconOnPress={() => navigation.navigate('EditGroup', { userType: 'rider' })}
+          itemOnPress={() => navigation.navigate('EditGroup', { userType: 'rider' })}
         />
       )
     };
@@ -86,7 +86,7 @@ export default class ImportRider extends Component {
       // const response = await this.props.firebase.signupWithEmail(email, password);
 
       setTimeout(() => {
-        this.props.navigation.navigate('Groups', { userType: 'rider' });
+        this.props.navigation.navigate('EditGroup', { userType: 'rider', action: 'import' });
       }, 1500);
     } catch (error) {
       actions.setFieldError('general', error.message);

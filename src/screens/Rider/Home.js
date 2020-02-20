@@ -109,7 +109,8 @@ export default class Home extends Component {
     if (data.routes.length) {
       const coords = this.decode(data.routes[0].overview_polyline.points);
       this.setState({
-        coords
+        coords,
+        isOverlayVisible: true
       });
       this.mapRef.fitToCoordinates(coords, { edgePadding: { top: 0, right: 0, bottom: 25, left: 0 }, animated: false });
     }
@@ -152,6 +153,17 @@ export default class Home extends Component {
     );
   };
 
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.selectedAddress.to !== this.state.selectedAddress.to && this.state.selectedAddress.to.name) {
+      setTimeout(() => {
+        this.setState({
+          isOverlayVisible: false
+        });
+        this._navigateTo('RideAccepted', {});
+      }, 5000);
+    }
+  }
+
   handleSignout = async () => {
     try {
       // await this.props.firebase.signOut();
@@ -184,7 +196,8 @@ export default class Home extends Component {
         alias: 'Current location'
       },
       to: {}
-    }
+    },
+    isOverlayVisible: false
   };
 
   setSelectedAddress = selectedAddress => {
@@ -396,7 +409,7 @@ export default class Home extends Component {
 
         {this.state.mapLoaded && this.state.selectedAddress.to.name && this.state.coords && (
           <Overlay
-            isVisible={true}
+            isVisible={this.state.isOverlayVisible}
             windowBackgroundColor="rgba(0, 0, 0, 0.8)"
             overlayBackgroundColor="rgba(0, 0, 0, 0)"
             overlayStyle={{ elevation: 0 }}
