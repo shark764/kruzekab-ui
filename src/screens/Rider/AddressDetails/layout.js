@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import { Text, View, ScrollView, TextInput } from 'react-native';
 import { Input, Avatar, Button } from 'react-native-elements';
-import { Container } from '../../components/Form/Elements';
+import { Container } from '../../../components/Form/Elements';
 import styled from 'styled-components';
 import { Formik } from 'formik';
 
@@ -133,8 +133,8 @@ export default class AddressDetails extends Component {
               };
 
               this.props.navigation.navigate('SelectGroup', {
-                setSelectedAddress: this.props.navigation.state.params.setSelectedAddress,
-                selectedAddress: selectedAddress
+                selectedAddress: selectedAddress,
+                setSelectedAddress: this.props.navigation.state.params.setSelectedAddress
               });
             }}>
             {({ handleSubmit, values, errors, handleChange }) => (

@@ -1,9 +1,7 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import { Text, View, ScrollView } from 'react-native';
-import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import { Avatar, ButtonGroup, ListItem, Button, SearchBar, Icon } from 'react-native-elements';
-import { Headline, SubHeadline, Container } from '../../components/Form/Elements';
-import { ExtendedGoBackButton } from '../../components/Header/Navigator';
+import { Container } from '../../../components/Form/Elements';
 import styled from 'styled-components';
 import axios from 'axios';
 import AwesomeDebouncePromise from 'awesome-debounce-promise';
@@ -28,7 +26,7 @@ const searchPlace = (text, currentPosition) =>
 
 const debouncedSearchPlace = AwesomeDebouncePromise(searchPlace, 500);
 export default class SelectAddress extends Component {
-  currentPosition = this.props.navigation.state.params.currentPosition;
+  currentPosition = this.props.currentPosition.toJS();
 
   state = {
     addressPlaceholder: this.props.navigation.state.params.addressPlaceholder,
@@ -43,6 +41,10 @@ export default class SelectAddress extends Component {
       selected: false
     },
     searchedPlaces: []
+  };
+
+  _navigateTo = (destinationScreen, params = {}) => {
+    this.props.navigation.navigate(destinationScreen, params);
   };
 
   updateIndex = selectedIndex => {
@@ -303,7 +305,7 @@ export default class SelectAddress extends Component {
               title="Done"
               disabled={!this.state.selectedAddress.selected}
               onPress={() => {
-                this.props.navigation.navigate('AddressDetails', {
+                this._navigateTo('AddressDetails', {
                   selectedAddress: this.state.selectedAddress,
                   setSelectedAddress: this.props.navigation.state.params.setSelectedAddress
                 });

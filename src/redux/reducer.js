@@ -1,5 +1,6 @@
 import { combineReducers } from 'redux-immutable';
 import { fromJS } from 'immutable';
+import { from } from 'rxjs';
 
 const INITIAL_STATE = fromJS({
   loggedIn: false,
@@ -8,7 +9,18 @@ const INITIAL_STATE = fromJS({
   riders: [],
   groups: [],
   newUser: {},
-  newGroup: {}
+  newGroup: {},
+  selectedAddress: {
+    from: {
+      name: 'Current location'
+    },
+    to: {}
+  },
+  location: 'to',
+  currentPosition: {
+    longitude: 90,
+    latitude: 180
+  }
 });
 
 const getItemIndex = (state, entity, itemId) => state.get(entity).findIndex(item => item.get('id') === itemId);
@@ -64,6 +76,14 @@ const appReducer = (state = INITIAL_STATE, action) => {
     }
     case 'ADD_TO_NEW_GROUP':
       return state.mergeIn(['newGroup'], fromJS(action.payload));
+    case 'UPDATE_SELECTED_ADDRESS':
+      return state.updateIn(['selectedAddress', action.location], selectedAddress => {
+        if (selectedAddress) return selectedAddress.merge(fromJS(action.payload));
+      });
+    case 'UPDATE_LOCATION':
+      return state.set('location', action.location);
+    case 'UPDATE_CURRENT_POSITION':
+      return state.set('currentPosition', fromJS(action.currentPosition));
     default:
       return state;
   }
