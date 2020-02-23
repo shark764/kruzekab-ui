@@ -69,3 +69,19 @@ export const addToNewGroup = payload => ({
   type: 'ADD_TO_NEW_GROUP',
   payload
 });
+
+export const updateSelectedAddress = (location, payload) => ({
+  type: 'UPDATE_SELECTED_ADDRESS',
+  location,
+  payload
+});
+
+export const updateLocation = location => ({
+  type: 'UPDATE_LOCATION',
+  location
+});
+
+export const updateCurrentPosition = currentPosition => ({
+  type: 'UPDATE_CURRENT_POSITION',
+  currentPosition
+});

@@ -1,13 +1,13 @@
 import React, { Component, Fragment } from 'react';
 import { View, Text, StyleSheet, Image } from 'react-native';
 import styled from 'styled-components';
-import { Container } from '../../components/Form/Elements';
-import { Input, Divider, Avatar, Overlay, Icon } from 'react-native-elements';
+import { Container } from '../../../components/Form/Elements';
+import { Input, Divider, Avatar, Overlay } from 'react-native-elements';
 import MapView, { PROVIDER_GOOGLE, Marker, Polyline, Circle } from 'react-native-maps';
 import Geolocation from '@react-native-community/geolocation';
 import axios from 'axios';
-import goal from '../../assets/goal.png';
-import pin from '../../assets/ic_dest.png';
+import goal from '../../../assets/goal.png';
+import pin from '../../../assets/ic_dest.png';
 
 const styles = StyleSheet.create({
   map: {
@@ -48,40 +48,6 @@ const WhereToView = styled(View)`
 `;
 
 export default class Home extends Component {
-  /*static navigationOptions = ({             navigation, navigation: { state } }) => {
-     return {
-       headerShown: false,
-       headerTitle: () => null,
-       headerLeft: () => (
-         <NavigationHeaderButtons>
-           <Item
-             title="Go Back"
-             buttonWrapperStyle={{
-               marginLeft: 12,
-               marginTop: 10
-             }}
-             useIconComponent={Ionicons}
-             iconName="md-arrow-back"
-             onPress={() => navigation.navigate('Initial', { userType: 'rider' })}
-           />
-         </NavigationHeaderButtons>
-       ),
-       headerStyle: {
-         backgroundColor: 'transparent',
-         elevation: 0,
-         shadowOpacity: 0,
-         borderBottomWidth: 0,
-         shadowColor: 'transparent'
-       }
-     };
-   };*/
-
-  // static navigationOptions = ({             navigation }) => {
-  //   return {
-  //     drawerIcon: () => null,
-  //     drawerLabel: () => null
-  //   };
-  // };
   mapRef = null;
 
   decode = (t, e) => {
@@ -101,8 +67,14 @@ export default class Home extends Component {
 
   drawRoute = async () => {
     const mode = 'driving'; // 'walking';
-    const origin = `${this.state.selectedAddress.from.latitude},${this.state.selectedAddress.from.longitude}`;
-    const destination = `${this.state.selectedAddress.to.latitude},${this.state.selectedAddress.to.longitude}`;
+    const origin = `${this.props.selectedAddress.getIn(['from', 'latitude'])},${this.props.selectedAddress.getIn([
+      'from',
+      'longitude'
+    ])}`;
+    const destination = `${this.props.selectedAddress.getIn(['to', 'latitude'])},${this.props.selectedAddress.getIn([
+      'to',
+      'longitude'
+    ])}`;
     const APIKEY = 'AIzaSyCH7pW8XhPRvUzm-JQ0f7aWVhN3QAUQO78';
     const url = `https://maps.googleapis.com/maps/api/directions/json?origin=${origin}&destination=${destination}&key=${APIKEY}&mode=${mode}`;
     let { data } = await axios.get(url);
@@ -119,11 +91,9 @@ export default class Home extends Component {
   getCurrentPosition = () => {
     Geolocation.getCurrentPosition(
       info =>
-        this.setState({
-          currentPosition: {
-            longitude: info.coords.longitude,
-            latitude: info.coords.latitude
-          }
+        this.props.updateCurrentPosition({
+          longitude: info.coords.longitude,
+          latitude: info.coords.latitude
         }),
       error => console.error(error),
       { enableHighAccuracy: true, timeout: 10000 }
@@ -132,29 +102,30 @@ export default class Home extends Component {
 
   componentDidMount = () => {
     Geolocation.getCurrentPosition(
-      info =>
+      info => {
+        this.props.updateCurrentPosition({
+          longitude: info.coords.longitude,
+          latitude: info.coords.latitude
+        });
+        this.props.updateSelectedAddress('from', {
+          longitude: info.coords.longitude,
+          latitude: info.coords.latitude,
+          name: 'Current position'
+        });
         this.setState({
-          currentPosition: {
-            longitude: info.coords.longitude,
-            latitude: info.coords.latitude
-          },
-          selectedAddress: {
-            to: {},
-            from: {
-              longitude: info.coords.longitude,
-              latitude: info.coords.latitude,
-              name: 'Current position'
-            }
-          },
           mapLoaded: true
-        }),
+        });
+      },
       error => console.error(error),
       { enableHighAccuracy: true, timeout: 10000 }
     );
   };
 
   componentDidUpdate(prevProps, prevState) {
-    if (prevState.selectedAddress.to !== this.state.selectedAddress.to && this.state.selectedAddress.to.name) {
+    if (
+      prevProps.selectedAddress.get('to') !== this.props.selectedAddress.get('to') &&
+      this.props.selectedAddress.getIn(['to', 'name'])
+    ) {
       setTimeout(() => {
         this.setState({
           isOverlayVisible: false
@@ -180,34 +151,19 @@ export default class Home extends Component {
   };
 
   state = {
-    location: 'to',
     coords: null,
     latitudeDelta: 0.01,
     longitudeDelta: 0.0004,
     regionLatitude: null,
     regionLongitude: null,
-    currentPosition: {
-      longitude: 90,
-      latitude: 180
-    },
     mapLoaded: false,
-    selectedAddress: {
-      from: {
-        alias: 'Current location'
-      },
-      to: {}
-    },
     isOverlayVisible: false
   };
 
   setSelectedAddress = selectedAddress => {
-    this.setState(prevState => ({
-      selectedAddress: {
-        ...prevState.selectedAddress,
-        [this.state.location]: selectedAddress
-      }
-    }));
-    if (this.state.selectedAddress.to.name) {
+    console.log(this.props.location);
+    this.props.updateSelectedAddress(this.props.location, selectedAddress);
+    if (this.props.selectedAddress.getIn(['to', 'name'])) {
       this.drawRoute();
     }
   };
@@ -228,14 +184,16 @@ export default class Home extends Component {
               showsCompass={false}
               loadingEnabled={true}
               region={{
-                latitude: this.state.regionLatitude || this.state.currentPosition.latitude,
-                longitude: this.state.regionLongitude || this.state.currentPosition.longitude,
+                latitude: this.state.regionLatitude || this.props.currentPosition.get('latitude'),
+                longitude: this.state.regionLongitude || this.props.currentPosition.get('longitude'),
                 latitudeDelta: this.state.latitudeDelta,
                 longitudeDelta: this.state.longitudeDelta
               }}>
               <Circle
-                key={(this.state.currentPosition.latitude + this.state.currentPosition.longitude).toString()}
-                center={this.state.currentPosition}
+                key={(
+                  this.props.currentPosition.get('latitude') + this.props.currentPosition.get('longitude')
+                ).toString()}
+                center={this.props.currentPosition.toJS()}
                 radius={20}
                 strokeWidth={1}
                 strokeColor={'#4CCA8D'}
@@ -243,30 +201,34 @@ export default class Home extends Component {
               />
 
               <Circle
-                key={(this.state.currentPosition.latitude + this.state.currentPosition.longitude + 1).toString()}
-                center={this.state.currentPosition}
+                key={(
+                  this.props.currentPosition.get('latitude') +
+                  this.props.currentPosition.get('longitude') +
+                  1
+                ).toString()}
+                center={this.props.currentPosition.toJS()}
                 radius={8}
                 strokeWidth={4}
                 strokeColor={'#FDFDFD'}
                 fillColor={'#4CCA8D'}
               />
 
-              {this.state.selectedAddress.to.name && (
+              {this.props.selectedAddress.getIn(['to', 'name']) && (
                 <Marker
                   coordinate={{
-                    latitude: this.state.selectedAddress.to.latitude || 37.78825,
-                    longitude: this.state.selectedAddress.to.longitude || -122.4324
+                    latitude: this.props.selectedAddress.getIn(['to', 'latitude']) || 37.78825,
+                    longitude: this.props.selectedAddress.getIn(['to', 'longitude']) || -122.4324
                   }}
                   pinColor="red">
                   <Image source={goal} style={{ height: 30, width: 30 }} />
                 </Marker>
               )}
 
-              {this.state.selectedAddress.from.name && (
+              {this.props.selectedAddress.getIn(['from', 'name']) && (
                 <Marker
                   coordinate={{
-                    latitude: this.state.selectedAddress.from.latitude || 37.78825,
-                    longitude: this.state.selectedAddress.from.longitude || -122.4324
+                    latitude: this.props.selectedAddress.getIn(['from', 'latitude']) || 37.78825,
+                    longitude: this.props.selectedAddress.getIn(['from', 'longitude']) || -122.4324
                   }}
                   pinColor="blue">
                   <Image source={pin} style={{ height: 40, width: 25 }} />
@@ -277,13 +239,13 @@ export default class Home extends Component {
                 <Polyline
                   coordinates={[
                     {
-                      latitude: this.state.selectedAddress.from.latitude,
-                      longitude: this.state.selectedAddress.from.longitude
+                      latitude: this.props.selectedAddress.getIn(['from', 'latitude']),
+                      longitude: this.props.selectedAddress.getIn(['from', 'longitude'])
                     }, // optional
                     ...this.state.coords,
                     {
-                      latitude: this.state.selectedAddress.to.latitude,
-                      longitude: this.state.selectedAddress.to.longitude
+                      latitude: this.props.selectedAddress.getIn(['to', 'latitude']),
+                      longitude: this.props.selectedAddress.getIn(['to', 'longitude'])
                     } // optional
                   ]}
                   strokeWidth={4}
@@ -339,7 +301,7 @@ export default class Home extends Component {
           <LineView>
             <Text
               style={{
-                color: this.state.location === 'from' ? '#5280E2' : '#212226',
+                color: this.props.location === 'from' ? '#5280E2' : '#212226',
                 position: 'absolute',
                 left: 12,
                 fontSize: 15,
@@ -364,7 +326,7 @@ export default class Home extends Component {
                 fontSize: 15,
                 left: 13,
                 top: 70,
-                color: this.state.location === 'to' ? '#5280E2' : '#212226'
+                color: this.props.location === 'to' ? '#5280E2' : '#212226'
               }}>
               ▼
             </Text>
@@ -372,16 +334,15 @@ export default class Home extends Component {
           <WhereToView>
             <Input
               placeholder="from ?"
-              value={this.state.selectedAddress.from.alias || this.state.selectedAddress.from.name}
+              value={
+                this.props.selectedAddress.getIn(['from', 'alias']) ||
+                this.props.selectedAddress.getIn(['from', 'name'])
+              }
               onFocus={() => {
-                this.setState({
-                  location: 'from'
-                });
-
-                this.props.navigation.navigate('SelectAddress', {
+                this.props.updateLocation('from');
+                this._navigateTo('SelectAddress', {
                   addressPlaceholder: 'Where from?',
-                  setSelectedAddress: this.setSelectedAddress,
-                  currentPosition: this.state.currentPosition
+                  setSelectedAddress: this.setSelectedAddress
                 });
               }}
               inputContainerStyle={{
@@ -390,15 +351,14 @@ export default class Home extends Component {
             <Divider></Divider>
             <Input
               placeholder="Where to?"
-              value={this.state.selectedAddress.to.alias || this.state.selectedAddress.to.name}
+              value={
+                this.props.selectedAddress.getIn(['to', 'alias']) || this.props.selectedAddress.getIn(['to', 'name'])
+              }
               onFocus={() => {
-                this.setState({
-                  location: 'to'
-                });
+                this.props.updateLocation('to');
                 this._navigateTo('SelectAddress', {
                   addressPlaceholder: 'Where to?',
-                  setSelectedAddress: this.setSelectedAddress,
-                  currentPosition: this.state.currentPosition
+                  setSelectedAddress: this.setSelectedAddress
                 });
               }}
               inputContainerStyle={{
@@ -406,8 +366,7 @@ export default class Home extends Component {
               }}></Input>
           </WhereToView>
         </LocationView>
-
-        {this.state.mapLoaded && this.state.selectedAddress.to.name && this.state.coords && (
+        {this.state.mapLoaded && this.props.selectedAddress.getIn(['to', 'name']) && this.state.coords && (
           <Overlay
             isVisible={this.state.isOverlayVisible}
             windowBackgroundColor="rgba(0, 0, 0, 0.8)"

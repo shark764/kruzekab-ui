@@ -50,8 +50,8 @@ export default class SelectGroup extends Component {
         this.props.navigation.navigate('SelectRiders', {
           userType: 'rider',
           groupId: selected,
-          setSelectedAddress: this.props.navigation.state.params.setSelectedAddress,
-          selectedAddress: this.props.navigation.state.params.selectedAddress
+          selectedAddress: this.props.navigation.state.params.selectedAddress,
+          setSelectedAddress: this.props.navigation.state.params.setSelectedAddress
         });
       }, 1500);
     } catch (error) {

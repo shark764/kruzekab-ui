@@ -99,8 +99,8 @@ const RequestStack = createStackNavigator(
     RideFinished: { screen: RideFinished }
   },
   {
-    // initialRouteName: 'Home',
-    initialRouteName: 'SelectGroup',
+    initialRouteName: 'Home',
+    //initialRouteName: 'SelectGroup',
     defaultNavigationOptions
   }
 );
