@@ -21,12 +21,16 @@ const StyledHeadline = styled(Text)`
 
 const searchPlace = (text, currentPosition) =>
   axios.get(
-    `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${currentPosition.latitude},${currentPosition.longitude}&radius=500&types=food&name=${text}&key=AIzaSyCH7pW8XhPRvUzm-JQ0f7aWVhN3QAUQO78`
+    `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${currentPosition.get(
+      'latitude'
+    )},${currentPosition.get(
+      'longitude'
+    )}&radius=500&types=food&name=${text}&key=AIzaSyCH7pW8XhPRvUzm-JQ0f7aWVhN3QAUQO78`
   );
 
 const debouncedSearchPlace = AwesomeDebouncePromise(searchPlace, 500);
 export default class SelectAddress extends Component {
-  currentPosition = this.props.currentPosition.toJS();
+  currentPosition = this.props.currentPosition;
 
   state = {
     addressPlaceholder: this.props.navigation.state.params.addressPlaceholder,
@@ -306,8 +310,8 @@ export default class SelectAddress extends Component {
               disabled={!this.state.selectedAddress.selected}
               onPress={() => {
                 this._navigateTo('AddressDetails', {
-                  selectedAddress: this.state.selectedAddress,
-                  setSelectedAddress: this.props.navigation.state.params.setSelectedAddress
+                  selectedAddress: this.state.selectedAddress
+                  //setSelectedAddress: this.props.navigation.state.params.setSelectedAddress
                 });
               }}
             />
