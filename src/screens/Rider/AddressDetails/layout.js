@@ -4,6 +4,7 @@ import { Input, Avatar, Button } from 'react-native-elements';
 import { Container } from '../../../components/Form/Elements';
 import styled from 'styled-components';
 import { Formik } from 'formik';
+import DialogInput from 'react-native-dialog-input';
 
 const StyledHeadline = styled(Text)`
   width: 237px;
@@ -71,118 +72,148 @@ export default class AddressDetails extends Component {
     saveStatus: 'Save Address',
     saveIconColor: '#5280E2',
     saveIconBackgroundColor: '#DDE5F7',
-    saveIcon: 'plus'
+    saveIcon: 'plus',
+    modalVisible: false,
+    locationAlias: ''
+  };
+
+  setModalVisible = visible => {
+    this.setState({
+      modalVisible: visible
+    });
   };
 
   render = () => (
-    <Container>
-      <ScrollView>
-        <View
-          style={{
-            flex: 1,
-            flexDirection: 'row',
-            marginTop: 13,
-            marginLeft: 15
-          }}>
-          <Avatar
-            rounded
-            size="small"
-            icon={{ name: 'chevron-left', type: 'font-awesome', color: '#000000' }}
-            onPress={() => this.props.navigation.goBack()}
-            activeOpacity={0.7}
-            overlayContainerStyle={{
-              backgroundColor: '#FFFFFF',
-              shadowColor: '#000',
-              shadowOffset: {
-                width: 0,
-                height: 6
-              },
-              shadowOpacity: 0.39,
-              shadowRadius: 8.3,
-              elevation: 13
-            }}
-          />
-          <StyledHeadline>Address details</StyledHeadline>
-        </View>
-        <View
-          style={{
-            marginTop: 30,
-            marginLeft: 25,
-            marginRight: 25
-          }}>
-          <Formik
-            initialValues={{
-              address1: this.state.address1,
-              address2: this.state.address2,
-              address3: this.state.address3
-            }}
-            validate={values => {
-              const errors = {};
-              if (!values.address1) errors.address1 = "Address can't be blank";
-              return errors;
-            }}
-            onSubmit={(values, { setSubmitting }) => {
-              console.log(this.state.selectedAddress);
-              const address = `${values.address1}, ${values.address2}, ${values.address3}`;
-              const selectedAddress = {
-                longitude: this.state.selectedAddress.longitude || this.state.selectedAddress.geometry.location.lng,
-                latitude: this.state.selectedAddress.latitude || this.state.selectedAddress.geometry.location.lat,
-                name: this.state.selectedAddress.name,
-                notes: this.state.notes,
-                address
-              };
-
-              this.props.navigation.navigate('SelectGroup', {
-                selectedAddress: selectedAddress,
-                setSelectedAddress: this.props.navigation.state.params.setSelectedAddress
-              });
+    <Fragment>
+      <Container>
+        <ScrollView>
+          <View
+            style={{
+              flex: 1,
+              flexDirection: 'row',
+              marginTop: 13,
+              marginLeft: 15
             }}>
-            {({ handleSubmit, values, errors, handleChange }) => (
-              <Fragment>
-                <StyledText>Address</StyledText>
-                <Input
-                  inputStyle={inputStyle}
-                  value={values.address1}
-                  errorMessage={errors.address1}
-                  onChangeText={handleChange('address1')}
-                />
-                <Input inputStyle={inputStyle} value={values.address2} onChangeText={handleChange('address2')} />
-                <Input inputStyle={inputStyle} value={values.address3} onChangeText={handleChange('address3')} />
-                <StyledText>Add a note</StyledText>
-                <TextArea multiline={true} numberOfLines={4} placeholder="Your message here..." />
-                <View
-                  style={{
-                    marginTop: 29,
-                    flex: 1,
-                    flexDirection: 'row'
-                  }}>
-                  <Avatar
-                    rounded
-                    size="small"
-                    icon={{ name: this.state.saveIcon, type: 'font-awesome', color: this.state.saveIconColor }}
-                    onPress={() =>
-                      this.setState({
-                        saveStatus: 'Saved',
-                        saveIconBackgroundColor: '#5280E2',
-                        saveIconColor: '#FFFFFF',
-                        saveIcon: 'check'
-                      })
-                    }
-                    activeOpacity={0.7}
-                    overlayContainerStyle={{
-                      backgroundColor: this.state.saveIconBackgroundColor
-                    }}
+            <Avatar
+              rounded
+              size="small"
+              icon={{ name: 'chevron-left', type: 'font-awesome', color: '#000000' }}
+              onPress={() => this.props.navigation.goBack()}
+              activeOpacity={0.7}
+              overlayContainerStyle={{
+                backgroundColor: '#FFFFFF',
+                shadowColor: '#000',
+                shadowOffset: {
+                  width: 0,
+                  height: 6
+                },
+                shadowOpacity: 0.39,
+                shadowRadius: 8.3,
+                elevation: 13
+              }}
+            />
+            <StyledHeadline>Address details</StyledHeadline>
+          </View>
+          <View
+            style={{
+              marginTop: 30,
+              marginLeft: 25,
+              marginRight: 25
+            }}>
+            <Formik
+              initialValues={{
+                address1: this.state.address1,
+                address2: this.state.address2,
+                address3: this.state.address3
+              }}
+              validate={values => {
+                const errors = {};
+                if (!values.address1) errors.address1 = "Address can't be blank";
+                return errors;
+              }}
+              onSubmit={(values, { setSubmitting }) => {
+                console.log(this.state.selectedAddress);
+                const address = `${values.address1}, ${values.address2}, ${values.address3}`;
+                const selectedAddress = {
+                  longitude: this.state.selectedAddress.longitude || this.state.selectedAddress.geometry.location.lng,
+                  latitude: this.state.selectedAddress.latitude || this.state.selectedAddress.geometry.location.lat,
+                  name: this.state.selectedAddress.name,
+                  notes: this.state.notes,
+                  alias: this.state.locationAlias,
+                  address
+                };
+
+                this.props.navigation.navigate('SelectGroup', {
+                  selectedAddress: selectedAddress
+                  // setSelectedAddress: this.props.navigation.state.params.setSelectedAddress
+                });
+              }}>
+              {({ handleSubmit, values, errors, handleChange }) => (
+                <Fragment>
+                  <StyledText>Address</StyledText>
+                  <Input
+                    inputStyle={inputStyle}
+                    value={values.address1}
+                    errorMessage={errors.address1}
+                    onChangeText={handleChange('address1')}
                   />
-                  <StyledSavingText>{this.state.saveStatus}</StyledSavingText>
-                </View>
-                <View style={{ marginTop: 64 }}>
-                  <Button title="Continue" onPress={handleSubmit} />
-                </View>
-              </Fragment>
-            )}
-          </Formik>
-        </View>
-      </ScrollView>
-    </Container>
+                  <Input inputStyle={inputStyle} value={values.address2} onChangeText={handleChange('address2')} />
+                  <Input inputStyle={inputStyle} value={values.address3} onChangeText={handleChange('address3')} />
+                  <StyledText>Add a note</StyledText>
+                  <TextArea multiline={true} numberOfLines={4} placeholder="Your message here..." />
+                  <View
+                    style={{
+                      marginTop: 29,
+                      flex: 1,
+                      flexDirection: 'row'
+                    }}>
+                    <Avatar
+                      rounded
+                      size="small"
+                      icon={{ name: this.state.saveIcon, type: 'font-awesome', color: this.state.saveIconColor }}
+                      onPress={
+                        () => this.setModalVisible(true)
+                        /*this.setState({
+                          saveStatus: 'Saved',
+                          saveIconBackgroundColor: '#5280E2',
+                          saveIconColor: '#FFFFFF',
+                          saveIcon: 'check'
+                        })*/
+                      }
+                      activeOpacity={0.7}
+                      overlayContainerStyle={{
+                        backgroundColor: this.state.saveIconBackgroundColor
+                      }}
+                    />
+                    <StyledSavingText>{this.state.saveStatus}</StyledSavingText>
+                  </View>
+                  <View style={{ marginTop: 64 }}>
+                    <Button title="Continue" onPress={handleSubmit} />
+                  </View>
+                </Fragment>
+              )}
+            </Formik>
+          </View>
+        </ScrollView>
+      </Container>
+      <DialogInput
+        isDialogVisible={this.state.modalVisible}
+        title="Save location"
+        message="Save current location as"
+        hintInput="Location name"
+        submitInput={inputText => {
+          this.setState({
+            locationAlias: inputText,
+            saveStatus: 'Saved',
+            saveIconBackgroundColor: '#5280E2',
+            saveIconColor: '#FFFFFF',
+            saveIcon: 'check'
+          });
+          this.setModalVisible(false);
+        }}
+        closeDialog={() => {
+          this.setModalVisible(false);
+        }}></DialogInput>
+    </Fragment>
   );
 }

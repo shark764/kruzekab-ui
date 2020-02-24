@@ -133,6 +133,15 @@ export default class Home extends Component {
         this._navigateTo('RideAccepted', {});
       }, 5000);
     }
+    // if selected address has changed (from or to) and coordinates exists for both locations
+    if (
+      (prevProps.selectedAddress.get('to') !== this.props.selectedAddress.get('to') ||
+        prevProps.selectedAddress.get('from') !== this.props.selectedAddress.get('from')) &&
+      this.props.selectedAddress.getIn(['to', 'latitude']) &&
+      this.props.selectedAddress.getIn(['from', 'latitude'])
+    ) {
+      this.drawRoute();
+    }
   }
 
   handleSignout = async () => {
@@ -341,8 +350,8 @@ export default class Home extends Component {
               onFocus={() => {
                 this.props.updateLocation('from');
                 this._navigateTo('SelectAddress', {
-                  addressPlaceholder: 'Where from?',
-                  setSelectedAddress: this.setSelectedAddress
+                  addressPlaceholder: 'Where from?'
+                  //setSelectedAddress: this.setSelectedAddress
                 });
               }}
               inputContainerStyle={{

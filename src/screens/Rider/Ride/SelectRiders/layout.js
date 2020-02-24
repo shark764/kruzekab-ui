@@ -62,8 +62,7 @@ export default class SelectRiders extends Component {
       const { selected } = this.state;
 
       setTimeout(() => {
-        console.log('setSelected', this.props.navigation.state.params.selectedAddress);
-        this.props.navigation.state.params.setSelectedAddress(this.props.navigation.state.params.selectedAddress);
+        this.props.updateSelectedAddress(this.props.location, this.props.navigation.state.params.selectedAddress);
         this.props.navigation.navigate('Home', { userType: 'rider', groupId: selected });
       }, 1500);
     } catch (error) {

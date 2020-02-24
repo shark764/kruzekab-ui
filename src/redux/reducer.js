@@ -1,6 +1,5 @@
 import { combineReducers } from 'redux-immutable';
 import { fromJS } from 'immutable';
-import { from } from 'rxjs';
 
 const INITIAL_STATE = fromJS({
   loggedIn: false,
