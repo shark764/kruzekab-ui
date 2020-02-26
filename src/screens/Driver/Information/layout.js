@@ -27,7 +27,7 @@ export default class DriverInformation extends Component {
   handleOnSubmit = async (values, actions) => {
     try {
       // const response = await this.props.firebase.signupWithEmail(email, password);
-
+      this.props.addToNewUser({ ...values, licensePicture: this.state.photo });
       setTimeout(() => {
         this.props.navigation.navigate('ProfilePhoto', { userType: 'driver' });
       }, 1500);

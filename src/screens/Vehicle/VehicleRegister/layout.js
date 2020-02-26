@@ -24,6 +24,9 @@ export default class VehicleRegister extends Component {
   handleOnSubmit = async (values, actions) => {
     try {
       setTimeout(() => {
+        this.props.addToNewUser(values);
+        //TODO: sent to api
+        this.props.addNewUser();
         this.props.navigation.navigate('ApplicationReviewed', { userType: 'driver' });
       }, 1500);
     } catch (error) {

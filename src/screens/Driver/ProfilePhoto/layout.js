@@ -38,6 +38,8 @@ export default class ProfilePhoto extends Component {
     try {
       // const response = await this.props.firebase.signupWithEmail(email, password);
 
+      this.props.addToNewUser({ profilePicture: this.state.photo });
+
       setTimeout(() => {
         this.props.navigation.navigate('VehicleRegister', { userType: 'driver' });
       }, 1500);
