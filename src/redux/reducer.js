@@ -59,18 +59,33 @@ async function sendData(data) {
   formdata.append('model', 'Vieja');*/
 
   formdata.append('name', `${data.name} ${data.lastName}`);
+  formdata.append('user_type', '1');
   formdata.append('phone_number', data.phoneNumber);
   formdata.append('password', data.password);
   formdata.append('max_seats', data.maxSeats);
   formdata.append('vehicle_year', data.vehicleYear);
   formdata.append('license_number', data.licenseNumber);
   formdata.append('birthdate', data.birthdate);
-  formdata.append('profile_picture', { uri: data.profilePicture.uri, type: data.profilePicture.type, name: 'dba031e6-4c46-48aa-85f6-283ef9b4423d' });
-  formdata.append('license_picture', { uri: data.licensePicture.uri, type: data.licensePicture.type, name:  'dba031e6-4c46-48aa-85f6-283ef9b4423f'});
+  formdata.append('profile_picture', {
+    uri: data.profilePicture.uri,
+    type: data.profilePicture.type,
+    name: data.profilePicture.fileName
+  });
+  formdata.append('license_picture', {
+    uri: data.licensePicture.uri,
+    type: data.licensePicture.type,
+    name: data.licensePicture.fileName
+  });
+  formdata.append('car_insurance', {
+    uri: data.carInsurancePicture.uri,
+    type: data.carInsurancePicture.type,
+    name: data.carInsurancePicture.fileName
+  });
   formdata.append('gender', data.gender === 'male' ? 'M' : 'F');
   formdata.append('main_job_title', data.occupation);
   formdata.append('automaker', data.car);
   formdata.append('model', data.model);
+  formdata.append('background_check_approved', data.check ? '1' : '0');
 
   try {
     const res = await axios.post('https://api.kruzekab.com/api/user/driver', formdata, {
