@@ -85,3 +85,7 @@ export const updateCurrentPosition = currentPosition => ({
   type: 'UPDATE_CURRENT_POSITION',
   currentPosition
 });
+
+export const addNewUser = () => ({
+  type: 'ADD_NEW_USER'
+});

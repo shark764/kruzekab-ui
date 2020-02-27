@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { ScrollView } from 'react-native';
-import styled from 'styled-components';
+import styled, { ThemeConsumer } from 'styled-components';
 import { Button, Icon } from 'react-native-elements';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Form from './form';
@@ -45,6 +45,7 @@ export default class DriverSignup extends Component {
 
       setTimeout(() => {
         // this.props.navigation.navigate('VehicleRegister', { userType: null });
+        this.props.addToNewUser({ ...values, userType: 'driver' });
         this.props.navigation.navigate('Confirm', { userType: 'driver', phoneNumber });
       }, 1500);
     } catch (error) {
