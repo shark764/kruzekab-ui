@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
-import { Text, View } from 'react-native';
+import PropTypes from 'prop-types';
+import { Text, View, ScrollView } from 'react-native';
 import styled from 'styled-components';
-import { ScrollView } from 'react-native';
+
+import { Icon } from 'react-native-elements';
 import { Container } from '../../../../components/Form/Elements';
 import { ExtendedGoBackButton } from '../../../../components/Header/Navigator';
 import Form from './form';
-import { validationSchema } from './validation';
-import { Icon } from 'react-native-elements';
+import validationSchema from './validation';
 
 const StyledContainer = styled(Container)`
   margin-top: 30px;
@@ -30,41 +31,38 @@ const IconContainer = styled(View)`
 `;
 
 export default class SelectRiders extends Component {
-  state = {
-    selected: []
-  };
+  static navigationOptions = ({ navigation }) => ({
+    title: 'Select riders',
+    headerLeft: () => (
+      <ExtendedGoBackButton
+        iconOnPress={() => navigation.navigate('SelectGroup')}
+        itemOnPress={() => navigation.navigate('SelectGroup')}
+      />
+    ),
+  });
 
-  static navigationOptions = ({ navigation }) => {
-    return {
-      title: 'Select riders',
-      headerLeft: () => (
-        <ExtendedGoBackButton
-          iconOnPress={() => navigation.navigate('SelectGroup', { userType: 'rider' })}
-          itemOnPress={() => navigation.navigate('SelectGroup', { userType: 'rider' })}
-        />
-      )
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      selected: [],
     };
-  };
+  }
 
-  goToLogin = () => this.props.navigation.navigate('Login', { userType: null });
-
-  goToConfirmation = () => this.props.navigation.navigate('Confirm', { userType: null });
-
-  goToLogin = () => this.props.navigation.navigate('Login', { userType: null });
-
-  _navigateTo = (destinationScreen, params = {}) => {
-    this.props.navigation.navigate(destinationScreen, params);
+  navigateTo = (destinationScreen, params = {}) => {
+    const { navigation } = this.props;
+    navigation.navigate(destinationScreen, params);
   };
 
   handleOnSubmit = async (values, actions) => {
     try {
-      // const response = await this.props.firebase.signupWithEmail(email, password);
       const { selected } = this.state;
+      const { updateSelectedAddress, location, navigation } = this.props;
 
-      setTimeout(() => {
-        this.props.updateSelectedAddress(this.props.location, this.props.navigation.state.params.selectedAddress);
-        this.props.navigation.navigate('Home', { userType: 'rider', groupId: selected });
-      }, 1500);
+      updateSelectedAddress(location, navigation.state.params.selectedAddress);
+
+      actions.setSubmitting(false);
+      navigation.navigate('Home', { userType: 'rider', groupId: selected });
     } catch (error) {
       actions.setFieldError('general', error.message);
     } finally {
@@ -78,7 +76,8 @@ export default class SelectRiders extends Component {
   handleOnAddRiderToGroup = async (values, actions) => {
     try {
       setTimeout(() => {
-        this.props.navigation.navigate('NewGroup', { userType: 'rider' });
+        const { navigation } = this.props;
+        navigation.navigate('NewGroup', { userType: 'rider' });
       }, 1500);
     } catch (error) {
       actions.setFieldError('general', error.message);
@@ -89,18 +88,12 @@ export default class SelectRiders extends Component {
     this.setState(prevState => ({
       selected: prevState.selected.includes(key)
         ? prevState.selected.splice(prevState.selected.indexOf(key), 1)
-        : [...prevState.selected, key]
+        : [...prevState.selected, key],
     }));
   };
 
   render() {
-    console.log(
-      'Nav param',
-      'SelectRiders',
-      this.props.navigation.getParam('userType', null),
-      this.props.navigation.getParam('groupId', null)
-    );
-
+    const { selected } = this.state;
     return (
       <StyledContainer enabled behavior="">
         <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
@@ -116,24 +109,27 @@ export default class SelectRiders extends Component {
               disabled={false}
             />
 
-            <GroupTitle>Kid's School</GroupTitle>
+            <GroupTitle>Kid&apos;s School</GroupTitle>
           </IconContainer>
 
           <Form
             handleOnSubmit={this.handleOnSubmit}
             initialValues={{
               userType: 2,
-              selected: ''
+              selected: '',
             }}
             validationSchema={validationSchema}
             handleOnAddRiderToGroup={this.handleOnAddRiderToGroup}
             handleOnSelected={this.handleOnSelected}
-            selected={this.state.selected}
-            goToLogin={this.goToLogin}
-            goToConfirmation={this.goToConfirmation}
+            selected={selected}
           />
         </ScrollView>
       </StyledContainer>
     );
   }
 }
+
+SelectRiders.propTypes = {
+  updateSelectedAddress: PropTypes.shape.isRequired,
+  location: PropTypes.shape.isRequired,
+};

@@ -3,11 +3,11 @@ import RiderNavigation from './RiderNavigation';
 
 const AppNavigation = createStackNavigator(
   {
-    Rider: RiderNavigation
+    Rider: RiderNavigation,
   },
   {
-    initialRouteName: 'Home'
-  }
+    initialRouteName: 'Home',
+  },
 );
 
 export default AppNavigation;

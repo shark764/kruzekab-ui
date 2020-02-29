@@ -1,16 +1,16 @@
 import { connect } from 'react-redux';
 import Layout from './layout';
 import { getAllGroups, getLocation } from '../../../../redux/selectors';
-import { addGroup, addRiderToGroup, updateSelectedAddress } from '../../../../redux/actions';
+import { addRiderToGroup, updateSelectedAddress } from '../../../../redux/actions';
 
-const mapStateToProps = (state, props) => ({
+const mapStateToProps = state => ({
   groups: getAllGroups(state),
-  location: getLocation(state)
+  location: getLocation(state),
 });
 
 const actions = {
   addRiderToGroup,
-  updateSelectedAddress
+  updateSelectedAddress,
 };
 
 export default connect(mapStateToProps, actions)(Layout);

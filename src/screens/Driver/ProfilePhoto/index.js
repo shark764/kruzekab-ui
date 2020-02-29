@@ -1,11 +1,15 @@
 import { connect } from 'react-redux';
-import { addToNewUser } from '../../../redux/actions';
 import Layout from './layout';
+import { addToNewUser } from '../../../redux/actions';
 
-const mapStateToProps = () => ({});
+const mapStateToProps = () => ({
+  initialValues: {
+    profilePicture: null,
+  },
+});
 
 const actions = {
-  addToNewUser
+  addToNewUser,
 };
 
 export default connect(mapStateToProps, actions)(Layout);

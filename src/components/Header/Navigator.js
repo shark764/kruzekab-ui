@@ -1,7 +1,8 @@
 import React from 'react';
-import { NavigationHeaderButtons, Item } from './HeaderButton';
+import PropTypes from 'prop-types';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { Icon } from 'react-native-elements';
+import { NavigationHeaderButtons, Item } from './HeaderButton';
 
 export const GoBackButton = props => (
   <NavigationHeaderButtons>
@@ -9,7 +10,7 @@ export const GoBackButton = props => (
       title="Go Back"
       buttonWrapperStyle={{
         marginLeft: 12,
-        marginTop: 10
+        marginTop: 10,
       }}
       useIconComponent={Ionicons}
       iconName="md-arrow-back"
@@ -18,7 +19,9 @@ export const GoBackButton = props => (
   </NavigationHeaderButtons>
 );
 
-export const ExtendedGoBackButton = props => (
+export const ExtendedGoBackButton = ({
+  iconOnPress, icon, itemOnPress, item,
+}) => (
   <NavigationHeaderButtons>
     <Item
       title="Go Back"
@@ -27,9 +30,9 @@ export const ExtendedGoBackButton = props => (
         marginTop: 30,
         alignItems: 'center',
         flexDirection: 'row',
-        justifyContent: 'flex-start'
+        justifyContent: 'flex-start',
       }}
-      ButtonElement={
+      ButtonElement={(
         <Icon
           raised
           reverse
@@ -39,13 +42,20 @@ export const ExtendedGoBackButton = props => (
           reverseColor="#212226"
           size={18}
           disabled={false}
-          onPress={props.iconOnPress}
-          {...props.icon}
+          onPress={iconOnPress}
+          {...icon}
         />
-      }
+      )}
       iconName="ios-arrow-back"
-      onPress={props.itemOnPress}
-      {...props.item}
+      onPress={itemOnPress}
+      {...item}
     />
   </NavigationHeaderButtons>
 );
+
+ExtendedGoBackButton.propTypes = {
+  iconOnPress: PropTypes.func.isRequired,
+  icon: PropTypes.shape.isRequired,
+  itemOnPress: PropTypes.func.isRequired,
+  item: PropTypes.shape.isRequired,
+};

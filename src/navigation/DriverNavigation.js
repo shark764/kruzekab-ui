@@ -9,11 +9,11 @@ const DriverNavigation = createStackNavigator(
     Home: { screen: Home },
     Riders: { screen: Riders },
     NewRider: { screen: NewRider },
-    EditRider: { screen: EditRider }
+    EditRider: { screen: EditRider },
   },
   {
-    initialRouteName: 'Riders'
-  }
+    initialRouteName: 'Riders',
+  },
 );
 
 // const DriverNavigation = createDrawerNavigator(

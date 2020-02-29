@@ -1,7 +1,8 @@
-import React, { Fragment } from 'react';
-import { View, Text, FlatList, TouchableOpacity } from 'react-native';
+import React from 'react';
+import PropTypes from 'prop-types';
+import { View, Text, TouchableOpacity } from 'react-native';
 import { Formik } from 'formik';
-import { Icon, Avatar } from 'react-native-elements';
+import { Avatar } from 'react-native-elements';
 import styled from 'styled-components';
 import FormButton from '../../../../components/Form/FormButton';
 import { FormattedError } from '../../../../components/Form/ErrorMessage';
@@ -9,12 +10,6 @@ import { BottomButtonContainer } from '../../../../components/Form/Elements';
 
 const SelectionContainer = styled(View)`
   flex-direction: row;
-  ${'' /* flex-wrap: wrap; */}
-  ${'' /* display: flex; */}
-  ${'' /* flex-direction: row; */}
-  ${'' /* align-items: center; */}
-  ${'' /* justify-content: center; */}
-  ${'' /* align-items: center; */}
   margin-left: 35px;
   margin-right: 35px;
 `;
@@ -23,13 +18,9 @@ const ListContainer = styled(View)`
   margin-left: 35px;
   margin-right: 35px;
   flex-direction: row;
-  ${'' /* flex-wrap: wrap; */}
-  ${'' /* display: flex; */}
   justify-content: center;
-  ${'' /* align-items: center; */}
 `;
 const OptionContainer = styled(View)`
-  ${'' /* flex-direction: column; */}
   margin-top: 10px;
   margin-bottom: 5px;
   padding-left: 5px;
@@ -40,7 +31,6 @@ const OptionContainer = styled(View)`
   border: ${props => (props.selected ? '1px solid #5280E2;' : '1px solid #dde5f7')};
   box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.08);
   border-radius: 6px;
-  ${'' /* justify-content: center; */}
   align-items: center;
   height: 150px;
   width: 155px;
@@ -67,7 +57,7 @@ const PhotoAvatar = props => (
     icon={{
       name: 'md-person',
       type: 'ionicon',
-      color: '#5280e2'
+      color: '#5280e2',
     }}
     overlayContainerStyle={{ backgroundColor: '#dde5f7' }}
     activeOpacity={0.7}
@@ -79,7 +69,7 @@ const PhotoAvatar = props => (
 const riders = [{ key: 1, title: 'Ben', imgPath: require('../../../../assets/edit-rider2.png') }];
 const riders2 = [
   { key: 2, title: 'Claire', imgPath: require('../../../../assets/edit-rider.png') },
-  { key: 3, title: 'Amelia', imgPath: require('../../../../assets/edit-rider3.png') }
+  { key: 3, title: 'Amelia', imgPath: require('../../../../assets/edit-rider3.png') },
 ];
 
 const Form = ({
@@ -88,7 +78,7 @@ const Form = ({
   validationSchema,
   handleOnSelected,
   selected,
-  handleOnAddRiderToGroup
+  handleOnAddRiderToGroup,
 }) => (
   <Formik
     enableReinitialize
@@ -97,9 +87,12 @@ const Form = ({
       console.log('values =>', values);
       handleOnSubmit(values, actions);
     }}
-    validationSchema={validationSchema}>
-    {({ handleSubmit, errors, isValid, isSubmitting }) => (
-      <Fragment>
+    validationSchema={validationSchema}
+  >
+    {({
+      handleSubmit, errors, isValid, isSubmitting,
+    }) => (
+      <>
         <SelectionContainer>
           <ListContainer>
             <TouchableOpacity onPress={handleOnAddRiderToGroup}>
@@ -153,9 +146,18 @@ const Form = ({
             loading={isSubmitting}
           />
         </BottomButtonContainer>
-      </Fragment>
+      </>
     )}
   </Formik>
 );
+
+Form.propTypes = {
+  handleOnSubmit: PropTypes.func.isRequired,
+  initialValues: PropTypes.shape.isRequired,
+  validationSchema: PropTypes.shape.isRequired,
+  handleOnSelected: PropTypes.func.isRequired,
+  selected: PropTypes.shape([]).isRequired,
+  handleOnAddRiderToGroup: PropTypes.func.isRequired,
+};
 
 export default Form;

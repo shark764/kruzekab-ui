@@ -1,5 +1,7 @@
 import styled from 'styled-components';
-import { View, KeyboardAvoidingView, Text, TouchableOpacity } from 'react-native';
+import {
+  View, KeyboardAvoidingView, Text, TouchableOpacity,
+} from 'react-native';
 import HideWithKeyboard from 'react-native-hide-with-keyboard';
 
 export const Container = styled(KeyboardAvoidingView)`
@@ -26,7 +28,7 @@ export const SubHeadline = styled(Text)`
   font-weight: normal;
   font-size: 16px;
   margin-top: 0;
-  margin-right: 0;
+  margin-right: 25px;
   margin-bottom: 25px;
   margin-left: 25px;
   color: #6b768d;

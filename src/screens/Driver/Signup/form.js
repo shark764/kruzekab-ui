@@ -1,11 +1,12 @@
-import React, { Fragment } from 'react';
-import { TouchableOpacity, ScrollView } from 'react-native';
+import React from 'react';
+import PropTypes from 'prop-types';
+import { TouchableOpacity } from 'react-native';
 import { Formik } from 'formik';
 import { Icon } from 'react-native-elements';
 import FormInput from '../../../components/Form/Fields/FormInput';
 import FormButton from '../../../components/Form/FormButton';
 import { FormattedError } from '../../../components/Form/ErrorMessage';
-import { ButtonContainer, BottomButtonContainer } from '../../../components/Form/Elements';
+import { BottomButtonContainer } from '../../../components/Form/Elements';
 
 const Form = ({
   handleOnSubmit,
@@ -13,7 +14,7 @@ const Form = ({
   validationSchema,
   handlePasswordVisibility,
   passwordVisibility,
-  passwordIcon
+  passwordIcon,
 }) => (
   <Formik
     enableReinitialize
@@ -22,9 +23,12 @@ const Form = ({
       console.log('values =>', values);
       handleOnSubmit(values, actions);
     }}
-    validationSchema={validationSchema}>
-    {({ handleChange, values, handleSubmit, errors, isValid, isSubmitting, touched, handleBlur }) => (
-      <Fragment>
+    validationSchema={validationSchema}
+  >
+    {({
+      handleChange, values, handleSubmit, errors, isValid, isSubmitting, touched, handleBlur,
+    }) => (
+      <>
         <FormInput
           name="name"
           label="Name"
@@ -32,21 +36,7 @@ const Form = ({
           onChangeText={handleChange('name')}
           onBlur={handleBlur('name')}
           placeholder="name..."
-          autoCapitalize="none"
-          iconName="md-person"
-          iconColor="#2C384A"
-          touched={touched}
-          errors={errors}
-        />
-
-        <FormInput
-          name="lastName"
-          label="Last Name"
-          value={values.lastName}
-          onChangeText={handleChange('lastName')}
-          onBlur={handleBlur('lastName')}
-          placeholder="last name..."
-          autoCapitalize="none"
+          autoCapitalize="words"
           iconName="md-person"
           iconColor="#2C384A"
           touched={touched}
@@ -88,7 +78,7 @@ const Form = ({
           onChangeText={handleChange('occupation')}
           onBlur={handleBlur('occupation')}
           placeholder="primary occupation..."
-          autoCapitalize="none"
+          autoCapitalize="words"
           iconType="material-community"
           iconName="worker"
           iconColor="#2C384A"
@@ -104,11 +94,11 @@ const Form = ({
           onBlur={handleBlur('password')}
           placeholder="password..."
           secureTextEntry={passwordVisibility}
-          rightIcon={
+          rightIcon={(
             <TouchableOpacity onPress={handlePasswordVisibility}>
               <Icon name={passwordIcon} type="ionicon" size={28} color="grey" />
             </TouchableOpacity>
-          }
+          )}
           iconName="ios-lock"
           iconColor="#2C384A"
           touched={touched}
@@ -126,9 +116,18 @@ const Form = ({
             loading={isSubmitting}
           />
         </BottomButtonContainer>
-      </Fragment>
+      </>
     )}
   </Formik>
 );
+
+Form.propTypes = {
+  handleOnSubmit: PropTypes.func.isRequired,
+  initialValues: PropTypes.shape.isRequired,
+  validationSchema: PropTypes.shape.isRequired,
+  handlePasswordVisibility: PropTypes.func.isRequired,
+  passwordVisibility: PropTypes.bool.isRequired,
+  passwordIcon: PropTypes.string.isRequired,
+};
 
 export default Form;

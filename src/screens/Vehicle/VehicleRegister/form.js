@@ -1,15 +1,16 @@
-import React, { Fragment } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { Formik } from 'formik';
 import { Button, Icon, Image } from 'react-native-elements';
+import { View, ActivityIndicator } from 'react-native';
 import FormInput from '../../../components/Form/Fields/FormInput';
-import FormPicker from '../../../components/Form/Fields/FormPicker';
 import FormButton from '../../../components/Form/FormButton';
 import { FormattedError } from '../../../components/Form/ErrorMessage';
-import { ButtonContainer, BottomButtonContainer } from '../../../components/Form/Elements';
-import { View } from 'react-native';
-import { ActivityIndicator } from 'react-native';
+import { BottomButtonContainer } from '../../../components/Form/Elements';
 
-const Form = ({ handleOnSubmit, initialValues, validationSchema, handleChoosePhoto, photo }) => (
+const Form = ({
+  handleOnSubmit, initialValues, validationSchema, handleChoosePhoto, photo,
+}) => (
   <Formik
     enableReinitialize
     initialValues={initialValues}
@@ -17,9 +18,12 @@ const Form = ({ handleOnSubmit, initialValues, validationSchema, handleChoosePho
       console.log('values =>', values);
       handleOnSubmit(values, actions);
     }}
-    validationSchema={validationSchema}>
-    {({ handleChange, values, handleSubmit, errors, isValid, isSubmitting, touched, handleBlur }) => (
-      <Fragment>
+    validationSchema={validationSchema}
+  >
+    {({
+      handleChange, values, handleSubmit, errors, isValid, isSubmitting, touched, handleBlur,
+    }) => (
+      <>
         <FormInput
           name="car"
           label="Car"
@@ -27,7 +31,7 @@ const Form = ({ handleOnSubmit, initialValues, validationSchema, handleChoosePho
           onChangeText={handleChange('car')}
           onBlur={handleBlur('car')}
           placeholder="vehicle branch..."
-          autoCapitalize="none"
+          autoCapitalize="words"
           iconName="md-car"
           iconColor="#2C384A"
           touched={touched}
@@ -41,7 +45,7 @@ const Form = ({ handleOnSubmit, initialValues, validationSchema, handleChoosePho
           onChangeText={handleChange('model')}
           onBlur={handleBlur('model')}
           placeholder="vehicle model..."
-          autoCapitalize="none"
+          autoCapitalize="words"
           iconName="md-car"
           iconColor="#2C384A"
           touched={touched}
@@ -86,19 +90,19 @@ const Form = ({ handleOnSubmit, initialValues, validationSchema, handleChoosePho
             fontStyle: 'normal',
             fontWeight: '600',
             fontSize: 14,
-            color: '#5280e2'
+            color: '#5280e2',
           }}
           type="clear"
           icon={<Icon reverse raised name="add-a-photo" size={15} color="#dde5f7" reverseColor="#5280e2" />}
         />
         {photo && (
-          <View style={{ marginLeft: 'auto', marginRight: 'auto', flex: 1 }}>
-            <Image
-              source={{ uri: photo.uri }}
-              style={{ width: 100, height: 100 }}
-              PlaceholderContent={<ActivityIndicator />}
-            />
-          </View>
+        <View style={{ marginLeft: 'auto', marginRight: 'auto', flex: 1 }}>
+          <Image
+            source={{ uri: photo.uri }}
+            style={{ width: 100, height: 100 }}
+            PlaceholderContent={<ActivityIndicator />}
+          />
+        </View>
         )}
 
         {errors.general && <FormattedError errorValue={errors.general} />}
@@ -112,9 +116,17 @@ const Form = ({ handleOnSubmit, initialValues, validationSchema, handleChoosePho
             loading={isSubmitting}
           />
         </BottomButtonContainer>
-      </Fragment>
+      </>
     )}
   </Formik>
 );
+
+Form.propTypes = {
+  handleOnSubmit: PropTypes.func.isRequired,
+  initialValues: PropTypes.shape.isRequired,
+  validationSchema: PropTypes.shape.isRequired,
+  handleChoosePhoto: PropTypes.shape.isRequired,
+  photo: PropTypes.shape.isRequired,
+};
 
 export default Form;

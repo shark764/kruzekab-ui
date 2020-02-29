@@ -1,15 +1,18 @@
-//FormButton.js
+// FormButton.js
 import React from 'react';
-import { Button, Icon } from 'react-native-elements';
+import PropTypes from 'prop-types';
+import { Button } from 'react-native-elements';
 
-const FormButton = ({ title, buttonType, buttonColor, textColor, ...rest }) => (
+const FormButton = ({
+  title, buttonType, buttonColor, textColor, ...rest
+}) => (
   <Button
     {...rest}
     type={buttonType}
     title={title}
     buttonStyle={[
       { borderColor: buttonColor, borderRadius: 4 },
-      buttonType !== 'outline' && { backgroundColor: '#5280e2' }
+      buttonType !== 'outline' && { backgroundColor: '#5280e2' },
     ]}
     titleStyle={{
       color: textColor || buttonColor,
@@ -21,9 +24,16 @@ const FormButton = ({ title, buttonType, buttonColor, textColor, ...rest }) => (
       display: 'flex',
       alignItems: 'center',
       textAlign: 'center',
-      letterSpacing: 0.5
+      letterSpacing: 0.5,
     }}
   />
 );
+
+FormButton.propTypes = {
+  title: PropTypes.string.isRequired,
+  buttonType: PropTypes.string.isRequired,
+  buttonColor: PropTypes.string.isRequired,
+  textColor: PropTypes.string.isRequired,
+};
 
 export default FormButton;

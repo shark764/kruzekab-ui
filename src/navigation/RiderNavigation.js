@@ -1,6 +1,7 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { createStackNavigator } from 'react-navigation-stack';
 import { createDrawerNavigator, DrawerItems } from 'react-navigation-drawer';
+import { SafeAreaView, View, Image } from 'react-native';
 import Riders from '../screens/Rider/Groups/Riders';
 import NewRider from '../screens/Rider/Groups/Riders/New';
 import EditRider from '../screens/Rider/Groups/Riders/Edit';
@@ -8,12 +9,9 @@ import Groups from '../screens/Rider/Groups/Groups';
 import NewGroup from '../screens/Rider/Groups/Groups/New';
 import EditGroup from '../screens/Rider/Groups/Groups/Edit';
 import ImportRider from '../screens/Rider/Groups/Groups/ImportRider';
-import AppNavigation from './AppNavigation';
 import Home from '../screens/Rider/Home';
 import SelectAddress from '../screens/Rider/SelectAddress';
 import AddressDetails from '../screens/Rider/AddressDetails';
-import { SafeAreaView, View, Image } from 'react-native';
-import { Button } from 'react-native-elements';
 import { HelpButton, HelpButtonText } from '../components/Form/Elements';
 import SelectGroup from '../screens/Rider/Ride/SelectGroup';
 import SelectRiders from '../screens/Rider/Ride/SelectRiders';
@@ -28,13 +26,12 @@ const defaultNavigationOptions = {
     elevation: 0,
     shadowOpacity: 0,
     borderBottomWidth: 0,
-    shadowColor: 'transparent',
     backgroundColor: '#fff',
     shadowColor: 'transparent',
     shadowRadius: 0,
     shadowOffset: {
-      height: 0
-    }
+      height: 0,
+    },
   },
   headerTintColor: '#3e4958',
   headerBackground: () => <Image style={{ width: '100%', height: 86 }} source={require('../assets/map.png')} />,
@@ -49,21 +46,21 @@ const defaultNavigationOptions = {
     color: '#3e4958',
     alignSelf: 'center',
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
-  headerLayoutPreset: 'center'
+  headerLayoutPreset: 'center',
 };
 
 const RiderStack = createStackNavigator(
   {
     Riders: { screen: Riders },
     NewRider: { screen: NewRider },
-    EditRider: { screen: EditRider }
+    EditRider: { screen: EditRider },
   },
   {
     initialRouteName: 'Riders',
-    defaultNavigationOptions
-  }
+    defaultNavigationOptions,
+  },
 );
 
 const GroupStack = createStackNavigator(
@@ -71,12 +68,12 @@ const GroupStack = createStackNavigator(
     Groups: { screen: Groups },
     NewGroup: { screen: NewGroup },
     EditGroup: { screen: EditGroup },
-    ImportRider: { screen: ImportRider }
+    ImportRider: { screen: ImportRider },
   },
   {
     initialRouteName: 'Groups',
-    defaultNavigationOptions
-  }
+    defaultNavigationOptions,
+  },
 );
 
 const RequestStack = createStackNavigator(
@@ -85,8 +82,8 @@ const RequestStack = createStackNavigator(
       screen: Home,
       navigationOptions: {
         headerShown: false,
-        drawerLabel: () => null
-      }
+        drawerLabel: () => null,
+      },
     },
     SelectAddress: { screen: SelectAddress, navigationOptions: { headerShown: false } },
     AddressDetails: { screen: AddressDetails, navigationOptions: { headerShown: false } },
@@ -96,20 +93,20 @@ const RequestStack = createStackNavigator(
     RideArrived: { screen: RideArrived },
     RideOnTrip: { screen: RideOnTrip },
     Streaming: { screen: Streaming, navigationOptions: { headerShown: false } },
-    RideFinished: { screen: RideFinished }
+    RideFinished: { screen: RideFinished },
   },
   {
     initialRouteName: 'Home',
-    //initialRouteName: 'SelectGroup',
-    defaultNavigationOptions
-  }
+    // initialRouteName: 'Groups',
+    defaultNavigationOptions,
+  },
 );
 
 const RiderNavigation = createDrawerNavigator(
   {
     Ride: { screen: RequestStack },
     'My Riders': { screen: RiderStack },
-    'My Groups': { screen: GroupStack }
+    'My Groups': { screen: GroupStack },
   },
   {
     contentComponent: props => (
@@ -121,8 +118,9 @@ const RiderNavigation = createDrawerNavigator(
             onPress={() => props.navigation.navigate('Initial', { userType: null })}
             titleStyle={{
               color: '#5280e2',
-              textDecorationLine: 'underline'
-            }}>
+              textDecorationLine: 'underline',
+            }}
+          >
             <HelpButtonText>Sign out</HelpButtonText>
           </HelpButton>
         </SafeAreaView>
@@ -130,8 +128,8 @@ const RiderNavigation = createDrawerNavigator(
     ),
     drawerOpenRoute: 'DrawerOpen',
     drawerCloseRoute: 'DrawerClose',
-    drawerToggleRoute: 'DrawerToggle'
-  }
+    drawerToggleRoute: 'DrawerToggle',
+  },
 );
 
 export default RiderNavigation;

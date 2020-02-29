@@ -6,13 +6,13 @@ import Layout from './layout';
 const mapStateToProps = state => ({
   selectedAddress: getSelectedAddress(state),
   location: getLocation(state),
-  currentPosition: getCurrentPosition(state)
+  currentPosition: getCurrentPosition(state),
 });
 
 const actions = {
   updateSelectedAddress,
   updateCurrentPosition,
-  updateLocation
+  updateLocation,
 };
 
 export default connect(mapStateToProps, actions)(Layout);

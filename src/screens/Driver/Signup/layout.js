@@ -1,12 +1,10 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { ScrollView } from 'react-native';
-import styled, { ThemeConsumer } from 'styled-components';
-import { Button, Icon } from 'react-native-elements';
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import styled from 'styled-components';
 import Form from './form';
-import { validationSchema } from './validation';
+import validationSchema from './validation';
 import { Headline, SubHeadline, Container } from '../../../components/Form/Elements';
-import { NavigationHeaderButtons, Item } from '../../../components/Header/HeaderButton';
 import { GoBackButton } from '../../../components/Header/Navigator';
 
 const StyledHeadline = styled(Headline)`
@@ -14,40 +12,45 @@ const StyledHeadline = styled(Headline)`
 `;
 
 export default class DriverSignup extends Component {
-  state = {
-    passwordVisibility: true,
-    passwordIcon: 'ios-eye'
-  };
+  static navigationOptions = ({ navigation }) => ({
+    headerLeft: () => <GoBackButton onPress={() => navigation.navigate('Initial', { userType: 'driver' })} />,
+  });
 
-  static navigationOptions = ({ navigation, navigation: { state } }) => {
-    return {
-      headerLeft: () => <GoBackButton onPress={() => navigation.navigate('Initial', { userType: 'driver' })} />
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      passwordVisibility: true,
+      passwordIcon: 'ios-eye',
     };
+  }
+
+  navigateTo = (destinationScreen, params = {}) => {
+    const { navigation } = this.props;
+    navigation.navigate(destinationScreen, params);
   };
 
-  goToInitial = () => this.props.navigation.navigate('Initial', { userType: 'driver' });
+  goToInitial = () => this.navigateTo('Initial', { userType: 'driver' });
 
-  goToLogin = () => this.props.navigation.navigate('Login', { userType: 'driver' });
+  goToLogin = () => this.navigateTo('Login', { userType: 'driver' });
 
-  goToConfirmation = () => this.props.navigation.navigate('Confirm', { userType: 'driver' });
+  goToConfirmation = () => this.navigateTo('Confirm', { userType: 'driver' });
 
   handlePasswordVisibility = () => {
     this.setState(prevState => ({
       passwordIcon: prevState.passwordIcon === 'ios-eye' ? 'ios-eye-off' : 'ios-eye',
-      passwordVisibility: !prevState.passwordVisibility
+      passwordVisibility: !prevState.passwordVisibility,
     }));
   };
 
   handleOnSignup = async (values, actions) => {
     try {
-      // const response = await this.props.firebase.signupWithEmail(email, password);
+      const { addToNewUser } = this.props;
       const { phoneNumber } = values;
+      const userType = 'driver';
+      addToNewUser({ ...values, userType });
 
-      setTimeout(() => {
-        // this.props.navigation.navigate('VehicleRegister', { userType: null });
-        this.props.addToNewUser({ ...values, userType: 'driver' });
-        this.props.navigation.navigate('Confirm', { userType: 'driver', phoneNumber });
-      }, 1500);
+      this.navigateTo('Confirm', { userType, phoneNumber });
     } catch (error) {
       actions.setFieldError('general', error.message);
     } finally {
@@ -59,9 +62,9 @@ export default class DriverSignup extends Component {
   };
 
   render() {
-    console.log('Nav param', 'DriverSignup', this.props.navigation.getParam('userType', null));
-
+    const { initialValues } = this.props;
     const { passwordVisibility, passwordIcon } = this.state;
+
     return (
       <Container enabled behavior="">
         <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
@@ -69,26 +72,12 @@ export default class DriverSignup extends Component {
           <SubHeadline>Sign up to start your application process</SubHeadline>
           <Form
             handleOnSubmit={this.handleOnSignup}
-            initialValues={{
-              userType: 2,
-              name: '',
-              lastName: '',
-              phoneNumber: '',
-              password: '',
-              email: '',
-              occupation: '',
-              maxSeats: '',
-              vehicleYear: '',
-              licenseNumber: '',
-              birthdate: '',
-              profilePicture: '',
-              licensePicture: '',
-              gender: ''
-            }}
+            initialValues={initialValues}
             validationSchema={validationSchema}
             handlePasswordVisibility={this.handlePasswordVisibility}
             passwordVisibility={passwordVisibility}
             passwordIcon={passwordIcon}
+            goToInitial={this.goToInitial}
             goToLogin={this.goToLogin}
             goToConfirmation={this.goToConfirmation}
           />
@@ -97,3 +86,8 @@ export default class DriverSignup extends Component {
     );
   }
 }
+
+DriverSignup.propTypes = {
+  initialValues: PropTypes.shape.isRequired,
+  addToNewUser: PropTypes.func.isRequired,
+};

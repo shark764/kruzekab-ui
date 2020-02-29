@@ -1,19 +1,17 @@
 import React, { Component } from 'react';
-import { ScrollView, View } from 'react-native';
+import PropTypes from 'prop-types';
+import { ScrollView } from 'react-native';
 import styled from 'styled-components';
-import { Button, Icon } from 'react-native-elements';
-import Ionicons from 'react-native-vector-icons/Ionicons';
 import Form from './form';
-import { validationSchema } from './validation';
+import validationSchema from './validation';
 import {
   Headline,
   SubHeadline,
   Container,
   BottomContainer,
   HelpButton,
-  HelpButtonText
+  HelpButtonText,
 } from '../../../components/Form/Elements';
-import { NavigationHeaderButtons, Item } from '../../../components/Header/HeaderButton';
 import { GoBackButton } from '../../../components/Header/Navigator';
 
 const StyledHeadline = styled(Headline)`
@@ -27,34 +25,41 @@ const BolderHelpButtonText = styled(HelpButtonText)`
 `;
 
 export default class Signup extends Component {
-  state = {
-    passwordVisibility: true,
-    passwordIcon: 'ios-eye'
-  };
+  static navigationOptions = ({ navigation }) => ({
+    headerLeft: () => <GoBackButton onPress={() => navigation.navigate('Initial')} />,
+  });
 
-  static navigationOptions = ({ navigation, navigation: { state } }) => {
-    return {
-      headerLeft: () => <GoBackButton onPress={() => navigation.navigate('Initial', { userType: 'rider' })} />
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      passwordVisibility: true,
+      passwordIcon: 'ios-eye',
     };
+  }
+
+  navigateTo = (destinationScreen, params = {}) => {
+    const { navigation } = this.props;
+    navigation.navigate(destinationScreen, params);
   };
 
-  goToLogin = () => this.props.navigation.navigate('Login', { userType: 'rider' });
+  goToLogin = () => this.navigateTo('Login', { userType: 'rider' });
 
   handlePasswordVisibility = () => {
     this.setState(prevState => ({
       passwordIcon: prevState.passwordIcon === 'ios-eye' ? 'ios-eye-off' : 'ios-eye',
-      passwordVisibility: !prevState.passwordVisibility
+      passwordVisibility: !prevState.passwordVisibility,
     }));
   };
 
   handleOnSignup = async (values, actions) => {
     try {
-      // const response = await this.props.firebase.signupWithEmail(email, password);
+      const { addToNewUser } = this.props;
       const { phoneNumber } = values;
+      const userType = 'rider';
+      addToNewUser({ ...values, userType });
 
-      setTimeout(() => {
-        this.props.navigation.navigate('Confirm', { userType: 'rider', phoneNumber });
-      }, 1500);
+      this.navigateTo('Confirm', { userType, phoneNumber });
     } catch (error) {
       actions.setFieldError('general', error.message);
     } finally {
@@ -66,9 +71,9 @@ export default class Signup extends Component {
   };
 
   render() {
-    console.log('Nav param', 'Signup', this.props.navigation.getParam('userType', null));
-
+    const { initialValues } = this.props;
     const { passwordVisibility, passwordIcon } = this.state;
+
     return (
       <Container enabled behavior="">
         <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
@@ -76,27 +81,11 @@ export default class Signup extends Component {
           <StyledSubHeadline>You will receive a SMS verification code</StyledSubHeadline>
           <Form
             handleOnSubmit={this.handleOnSignup}
-            initialValues={{
-              userType: 1,
-              name: '',
-              lastName: '',
-              phoneNumber: '',
-              password: '',
-              email: '',
-              occupation: '',
-              maxSeats: '',
-              vehicleYear: '',
-              licenseNumber: '',
-              birthdate: '',
-              profilePicture: '',
-              licensePicture: '',
-              gender: ''
-            }}
+            initialValues={initialValues}
             validationSchema={validationSchema}
             handlePasswordVisibility={this.handlePasswordVisibility}
             passwordVisibility={passwordVisibility}
             passwordIcon={passwordIcon}
-            goToLogin={this.goToLogin}
           />
 
           <BottomContainer>
@@ -110,3 +99,8 @@ export default class Signup extends Component {
     );
   }
 }
+
+Signup.propTypes = {
+  initialValues: PropTypes.shape.isRequired,
+  addToNewUser: PropTypes.func.isRequired,
+};

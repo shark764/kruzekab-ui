@@ -1,7 +1,10 @@
-import React, { Fragment } from 'react';
-import { View, Text, FlatList, TouchableOpacity, ActivityIndicator } from 'react-native';
+import React from 'react';
+import PropTypes from 'prop-types';
+import {
+  View, Text, FlatList, TouchableOpacity,
+} from 'react-native';
 import { Formik } from 'formik';
-import { Icon, Image } from 'react-native-elements';
+import { Icon } from 'react-native-elements';
 import styled from 'styled-components';
 import FormButton from '../../../../components/Form/FormButton';
 import { FormattedError } from '../../../../components/Form/ErrorMessage';
@@ -45,7 +48,9 @@ const GroupTitle = styled(Text)`
   color: ${props => (props.selected ? '#5280e2' : '#6b768d')};
 `;
 
-const ListRow = ({ id, title, handleOnSelected, selected }) => (
+const ListRow = ({
+  id, title, handleOnSelected, selected,
+}) => (
   <TouchableOpacity onPress={() => handleOnSelected(id)}>
     <OptionContainer selected={selected === id}>
       <Icon
@@ -73,7 +78,7 @@ const ListRow = ({ id, title, handleOnSelected, selected }) => (
           onPress={() => handleOnSelected(id)}
           disabled={false}
           containerStyle={{
-            marginTop: 5
+            marginTop: 5,
           }}
           // ImageComponent={<Image PlaceholderContent={<ActivityIndicator />} />}
         />
@@ -81,6 +86,12 @@ const ListRow = ({ id, title, handleOnSelected, selected }) => (
     </OptionContainer>
   </TouchableOpacity>
 );
+ListRow.propTypes = {
+  id: PropTypes.string.isRequired,
+  title: PropTypes.string.isRequired,
+  handleOnSelected: PropTypes.shape.isRequired,
+  selected: PropTypes.string.isRequired,
+};
 
 const Listview = ({ groupList, handleOnSelected, selected }) => (
   <FlatList
@@ -98,15 +109,22 @@ const Listview = ({ groupList, handleOnSelected, selected }) => (
     )}
   />
 );
+Listview.propTypes = {
+  groupList: PropTypes.shape.isRequired,
+  handleOnSelected: PropTypes.shape.isRequired,
+  selected: PropTypes.string.isRequired,
+};
 
 const getData = [
   { key: 1, title: 'Soccer Team' },
   { key: 2, title: "Ben's Class" },
   { key: 3, title: "Nancy's theater classes" },
-  { key: 4, title: "Kid's School" }
+  { key: 4, title: "Kid's School" },
 ];
 
-const Form = ({ handleOnSubmit, initialValues, validationSchema, handleOnSelected, selected, handleOnAddGroup }) => (
+const Form = ({
+  handleOnSubmit, initialValues, validationSchema, handleOnSelected, selected, handleOnAddGroup,
+}) => (
   <Formik
     enableReinitialize
     initialValues={initialValues}
@@ -114,9 +132,12 @@ const Form = ({ handleOnSubmit, initialValues, validationSchema, handleOnSelecte
       console.log('values =>', values);
       handleOnSubmit(values, actions);
     }}
-    validationSchema={validationSchema}>
-    {({ handleSubmit, errors, isValid, isSubmitting }) => (
-      <Fragment>
+    validationSchema={validationSchema}
+  >
+    {({
+      handleSubmit, errors, isValid, isSubmitting,
+    }) => (
+      <>
         <SelectGroupContainer>
           <Listview groupList={getData} handleOnSelected={handleOnSelected} selected={selected} />
 
@@ -153,9 +174,18 @@ const Form = ({ handleOnSubmit, initialValues, validationSchema, handleOnSelecte
             loading={isSubmitting}
           />
         </BottomButtonContainer>
-      </Fragment>
+      </>
     )}
   </Formik>
 );
+
+Form.propTypes = {
+  handleOnSubmit: PropTypes.func.isRequired,
+  initialValues: PropTypes.shape.isRequired,
+  validationSchema: PropTypes.shape.isRequired,
+  handleOnSelected: PropTypes.shape.isRequired,
+  handleOnAddGroup: PropTypes.shape.isRequired,
+  selected: PropTypes.string.isRequired,
+};
 
 export default Form;

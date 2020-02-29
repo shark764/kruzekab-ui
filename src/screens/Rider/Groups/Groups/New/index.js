@@ -1,6 +1,18 @@
 import { connect } from 'react-redux';
 import Layout from './layout';
+import { addGroup, addToNewGroup } from '../../../../../redux/actions';
 
-const mapStateToProps = () => ({});
+const mapStateToProps = () => ({
+  initialValues: {
+    name: '',
+    riders: [],
+    isDefault: false,
+  },
+});
 
-export default connect(mapStateToProps)(Layout);
+const actions = {
+  addGroup,
+  addToNewGroup,
+};
+
+export default connect(mapStateToProps, actions)(Layout);

@@ -1,7 +1,8 @@
-import React, { Fragment } from 'react';
-import { TouchableOpacity, Text } from 'react-native';
+import React from 'react';
+import PropTypes from 'prop-types';
+import { TouchableOpacity } from 'react-native';
 import { Formik } from 'formik';
-import { Button, Icon } from 'react-native-elements';
+import { Icon } from 'react-native-elements';
 import styled from 'styled-components';
 import FormInput from '../../../components/Form/Fields/FormInput';
 import { FormattedError } from '../../../components/Form/ErrorMessage';
@@ -20,7 +21,7 @@ const Form = ({
   handlePasswordVisibility,
   passwordVisibility,
   passwordIcon,
-  goToForgotPassword
+  goToForgotPassword,
 }) => (
   <Formik
     enableReinitialize
@@ -29,9 +30,12 @@ const Form = ({
       console.log('values =>', values);
       handleOnSubmit(values, actions);
     }}
-    validationSchema={validationSchema}>
-    {({ handleChange, values, handleSubmit, errors, isValid, isSubmitting, touched, handleBlur }) => (
-      <Fragment>
+    validationSchema={validationSchema}
+  >
+    {({
+      handleChange, values, handleSubmit, errors, isValid, isSubmitting, touched, handleBlur,
+    }) => (
+      <>
         <FormInput
           name="phoneNumber"
           label="Phone Number"
@@ -54,11 +58,11 @@ const Form = ({
           onBlur={handleBlur('password')}
           placeholder="password..."
           secureTextEntry={passwordVisibility}
-          rightIcon={
+          rightIcon={(
             <TouchableOpacity onPress={handlePasswordVisibility}>
               <Icon name={passwordIcon} type="ionicon" size={28} color="grey" />
             </TouchableOpacity>
-          }
+          )}
           iconName="ios-lock"
           iconColor="#2C384A"
           onFocus={() => console.log('Focus triggered!')}
@@ -85,9 +89,19 @@ const Form = ({
             loading={isSubmitting}
           />
         </StyledButtonContainer>
-      </Fragment>
+      </>
     )}
   </Formik>
 );
+
+Form.propTypes = {
+  handleOnSubmit: PropTypes.func.isRequired,
+  initialValues: PropTypes.shape.isRequired,
+  validationSchema: PropTypes.shape.isRequired,
+  handlePasswordVisibility: PropTypes.func.isRequired,
+  passwordVisibility: PropTypes.bool.isRequired,
+  passwordIcon: PropTypes.string.isRequired,
+  goToForgotPassword: PropTypes.func.isRequired,
+};
 
 export default Form;

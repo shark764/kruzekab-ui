@@ -1,18 +1,13 @@
-import React, { Fragment } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { View, Text } from 'react-native';
 import { Formik } from 'formik';
-import { Button, Icon, Avatar, CheckBox } from 'react-native-elements';
+import { Icon, Avatar, CheckBox } from 'react-native-elements';
 import styled from 'styled-components';
 import FormButton from '../../../../../components/Form/FormButton';
 import ErrorMessage, { FormattedError } from '../../../../../components/Form/ErrorMessage';
-import {
-  ButtonContainer,
-  BottomContainer,
-  Headline,
-  BottomButtonContainer
-} from '../../../../../components/Form/Elements';
+import { ButtonContainer, Headline, BottomButtonContainer } from '../../../../../components/Form/Elements';
 import FormInput from '../../../../../components/Form/Fields/FormInput';
-import FormCheckbox from '../../../../../components/Form/Fields/FormCheckbox';
 
 const StyledHeadline = styled(Headline)`
   font-weight: bold;
@@ -43,20 +38,6 @@ const LabelText = styled(Text)`
   justify-content: center;
   align-items: center;
 `;
-const DeleteLabelText = styled(Text)`
-  color: #ee0000;
-`;
-const StyledBottomContainer = styled(BottomContainer)`
-  left: 0;
-  right: 0;
-  margin-left: 25px;
-  margin-right: 25px;
-`;
-const DeleteContainer = styled(View)`
-  margin-left: 25px;
-  flex-direction: row;
-  justify-content: flex-start;
-`;
 const FieldContainer = styled(View)`
   margin-right: 15px;
   margin-left: 15px;
@@ -66,10 +47,9 @@ const Form = ({
   handleOnSubmit,
   initialValues,
   validationSchema,
-  handleOnDelete,
   handleOnEditNewRider,
   handleOnAddRider,
-  handleOnImportRider
+  handleOnImportRider,
 }) => (
   <Formik
     enableReinitialize
@@ -78,9 +58,12 @@ const Form = ({
       console.log('values =>', values);
       handleOnSubmit(values, actions);
     }}
-    validationSchema={validationSchema}>
-    {({ handleChange, values, handleSubmit, errors, isValid, isSubmitting, touched, handleBlur, setFieldValue }) => (
-      <Fragment>
+    validationSchema={validationSchema}
+  >
+    {({
+      handleChange, values, handleSubmit, errors, isValid, isSubmitting, touched, handleBlur, setFieldValue,
+    }) => (
+      <>
         <FormInput
           name="name"
           label="Group Name"
@@ -108,7 +91,7 @@ const Form = ({
               fontStyle: 'normal',
               fontFamily: 'Open Sans',
               fontWeight: 'normal',
-              color: '#6b768d'
+              color: '#6b768d',
             }}
             checked={values.isDefault}
             onPress={() => setFieldValue('isDefault', !values.isDefault)}
@@ -118,27 +101,24 @@ const Form = ({
 
         <StyledHeadline>Riders</StyledHeadline>
 
-        {values.riders.map((riderItem, index) => (
-          <RiderContainer key={index}>
+        {values.riders.map(rider => (
+          <RiderContainer key={rider.get('id')}>
             <Avatar
               rounded
-              // source={{
-              //   uri: 'https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg'
-              // }}
-              source={riderItem.imgPath}
+              source={rider.imgPath}
               showEditButton={false}
               icon={{
                 name: 'md-person',
                 type: 'ionicon',
-                color: '#5280e2'
+                color: '#5280e2',
               }}
               overlayContainerStyle={{ backgroundColor: '#dde5f7' }}
               activeOpacity={0.7}
               size={53}
-              onPress={() => handleOnEditNewRider({ userType: 'rider', rider: riderItem })}
+              onPress={() => handleOnEditNewRider(rider.get('id'))}
               disabled={false}
             />
-            <LabelText>{`  ${riderItem.name}`}</LabelText>
+            <LabelText>{`  ${rider.name}`}</LabelText>
           </RiderContainer>
         ))}
 
@@ -169,7 +149,7 @@ const Form = ({
             onPress={handleOnImportRider}
             disabled={false}
           />
-          <LabelText>Import user's riders</LabelText>
+          <LabelText>Import user&apos;s riders</LabelText>
         </IconContainer>
 
         {errors.general && <FormattedError errorValue={errors.general} />}
@@ -183,9 +163,18 @@ const Form = ({
             loading={isSubmitting}
           />
         </BottomButtonContainer>
-      </Fragment>
+      </>
     )}
   </Formik>
 );
+
+Form.propTypes = {
+  handleOnSubmit: PropTypes.func.isRequired,
+  initialValues: PropTypes.shape.isRequired,
+  validationSchema: PropTypes.shape.isRequired,
+  handleOnEditNewRider: PropTypes.func.isRequired,
+  handleOnAddRider: PropTypes.func.isRequired,
+  handleOnImportRider: PropTypes.func.isRequired,
+};
 
 export default Form;

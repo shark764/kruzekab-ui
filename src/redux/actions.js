@@ -1,91 +1,132 @@
-export const login = (phoneNumber, password, userType) => ({
+export const login = (userType, payload) => ({
   type: 'LOGIN',
-  phoneNumber,
-  password,
-  userType
+  userType,
+  payload,
 });
 
 export const signUp = (payload, userType) => ({
   type: 'SIGN_UP',
   userType,
-  payload
+  payload,
 });
 
 export const addToNewUser = payload => ({
   type: 'ADD_TO_NEW_USER',
-  payload
+  payload,
+});
+
+export const createUser = () => ({
+  type: 'CREATE_USER',
 });
 
 export const setUserData = payload => ({
   type: 'SET_USER_DATA',
-  payload
+  payload,
+});
+
+export const fetchRiders = () => ({
+  type: 'FETCH_RIDERS',
+});
+
+export const fetchRider = () => ({
+  type: 'FETCH_RIDER',
+});
+
+export const setRiders = payload => ({
+  type: 'SET_RIDERS',
+  payload,
+});
+
+export const setRider = payload => ({
+  type: 'SET_RIDER',
+  payload,
 });
 
 export const addRider = payload => ({
   type: 'ADD_RIDER',
-  payload
+  payload,
 });
 
 export const updateRider = (payload, riderId) => ({
   type: 'UPDATE_RIDER',
   payload,
-  riderId
+  riderId,
 });
 
 export const removeRider = riderId => ({
   type: 'REMOVE_RIDER',
-  riderId
+  riderId,
+});
+
+export const fetchGroups = () => ({
+  type: 'FETCH_GROUPS',
+});
+
+export const fetchGroup = () => ({
+  type: 'FETCH_GROUP',
+});
+
+export const setGroups = payload => ({
+  type: 'SET_GROUPS',
+  payload,
+});
+
+export const setGroup = payload => ({
+  type: 'SET_GROUP',
+  payload,
 });
 
 export const addGroup = payload => ({
   type: 'ADD_GROUP',
-  payload
+  payload,
 });
 
 export const updateGroup = (payload, groupId) => ({
   type: 'UPDATE_GROUP',
   payload,
-  groupId
+  groupId,
 });
 
 export const removeGroup = groupId => ({
   type: 'REMOVE_GROUP',
-  groupId
+  groupId,
 });
 
 export const addRiderToGroup = (groupId, riderId) => ({
   type: 'ADD_RIDER_TO_GROUP',
   groupId,
-  riderId
+  riderId,
 });
 
 export const removeRiderFromGroup = (groupId, riderId) => ({
   type: 'REMOVE_RIDER_FROM_GROUP',
   groupId,
-  riderId
+  riderId,
+});
+
+export const importRiders = (groupId, phoneNumber) => ({
+  type: 'IMPORT_RIDERS',
+  groupId,
+  phoneNumber,
 });
 
 export const addToNewGroup = payload => ({
   type: 'ADD_TO_NEW_GROUP',
-  payload
+  payload,
 });
 
 export const updateSelectedAddress = (location, payload) => ({
   type: 'UPDATE_SELECTED_ADDRESS',
   location,
-  payload
+  payload,
 });
 
 export const updateLocation = location => ({
   type: 'UPDATE_LOCATION',
-  location
+  location,
 });
 
 export const updateCurrentPosition = currentPosition => ({
   type: 'UPDATE_CURRENT_POSITION',
-  currentPosition
-});
-
-export const addNewUser = () => ({
-  type: 'ADD_NEW_USER'
+  currentPosition,
 });

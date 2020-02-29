@@ -1,18 +1,10 @@
 import React, { Component } from 'react';
-import { ScrollView, View, Image, StyleSheet, Text } from 'react-native';
+import PropTypes from 'prop-types';
+import { ScrollView, Text } from 'react-native';
 import styled from 'styled-components';
 import { Icon, Avatar } from 'react-native-elements';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import {
-  ButtonContainer,
-  Container,
-  Headline,
-  BottomContainer,
-  HelpButtonText,
-  HelpButton
-} from '../../../../components/Form/Elements';
+import { ButtonContainer, Container, Headline } from '../../../../components/Form/Elements';
 import { ExtendedGoBackButton } from '../../../../components/Header/Navigator';
-import FormButton from '../../../../components/Form/FormButton';
 
 const StyledContainer = styled(Container)`
   margin-top: 30px;
@@ -45,92 +37,47 @@ const LabelText = styled(Text)`
   justify-content: center;
   align-items: center;
 `;
-const StyledBottomContainer = styled(BottomContainer)`
-  left: 0;
-  right: 0;
-  margin-left: 25px;
-  margin-right: 25px;
-`;
 
 export default class Groups extends Component {
-  state = {
-    groupsList: []
-  };
+  static navigationOptions = ({ navigation }) => ({
+    title: 'Groups',
+    headerLeft: () => (
+      <ExtendedGoBackButton
+        iconOnPress={() => navigation.navigate('Home')}
+        itemOnPress={() => navigation.navigate('Home')}
+      />
+    ),
+  });
 
-  static navigationOptions = ({ navigation, navigation: { state } }) => {
-    return {
-      title: 'Groups',
-      headerLeft: () => (
-        <ExtendedGoBackButton
-          iconOnPress={() => navigation.navigate('Home', { userType: 'rider' })}
-          itemOnPress={() => navigation.navigate('Home', { userType: 'rider' })}
-        />
-      )
-    };
-  };
-
-  goToLogin = () => this.props.navigation.navigate('Login', { userType: null });
-
-  goToConfirmation = () => this.props.navigation.navigate('Confirm', { userType: null });
-
-  goToLogin = () => this.props.navigation.navigate('Login', { userType: null });
-
-  _navigateTo = (destinationScreen, params = {}) => {
-    this.props.navigation.navigate(destinationScreen, params);
-  };
-
-  handleOnSubmit = async (values, actions) => {
-    try {
-      // const response = await this.props.firebase.signupWithEmail(email, password);
-
-      setTimeout(() => {
-        this.props.navigation.navigate('VehicleRegister', { userType: 'rider' });
-      }, 1500);
-    } catch (error) {
-      actions.setFieldError('general', error.message);
-    } finally {
-      // This is avoiding submit button loading icon
-      setTimeout(() => {
-        actions.setSubmitting(false);
-      }, 1500);
-    }
+  navigateTo = (destinationScreen, params = {}) => {
+    const { navigation } = this.props;
+    navigation.navigate(destinationScreen, params);
   };
 
   render() {
-    console.log('Nav param', 'Groups', this.props.navigation.getParam('userType', null));
-
-    const groupsList = [
-      { key: 'edit-rider1', name: 'Soccer Team' },
-      { key: 'edit-rider2', name: "Ben's Class" },
-      { key: 'edit-rider3', name: "Nancy's theater classes" },
-      { key: 'edit-rider4', name: "Kid's School" }
-    ];
-
+    const { groups } = this.props;
     return (
       <StyledContainer enabled behavior="">
         <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
           <StyledHeadline>Groups</StyledHeadline>
 
-          {groupsList.map((groupItem, index) => (
-            <GroupContainer key={index}>
+          {groups.map(group => (
+            <GroupContainer key={group.get('id')}>
               <Avatar
                 rounded
-                // source={{
-                //   uri: 'https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg'
-                // }}
                 showEditButton={false}
                 icon={{
                   name: 'group',
                   type: 'material',
-                  color: '#5280e2'
+                  color: '#5280e2',
                 }}
                 overlayContainerStyle={{ backgroundColor: '#dde5f7' }}
                 activeOpacity={0.7}
                 size={53}
-                onPress={() => this._navigateTo('EditGroup', { userType: 'rider', rider: groupItem })}
+                onPress={() => this.navigateTo('EditGroup', { groupId: group.get('id') })}
                 disabled={false}
               />
-              <LabelText>{`  ${groupItem.name}`}</LabelText>
+              <LabelText>{`  ${group.get('name')}`}</LabelText>
             </GroupContainer>
           ))}
 
@@ -143,7 +90,7 @@ export default class Groups extends Component {
               color="#dde5f7"
               reverseColor="#5280e2"
               size={25}
-              onPress={() => this._navigateTo('NewGroup', { userType: 'rider' })}
+              onPress={() => this.navigateTo('NewGroup', { context: 'groups' })}
               disabled={false}
             />
             <LabelText>Create new group</LabelText>
@@ -153,3 +100,7 @@ export default class Groups extends Component {
     );
   }
 }
+
+Groups.propTypes = {
+  groups: PropTypes.shape.isRequired,
+};

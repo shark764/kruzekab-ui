@@ -1,16 +1,14 @@
 import { connect } from 'react-redux';
 import Layout from './layout';
 import { getAllRiders } from '../../../../redux/selectors';
-import { addRider, updateRider, removeRider } from '../../../../redux/actions';
+import { setRiders } from '../../../../redux/actions';
 
-const mapStateToProps = (state, props) => ({
-  riders: getAllRiders(state)
+const mapStateToProps = state => ({
+  riders: getAllRiders(state),
 });
 
 const actions = {
-  addRider,
-  updateRider,
-  removeRider
+  setRiders,
 };
 
 export default connect(mapStateToProps, actions)(Layout);

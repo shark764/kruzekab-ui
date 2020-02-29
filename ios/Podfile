@@ -46,6 +46,8 @@ target 'KruzeKabUI' do
 
   pod 'react-native-video', :path => '../node_modules/react-native-video'
 
+  pod 'RNSha1', :path => '../node_modules/react-native-sha1'
+
   target 'KruzeKabUITests' do
     inherit! :search_paths
     # Pods for testing

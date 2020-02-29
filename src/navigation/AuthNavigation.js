@@ -1,4 +1,4 @@
-//AuthNavigation.js
+// AuthNavigation.js
 import { createStackNavigator } from 'react-navigation-stack';
 import Login from '../screens/Authentication/Login';
 import Signup from '../screens/Rider/Signup';
@@ -22,7 +22,7 @@ const AuthNavigation = createStackNavigator(
     ApplicationReviewed: { screen: ApplicationReviewed },
     ForgotPassword: { screen: ForgotPassword },
     PasswordChanged: { screen: PasswordChanged },
-    Confirm: { screen: Confirmation }
+    Confirm: { screen: Confirmation },
   },
   {
     initialRouteName: 'Login',
@@ -33,11 +33,11 @@ const AuthNavigation = createStackNavigator(
         elevation: 0,
         shadowOpacity: 0,
         borderBottomWidth: 0,
-        shadowColor: 'transparent'
-      }
-    }
+        shadowColor: 'transparent',
+      },
+    },
     // headerMode: 'none'
-  }
+  },
 );
 
 export default AuthNavigation;

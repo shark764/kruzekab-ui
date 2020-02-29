@@ -1,6 +1,8 @@
 import { connect } from 'react-redux';
 import Layout from './layout';
 
-const mapStateToProps = () => ({});
+const mapStateToProps = () => ({
+  initialValues: {},
+});
 
 export default connect(mapStateToProps)(Layout);

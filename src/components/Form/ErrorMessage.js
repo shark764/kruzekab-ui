@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { View, Text } from 'react-native';
 import styled from 'styled-components';
 
@@ -15,7 +16,21 @@ export const FormattedError = ({ errorValue }) => (
   </Container>
 );
 
-const ErrorMessage = ({ name, errors, touched }) =>
-  touched[name] && errors[name] ? <FormattedError errorValue={touched[name] && errors[name]} /> : null;
+FormattedError.propTypes = {
+  errorValue: PropTypes.string.isRequired,
+};
+
+const ErrorMessage = ({ name, errors, touched }) => {
+  if (touched[name] && errors[name]) {
+    return <FormattedError errorValue={touched[name] && errors[name]} />;
+  }
+  return null;
+};
+
+ErrorMessage.propTypes = {
+  name: PropTypes.string.isRequired,
+  errors: PropTypes.shape.isRequired,
+  touched: PropTypes.shape.isRequired,
+};
 
 export default ErrorMessage;

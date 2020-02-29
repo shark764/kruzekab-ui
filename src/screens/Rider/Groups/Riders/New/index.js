@@ -1,6 +1,16 @@
 import { connect } from 'react-redux';
 import Layout from './layout';
+import { addRider } from '../../../../../redux/actions';
 
-const mapStateToProps = () => ({});
+const mapStateToProps = () => ({
+  initialValues: {
+    name: '',
+    photo: null,
+  },
+});
 
-export default connect(mapStateToProps)(Layout);
+const actions = {
+  addRider,
+};
+
+export default connect(mapStateToProps, actions)(Layout);

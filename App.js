@@ -1,25 +1,15 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { Provider } from 'react-redux';
-import { createStore } from 'redux';
 
-import appReducer from './src/redux/reducer';
 import AppNavigator from './src/navigation';
-
-const store = createStore(appReducer);
+import store from './src/redux/store';
 
 console.disableYellowBox = true;
 
-export default class App extends Component {
-  constructor(props) {
-    super(props);
-    // ...
-  }
-
-  render() {
-    return (
-      <Provider store={store}>
-        <AppNavigator />
-      </Provider>
-    );
-  }
+export default function App() {
+  return (
+    <Provider store={store}>
+      <AppNavigator />
+    </Provider>
+  );
 }

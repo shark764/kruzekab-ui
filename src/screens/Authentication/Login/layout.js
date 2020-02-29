@@ -1,20 +1,19 @@
 import React, { Component } from 'react';
-import { ScrollView, TouchableOpacity } from 'react-native';
+import PropTypes from 'prop-types';
+import { ScrollView } from 'react-native';
 import styled from 'styled-components';
-import Axios from 'axios';
 import {
   Container,
   SubHeadline,
   Headline,
   BottomContainer,
   HelpButton,
-  HelpButtonText
+  HelpButtonText,
 } from '../../../components/Form/Elements';
 import Form from './form';
-import { validationSchema } from './validation';
-import { NavigationHeaderButtons, Item } from '../../../components/Header/HeaderButton';
+import validationSchema from './validation';
 import { GoBackButton } from '../../../components/Header/Navigator';
-// import bcrypt from 'bcrypt';
+import { loginRequest } from '../../../redux/requests';
 
 const StyledHeadline = styled(Headline)`
   margin-bottom: 0;
@@ -27,58 +26,53 @@ const BolderHelpButtonText = styled(HelpButtonText)`
 `;
 
 export default class Login extends Component {
-  state = {
-    passwordVisibility: true,
-    passwordIcon: 'ios-eye'
-  };
+  static navigationOptions = ({ navigation }) => ({
+    headerLeft: () => <GoBackButton onPress={() => navigation.navigate('Initial', { userType: null })} />,
+  });
 
-  static navigationOptions = ({ navigation, navigation: { state } }) => {
-    return {
-      headerLeft: () => <GoBackButton onPress={() => navigation.navigate('Initial', { userType: null })} />
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      passwordVisibility: true,
+      passwordIcon: 'ios-eye',
     };
+  }
+
+  navigateTo = (destinationScreen, params = {}) => {
+    const { navigation } = this.props;
+    navigation.navigate(destinationScreen, params);
   };
 
-  goToSignup = () => this.props.navigation.navigate('Signup', { userType: null });
+  goToSignup = () => this.navigateTo('Signup', { userType: 'rider' });
 
-  goToForgotPassword = () => this.props.navigation.navigate('ForgotPassword', { userType: null });
+  goToForgotPassword = () => this.navigateTo('ForgotPassword', { userType: 'rider' });
 
   handlePasswordVisibility = () => {
     this.setState(prevState => ({
       passwordIcon: prevState.passwordIcon === 'ios-eye' ? 'ios-eye-off' : 'ios-eye',
-      passwordVisibility: !prevState.passwordVisibility
+      passwordVisibility: !prevState.passwordVisibility,
     }));
   };
 
   handleOnLogin = async (values, actions) => {
     try {
+      const { navigation, login } = this.props;
+      let userType = navigation.getParam('userType', null);
+
       const { phoneNumber, password } = values;
+      const { data } = await loginRequest(phoneNumber, password);
+      if (data.data.user.client !== null) {
+        userType = 'rider';
+      } else if (data.data.user.driver !== null) {
+        userType = 'driver';
+      }
+      login(userType, data.data.user);
 
-      // const rounds = 10;
-      // const hash = await bcrypt.hash(`${phoneNumber}:${password}`, rounds);
-
-      let res = await Axios.post(
-        'https://api.kruzekab.com/api/login',
-        {},
-        {
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: '$2y$10$Yxl4lSH6PSLvjuNwhNAcS.e8mK8iaU5C52RRfppBscDm8zjuaP5PK'
-          }
-        }
-      );
-
-      console.log(`Status code: ${res.status}`);
-      console.log(`Status text: ${res.statusText}`);
-      console.log(`Request method: ${res.request.method}`);
-      console.log(`Path: ${res.request.path}`);
-
-      console.log(`Date: ${res.headers.date}`);
-      console.log(`Data: ${res.data}`);
-
-      if (res.status === 200) {
-        this.props.navigation.navigate('Rider', { userType: null });
+      if (userType === 'rider') {
+        this.navigateTo('Rider', { userType });
       } else {
-        actions.setFieldError('general', res.statusText);
+        this.navigateTo('ApplicationReviewed', { userType });
       }
     } catch (error) {
       actions.setFieldError('general', error.message);
@@ -91,9 +85,9 @@ export default class Login extends Component {
   };
 
   render() {
-    console.log('Nav param', 'Login', this.props.navigation.getParam('userType', null));
-
+    const { initialValues } = this.props;
     const { passwordVisibility, passwordIcon } = this.state;
+
     return (
       <Container>
         <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
@@ -101,32 +95,16 @@ export default class Login extends Component {
           <StyledSubHeadline>Login to your Account</StyledSubHeadline>
           <Form
             handleOnSubmit={this.handleOnLogin}
-            initialValues={{
-              name: '',
-              lastName: '',
-              phoneNumber: '',
-              password: '',
-              email: '',
-              userType: '',
-              occupation: '',
-              maxSeats: '',
-              vehicleYear: '',
-              licenseNumber: '',
-              birthdate: '',
-              profilePicture: '',
-              licensePicture: '',
-              gender: ''
-            }}
+            initialValues={initialValues}
             validationSchema={validationSchema}
             handlePasswordVisibility={this.handlePasswordVisibility}
             passwordVisibility={passwordVisibility}
             passwordIcon={passwordIcon}
-            goToSignup={this.goToSignup}
             goToForgotPassword={this.goToForgotPassword}
           />
           <BottomContainer>
             <HelpButton onPress={this.goToSignup}>
-              <HelpButtonText>Don't have an account? </HelpButtonText>
+              <HelpButtonText>Don&apos;t have an account? </HelpButtonText>
               <BolderHelpButtonText>Sign Up</BolderHelpButtonText>
             </HelpButton>
           </BottomContainer>
@@ -135,3 +113,8 @@ export default class Login extends Component {
     );
   }
 }
+
+Login.propTypes = {
+  initialValues: PropTypes.shape.isRequired,
+  login: PropTypes.func.isRequired,
+};

@@ -1,61 +1,58 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { ScrollView } from 'react-native';
 import styled from 'styled-components';
-import { Button, Icon } from 'react-native-elements';
-import Ionicons from 'react-native-vector-icons/Ionicons';
 import Form from './form';
-import { validationSchema } from './validation';
+import validationSchema from './validation';
 import { Headline, SubHeadline, Container } from '../../../components/Form/Elements';
-import { NavigationHeaderButtons, Item } from '../../../components/Header/HeaderButton';
 import { GoBackButton } from '../../../components/Header/Navigator';
 
 const StyledHeadline = styled(Headline)`
   margin-bottom: 0;
 `;
 
-export default class DriverSignup extends Component {
-  state = {
-    passwordVisibility: true,
-    confirmPasswordVisibility: true,
-    passwordIcon: 'ios-eye',
-    confirmPasswordIcon: 'ios-eye'
-  };
+export default class ForgotPassword extends Component {
+  static navigationOptions = ({ navigation }) => ({
+    headerLeft: () => <GoBackButton onPress={() => navigation.navigate('Initial', { userType: 'driver' })} />,
+  });
 
-  static navigationOptions = ({ navigation, navigation: { state } }) => {
-    return {
-      headerLeft: () => <GoBackButton onPress={() => navigation.navigate('Initial', { userType: 'driver' })} />
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      passwordVisibility: true,
+      confirmPasswordVisibility: true,
+      passwordIcon: 'ios-eye',
+      confirmPasswordIcon: 'ios-eye',
     };
+  }
+
+  navigateTo = (destinationScreen, params = {}) => {
+    const { navigation } = this.props;
+    navigation.navigate(destinationScreen, params);
   };
-
-  goToInitial = () => this.props.navigation.navigate('Initial', { userType: 'driver' });
-
-  goToLogin = () => this.props.navigation.navigate('Login', { userType: 'driver' });
-
-  goToConfirmation = () => this.props.navigation.navigate('Confirm', { userType: 'driver' });
 
   handlePasswordVisibility = () => {
     this.setState(prevState => ({
       passwordIcon: prevState.passwordIcon === 'ios-eye' ? 'ios-eye-off' : 'ios-eye',
-      passwordVisibility: !prevState.passwordVisibility
+      passwordVisibility: !prevState.passwordVisibility,
     }));
   };
 
   handleConfirmPasswordVisibility = () => {
     this.setState(prevState => ({
       confirmPasswordIcon: prevState.confirmPasswordIcon === 'ios-eye' ? 'ios-eye-off' : 'ios-eye',
-      confirmPasswordVisibility: !prevState.confirmPasswordVisibility
+      confirmPasswordVisibility: !prevState.confirmPasswordVisibility,
     }));
   };
 
   handleOnSubmit = async (values, actions) => {
     try {
-      // const response = await this.props.firebase.signupWithEmail(email, password);
+      const { navigation } = this.props;
       const { phoneNumber } = values;
+      const userType = navigation.getParam('userType', null);
 
-      setTimeout(() => {
-        // this.props.navigation.navigate('VehicleRegister', { userType: null });
-        this.props.navigation.navigate('Confirm', { userType: 'driver', phoneNumber });
-      }, 1500);
+      this.navigateTo('Confirm', { userType, phoneNumber });
     } catch (error) {
       actions.setFieldError('general', error.message);
     } finally {
@@ -67,9 +64,12 @@ export default class DriverSignup extends Component {
   };
 
   render() {
-    console.log('Nav param', 'DriverSignup', this.props.navigation.getParam('userType', null));
+    const { initialValues } = this.props;
 
-    const { passwordVisibility, confirmPasswordVisibility, passwordIcon, confirmPasswordIcon } = this.state;
+    const {
+      passwordVisibility, confirmPasswordVisibility, passwordIcon, confirmPasswordIcon,
+    } = this.state;
+
     return (
       <Container enabled behavior="">
         <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
@@ -77,12 +77,7 @@ export default class DriverSignup extends Component {
           <SubHeadline>You will receive a SMS verification code</SubHeadline>
           <Form
             handleOnSubmit={this.handleOnSubmit}
-            initialValues={{
-              userType: 2,
-              phoneNumber: '',
-              newPassword: '',
-              confirmNewPassword: ''
-            }}
+            initialValues={initialValues}
             validationSchema={validationSchema}
             handlePasswordVisibility={this.handlePasswordVisibility}
             passwordVisibility={passwordVisibility}
@@ -90,11 +85,13 @@ export default class DriverSignup extends Component {
             handleConfirmPasswordVisibility={this.handleConfirmPasswordVisibility}
             confirmPasswordVisibility={confirmPasswordVisibility}
             confirmPasswordIcon={confirmPasswordIcon}
-            goToLogin={this.goToLogin}
-            goToConfirmation={this.goToConfirmation}
           />
         </ScrollView>
       </Container>
     );
   }
 }
+
+ForgotPassword.propTypes = {
+  initialValues: PropTypes.shape.isRequired,
+};

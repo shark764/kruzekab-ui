@@ -1,4 +1,5 @@
-import React, { Fragment } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { TouchableOpacity } from 'react-native';
 import { Formik } from 'formik';
 import { Icon } from 'react-native-elements';
@@ -13,7 +14,7 @@ const Form = ({
   validationSchema,
   handlePasswordVisibility,
   passwordVisibility,
-  passwordIcon
+  passwordIcon,
 }) => (
   <Formik
     enableReinitialize
@@ -22,9 +23,12 @@ const Form = ({
       console.log('values =>', values);
       handleOnSubmit(values, actions);
     }}
-    validationSchema={validationSchema}>
-    {({ handleChange, values, handleSubmit, errors, isValid, isSubmitting, touched, handleBlur }) => (
-      <Fragment>
+    validationSchema={validationSchema}
+  >
+    {({
+      handleChange, values, handleSubmit, errors, isValid, isSubmitting, touched, handleBlur,
+    }) => (
+      <>
         <FormInput
           name="name"
           label="Name"
@@ -32,7 +36,7 @@ const Form = ({
           onChangeText={handleChange('name')}
           onBlur={handleBlur('name')}
           placeholder="name..."
-          autoCapitalize="none"
+          autoCapitalize="words"
           iconName="md-person"
           iconColor="#2C384A"
           touched={touched}
@@ -61,11 +65,11 @@ const Form = ({
           onBlur={handleBlur('password')}
           placeholder="password..."
           secureTextEntry={passwordVisibility}
-          rightIcon={
+          rightIcon={(
             <TouchableOpacity onPress={handlePasswordVisibility}>
               <Icon name={passwordIcon} type="ionicon" size={28} color="grey" />
             </TouchableOpacity>
-          }
+          )}
           iconName="ios-lock"
           iconColor="#2C384A"
           touched={touched}
@@ -83,9 +87,18 @@ const Form = ({
             loading={isSubmitting}
           />
         </ButtonContainer>
-      </Fragment>
+      </>
     )}
   </Formik>
 );
+
+Form.propTypes = {
+  handleOnSubmit: PropTypes.func.isRequired,
+  initialValues: PropTypes.shape.isRequired,
+  validationSchema: PropTypes.shape.isRequired,
+  handlePasswordVisibility: PropTypes.func.isRequired,
+  passwordVisibility: PropTypes.bool.isRequired,
+  passwordIcon: PropTypes.string.isRequired,
+};
 
 export default Form;

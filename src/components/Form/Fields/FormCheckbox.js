@@ -1,4 +1,5 @@
-import React, { Fragment } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { CheckBox } from 'react-native-elements';
 import { View, Text } from 'react-native';
 import styled from 'styled-components';
@@ -33,7 +34,7 @@ export const CheckboxField = ({ label, ...rest }) => (
         {...rest}
         containerStyle={{
           backgroundColor: '#fff',
-          borderColor: '#fff'
+          borderColor: '#fff',
         }}
         checkedIcon="check-square"
         checkedColor="#5280e2"
@@ -42,18 +43,22 @@ export const CheckboxField = ({ label, ...rest }) => (
           fontStyle: 'normal',
           fontFamily: 'Open Sans',
           fontWeight: 'normal',
-          color: '#6b768d'
+          color: '#6b768d',
         }}
       />
     </InputContainer>
   </Container>
 );
 
+CheckboxField.propTypes = {
+  label: PropTypes.string.isRequired,
+};
+
 const FormCheckbox = props => (
-  <Fragment>
+  <>
     <CheckboxField {...props} />
     <ErrorMessage {...props} />
-  </Fragment>
+  </>
 );
 
 export default FormCheckbox;

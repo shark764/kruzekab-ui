@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { View } from 'react-native';
 import { Button, Icon } from 'react-native-elements';
 import styled from 'styled-components';
 import FormButton from '../components/Form/FormButton';
@@ -10,7 +9,7 @@ import {
   ButtonContainer,
   Container,
   LogoContainer,
-  BottomContainer
+  BottomContainer,
 } from '../components/Form/Elements';
 
 const StyledHeadline = styled(Headline)`
@@ -33,20 +32,23 @@ const StyledButtonContainer = styled(ButtonContainer)`
 `;
 
 export default class Initial extends Component {
-  goToLogin = () => this.props.navigation.navigate('Login', { userType: null });
+  navigateTo = (destinationScreen, params = {}) => {
+    const { navigation } = this.props;
+    navigation.navigate(destinationScreen, params);
+  };
 
-  goToSignup = () => this.props.navigation.navigate('Signup', { userType: 'rider' });
+  goToLogin = () => this.navigateTo('Login', { userType: null });
 
-  goToDriverSignup = () => this.props.navigation.navigate('DriverSignup', { userType: 'driver' });
+  goToSignup = () => this.navigateTo('Signup', { userType: 'rider' });
 
-  goToForgotPassword = () => this.props.navigation.navigate('ForgotPassword', { userType: null });
+  goToDriverSignup = () => this.navigateTo('DriverSignup', { userType: 'driver' });
+
+  goToForgotPassword = () => this.navigateTo('ForgotPassword', { userType: null });
 
   render() {
-    console.log('Nav param', 'Initial', this.props.navigation.getParam('userType', null));
-
     return (
       <Container>
-        <StyledHeadline>Let's Get You Started!</StyledHeadline>
+        <StyledHeadline>Let&apos;s Get You Started!</StyledHeadline>
         <StyledSubHeadline>Sign Up or Login to your Account</StyledSubHeadline>
         <LogoContainer>
           <WelcomeLogo />
@@ -64,7 +66,7 @@ export default class Initial extends Component {
             onPress={this.goToDriverSignup}
             titleStyle={{
               color: '#5280e2',
-              textDecorationLine: 'underline'
+              textDecorationLine: 'underline',
             }}
             type="clear"
           />

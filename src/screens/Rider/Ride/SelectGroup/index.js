@@ -3,12 +3,12 @@ import Layout from './layout';
 import { getAllGroups } from '../../../../redux/selectors';
 import { addGroup } from '../../../../redux/actions';
 
-const mapStateToProps = (state, props) => ({
-  groups: getAllGroups(state)
+const mapStateToProps = state => ({
+  groups: getAllGroups(state),
 });
 
 const actions = {
-  addGroup
+  addGroup,
 };
 
 export default connect(mapStateToProps, actions)(Layout);

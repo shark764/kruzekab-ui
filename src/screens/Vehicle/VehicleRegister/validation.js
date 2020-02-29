@@ -1,6 +1,6 @@
 import * as Yup from 'yup';
 
-export const validationSchema = Yup.object().shape({
+const validationSchema = Yup.object().shape({
   car: Yup.string()
     .label('Car')
     .required(),
@@ -18,5 +18,7 @@ export const validationSchema = Yup.object().shape({
     .typeError('Value must be a number')
     .required()
     .integer('Value can only contain integers')
-    .positive('Value must be greater than zero')
+    .positive('Value must be greater than zero'),
 });
+
+export default validationSchema;

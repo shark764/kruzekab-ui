@@ -1,6 +1,19 @@
 import { connect } from 'react-redux';
 import Layout from './layout';
+import { importRiders } from '../../../../../redux/actions';
 
-const mapStateToProps = () => ({});
+const mapStateToProps = (state, props) => {
+  const groupId = props.navigation.getParam('groupId', null);
+  return {
+    initialValues: {
+      parentPhoneNumber: '',
+    },
+    groupId,
+  };
+};
 
-export default connect(mapStateToProps)(Layout);
+const actions = {
+  importRiders,
+};
+
+export default connect(mapStateToProps, actions)(Layout);

@@ -1,13 +1,12 @@
 import React, { Component, createRef } from 'react';
+import PropTypes from 'prop-types';
 import { View, Text, Alert } from 'react-native';
 import styled from 'styled-components';
-import { Button, Icon } from 'react-native-elements';
-import Ionicons from 'react-native-vector-icons/Ionicons';
 import Form from './form';
-import { validationSchema } from './validation';
+import validationSchema from './validation';
 import { Container } from '../../../components/Form/Elements';
-import { NavigationHeaderButtons, Item } from '../../../components/Header/HeaderButton';
 import { GoBackButton } from '../../../components/Header/Navigator';
+import { createClient } from '../../../redux/requests';
 
 const HeadlineContainer = styled(View)`
   margin-top: 120px;
@@ -24,69 +23,62 @@ const Headline = styled(Text)`
 `;
 
 export default class Confirmation extends Component {
+  static navigationOptions = ({ navigation }) => ({
+    headerLeft: () => <GoBackButton onPress={() => navigation.navigate('Signup')} />,
+  });
+
+  code = createRef();
+
   constructor(props) {
     super(props);
 
     this.state = {
-      code: '',
-      confirmationSent: false,
-      isFulfilled: false
+      isFulfilled: false,
     };
   }
 
-  static navigationOptions = ({ navigation, navigation: { state } }) => {
-    return {
-      headerLeft: () => <GoBackButton onPress={() => navigation.navigate('Signup')} />
-    };
+  navigateTo = (destinationScreen, params = {}) => {
+    const { navigation } = this.props;
+    navigation.navigate(destinationScreen, params);
   };
 
   handlerOnFulfill = code => {
     // TODO: call API to check code here
     // If code does not match, clear input with: this.refs.codeInputRef1.clear()
-    if (code == '1234') {
+    if (code === '1234') {
       Alert.alert('Confirmation Code', 'Successful!', [{ text: 'OK' }], { cancelable: false });
       this.setState(() => ({
-        isFulfilled: true
+        isFulfilled: true,
       }));
     } else {
       Alert.alert('Confirmation Code', 'Code not match!', [{ text: 'OK' }], { cancelable: false });
       this.setState(() => ({
-        isFulfilled: false
+        isFulfilled: false,
       }));
 
       // this.code.current.clear();
     }
   };
 
-  goToLogin = () => this.props.navigation.navigate('Login', { userType: null });
-
-  goToSignup = () => this.props.navigation.navigate('Signup', { userType: null });
-
   handleVerify = async (values, actions) => {
-    // const { email } = values;
-
     try {
-      // await this.props.firebase.passwordReset(email);
+      const { navigation } = this.props;
+      const userType = navigation.getParam('userType', null);
 
-      setTimeout(() => {
-        const userType = this.props.navigation.getParam('userType', null);
-        console.log('Verified successfully', userType, userType === 'rider');
-        if (!userType) {
-          this.props.navigation.navigate('Initial', { error: 'Could not identify user type' });
-        }
-        if (userType === 'rider') {
-          this.props.navigation.navigate('Rider', { userType: userType });
-        } else {
-          this.props.navigation.navigate('DriverInformation', { userType: userType });
-        }
-      }, 1500);
+      if (!userType) {
+        this.navigateTo('Initial', { error: 'Could not identify user type' });
+      }
+      if (userType === 'rider') {
+        await createClient();
+        this.navigateTo('Login', { userType });
+      } else {
+        this.navigateTo('DriverInformation', { userType });
+      }
     } catch (error) {
       actions.setFieldError('general', error.message);
     } finally {
       // This is avoiding submit button loading icon
-      setTimeout(() => {
-        actions.setSubmitting(false);
-      }, 1500);
+      actions.setSubmitting(false);
     }
   };
 
@@ -96,40 +88,40 @@ export default class Confirmation extends Component {
         console.log('Code sent again');
       }, 1500);
     } catch (error) {
-      actions.setFieldError('general', error.message);
+      // Error
     }
   };
 
-  code = createRef();
-
   render() {
-    console.log(
-      'Nav param',
-      'Confirmation',
-      this.props.navigation.getParam('userType', null),
-      this.props.navigation.getParam('phoneNumber', null)
-    );
-    const phoneNumber = this.props.navigation.getParam('phoneNumber', null);
+    const { phoneNumber, initialValues } = this.props;
+    const { isFulfilled } = this.state;
 
     return (
       <Container>
         <HeadlineContainer>
           <Headline>A code has been sent to</Headline>
-          <Headline>{phoneNumber} via SMS</Headline>
+          <Headline>
+            {phoneNumber}
+            {' '}
+            via SMS
+          </Headline>
         </HeadlineContainer>
         <Form
           phoneNumber={phoneNumber}
           handleOnSubmit={this.handleVerify}
-          initialValues={{ code: '' }}
+          initialValues={initialValues}
           validationSchema={validationSchema}
           handleOnResendCode={this.handleOnResendCode}
           onFulfill={this.handlerOnFulfill}
-          isFulfilled={this.state.isFulfilled}
+          isFulfilled={isFulfilled}
           code={this.code}
-          goToLogin={this.goToLogin}
-          goToSignup={this.goToSignup}
         />
       </Container>
     );
   }
 }
+
+Confirmation.propTypes = {
+  initialValues: PropTypes.shape.isRequired,
+  phoneNumber: PropTypes.string.isRequired,
+};

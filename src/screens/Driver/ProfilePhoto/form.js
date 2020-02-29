@@ -1,27 +1,16 @@
-import React, { Fragment } from 'react';
-import { Image } from 'react-native';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { Formik } from 'formik';
-import { Button, Icon, Avatar } from 'react-native-elements';
+import { Button, Avatar } from 'react-native-elements';
 import styled from 'styled-components';
 import FormButton from '../../../components/Form/FormButton';
 import { FormattedError } from '../../../components/Form/ErrorMessage';
-import { ButtonContainer, BottomContainer, BottomButtonContainer } from '../../../components/Form/Elements';
+import { ButtonContainer, BottomButtonContainer } from '../../../components/Form/Elements';
 
 const IconContainer = styled(ButtonContainer)`
   margin-bottom: 80px;
   margin-top: 70px;
   align-items: center;
-`;
-const SubIcon = styled(ButtonContainer)`
-  margin-top: -50px;
-  margin-right: -50px;
-  margin-bottom: 0;
-`;
-const StyledBottomContainer = styled(BottomContainer)`
-  left: 0;
-  right: 0;
-  margin-left: 25px;
-  margin-right: 25px;
 `;
 
 const PhotoAvatar = props => (
@@ -37,12 +26,12 @@ const PhotoAvatar = props => (
       underlayColor: '#5280e2',
       size: 17,
       marginRight: 18,
-      marginBottom: 20
+      marginBottom: 20,
     }}
     icon={{
       name: 'md-person',
       type: 'ionicon',
-      color: '#5280e2'
+      color: '#5280e2',
     }}
     overlayContainerStyle={{ backgroundColor: '#dde5f7' }}
     activeOpacity={0.7}
@@ -51,7 +40,9 @@ const PhotoAvatar = props => (
   />
 );
 
-const Form = ({ handleOnSubmit, initialValues, validationSchema, handleChoosePhoto, photo }) => (
+const Form = ({
+  handleOnSubmit, initialValues, validationSchema, handleChoosePhoto, photo,
+}) => (
   <Formik
     enableReinitialize
     initialValues={initialValues}
@@ -59,14 +50,17 @@ const Form = ({ handleOnSubmit, initialValues, validationSchema, handleChoosePho
       console.log('values =>', values);
       handleOnSubmit(values, actions);
     }}
-    validationSchema={validationSchema}>
-    {({ handleSubmit, errors, isValid, isSubmitting }) => (
-      <Fragment>
+    validationSchema={validationSchema}
+  >
+    {({
+      handleSubmit, errors, isValid, isSubmitting,
+    }) => (
+      <>
         <IconContainer>
           {photo ? (
             <PhotoAvatar
               source={{
-                uri: photo.uri
+                uri: photo.uri,
               }}
               onPress={handleChoosePhoto}
               onEditPress={handleChoosePhoto}
@@ -86,8 +80,7 @@ const Form = ({ handleOnSubmit, initialValues, validationSchema, handleChoosePho
             title="Add photo"
             onPress={handleChoosePhoto}
             titleStyle={{
-              color: '#5280e2'
-              // textDecorationLine: 'underline'
+              color: '#5280e2',
             }}
             type="clear"
           />
@@ -104,9 +97,17 @@ const Form = ({ handleOnSubmit, initialValues, validationSchema, handleChoosePho
             loading={isSubmitting}
           />
         </BottomButtonContainer>
-      </Fragment>
+      </>
     )}
   </Formik>
 );
+
+Form.propTypes = {
+  handleOnSubmit: PropTypes.func.isRequired,
+  initialValues: PropTypes.shape.isRequired,
+  validationSchema: PropTypes.shape.isRequired,
+  handleChoosePhoto: PropTypes.shape.isRequired,
+  photo: PropTypes.shape.isRequired,
+};
 
 export default Form;

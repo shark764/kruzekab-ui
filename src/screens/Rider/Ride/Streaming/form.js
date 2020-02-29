@@ -1,24 +1,18 @@
-import React, { Fragment } from 'react';
-import { Image, View, Text } from 'react-native';
+import React from 'react';
+import PropTypes from 'prop-types';
+import { View, Text } from 'react-native';
 import { Formik } from 'formik';
 import { Avatar, Icon, Badge } from 'react-native-elements';
 import styled from 'styled-components';
+import Video from 'react-native-video';
 import FormButton from '../../../../components/Form/FormButton';
 import { FormattedError } from '../../../../components/Form/ErrorMessage';
-import { ButtonContainer, BottomContainer, BottomButtonContainer } from '../../../../components/Form/Elements';
-import FormInput from '../../../../components/Form/Fields/FormInput';
-import Video from 'react-native-video';
+import { ButtonContainer } from '../../../../components/Form/Elements';
 
 const IconContainer = styled(ButtonContainer)`
   margin-bottom: 5px;
   margin-top: 120px;
   flex-direction: row;
-`;
-const StyledBottomContainer = styled(BottomContainer)`
-  left: 0;
-  right: 0;
-  margin-left: 25px;
-  margin-right: 25px;
 `;
 
 const PhotoAvatar = props => (
@@ -28,7 +22,7 @@ const PhotoAvatar = props => (
     icon={{
       name: 'md-person',
       type: 'ionicon',
-      color: '#5280e2'
+      color: '#5280e2',
     }}
     overlayContainerStyle={{ backgroundColor: '#dde5f7' }}
     activeOpacity={0.7}
@@ -39,12 +33,12 @@ const PhotoAvatar = props => (
 
 const ridersList = [
   { key: 'edit-rider1', imgPath: require('../../../../assets/edit-rider.png'), name: 'Claire' },
-  { key: 'edit-rider2', imgPath: require('../../../../assets/edit-rider2.png'), name: 'Ben' }
+  { key: 'edit-rider2', imgPath: require('../../../../assets/edit-rider2.png'), name: 'Ben' },
 ];
 
 const video = require('../../../../assets/kids-ride.mp4');
 
-const Form = ({ handleOnSubmit, initialValues, validationSchema, handleChoosePhoto, photo }) => (
+const Form = ({ handleOnSubmit, initialValues, validationSchema }) => (
   <Formik
     enableReinitialize
     initialValues={initialValues}
@@ -52,13 +46,14 @@ const Form = ({ handleOnSubmit, initialValues, validationSchema, handleChoosePho
       console.log('values =>', values);
       handleOnSubmit(values, actions);
     }}
-    validationSchema={validationSchema}>
-    {({ handleChange, values, handleSubmit, errors, isValid, isSubmitting, touched, handleBlur }) => (
-      <Fragment>
+    validationSchema={validationSchema}
+  >
+    {({ errors }) => (
+      <>
         <Video
           source={video}
-          ref={ref => {
-            this.player = ref;
+          ref={() => {
+            // this.player = ref;
           }} // Store reference
           // onBuffer={this.onBuffer} // Callback when remote video is buffering
           // onError={this.videoError} // Callback when video cannot be loaded
@@ -67,7 +62,7 @@ const Form = ({ handleOnSubmit, initialValues, validationSchema, handleChoosePho
             top: 0,
             left: 0,
             bottom: 0,
-            right: 0
+            right: 0,
           }}
         />
 
@@ -80,7 +75,15 @@ const Form = ({ handleOnSubmit, initialValues, validationSchema, handleChoosePho
             </View>
           </IconContainer>
 
-          <View style={{ flexDirection: 'row', flex: 1, marginLeft: 25, marginTop: 15, fontSize: 20 }}>
+          <View
+            style={{
+              flexDirection: 'row',
+              flex: 1,
+              marginLeft: 25,
+              marginTop: 15,
+              fontSize: 20,
+            }}
+          >
             <Badge
               value="HS785K"
               badgeStyle={{
@@ -89,12 +92,21 @@ const Form = ({ handleOnSubmit, initialValues, validationSchema, handleChoosePho
                 paddingTop: 15,
                 paddingBottom: 15,
                 paddingLeft: 15,
-                paddingRight: 15
+                paddingRight: 15,
               }}
               textStyle={{ fontSize: 18 }}
             />
           </View>
-          <View style={{ flexDirection: 'row', flex: 1, marginLeft: 25, marginTop: 5, fontSize: 20, color: '#3e4958' }}>
+          <View
+            style={{
+              flexDirection: 'row',
+              flex: 1,
+              marginLeft: 25,
+              marginTop: 5,
+              fontSize: 20,
+              color: '#3e4958',
+            }}
+          >
             <Text>Volkswagen Jetta</Text>
           </View>
 
@@ -108,12 +120,20 @@ const Form = ({ handleOnSubmit, initialValues, validationSchema, handleChoosePho
                 fontSize: 14,
                 lineHeight: 28,
                 letterSpacing: 0.2,
-                color: '#3e4958'
-              }}>
+                color: '#3e4958',
+              }}
+            >
               Passengers
             </Text>
           </View>
-          <View style={{ flexDirection: 'row', flex: 1, marginTop: 5, marginLeft: 25 }}>
+          <View
+            style={{
+              flexDirection: 'row',
+              flex: 1,
+              marginTop: 5,
+              marginLeft: 25,
+            }}
+          >
             <Badge
               value="2"
               badgeStyle={{
@@ -122,7 +142,7 @@ const Form = ({ handleOnSubmit, initialValues, validationSchema, handleChoosePho
                 paddingTop: 15,
                 paddingBottom: 15,
                 paddingLeft: 15,
-                paddingRight: 15
+                paddingRight: 15,
               }}
               textStyle={{ fontSize: 14 }}
             />
@@ -135,12 +155,20 @@ const Form = ({ handleOnSubmit, initialValues, validationSchema, handleChoosePho
                 fontSize: 14,
                 lineHeight: 28,
                 letterSpacing: 0.2,
-                color: '#6b768d'
-              }}>
+                color: '#6b768d',
+              }}
+            >
               Claire, Ben
             </Text>
           </View>
-          <View style={{ flexDirection: 'row', flex: 1, marginTop: 5, marginLeft: 25 }}>
+          <View
+            style={{
+              flexDirection: 'row',
+              flex: 1,
+              marginTop: 5,
+              marginLeft: 25,
+            }}
+          >
             <Icon style={{ marginLeft: 5 }} name="map-marker" type="material-community" color="#4cca8d" />
             <Text
               style={{
@@ -151,14 +179,15 @@ const Form = ({ handleOnSubmit, initialValues, validationSchema, handleChoosePho
                 fontSize: 14,
                 lineHeight: 28,
                 letterSpacing: 0.2,
-                color: '#6b768d'
-              }}>
-              Kid's School
+                color: '#6b768d',
+              }}
+            >
+              Kid&apos;s School
             </Text>
             <View style={{ flexDirection: 'row', flex: 1, marginLeft: 25 }}>
-              {ridersList.map((riderItem, index) => (
+              {ridersList.map(riderItem => (
                 <Avatar
-                  key={index}
+                  key={riderItem.key}
                   rounded
                   // source={{
                   //   uri: 'https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg'
@@ -168,7 +197,7 @@ const Form = ({ handleOnSubmit, initialValues, validationSchema, handleChoosePho
                   icon={{
                     name: 'md-person',
                     type: 'ionicon',
-                    color: '#5280e2'
+                    color: '#5280e2',
                   }}
                   overlayContainerStyle={{ backgroundColor: '#dde5f7' }}
                   activeOpacity={0.7}
@@ -184,9 +213,15 @@ const Form = ({ handleOnSubmit, initialValues, validationSchema, handleChoosePho
         <ButtonContainer>
           <FormButton title="Report Issue" textColor="white" disabled={false} loading={false} />
         </ButtonContainer>
-      </Fragment>
+      </>
     )}
   </Formik>
 );
+
+Form.propTypes = {
+  handleOnSubmit: PropTypes.func.isRequired,
+  initialValues: PropTypes.shape.isRequired,
+  validationSchema: PropTypes.shape.isRequired,
+};
 
 export default Form;

@@ -1,4 +1,5 @@
-import React, { Fragment } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { CheckBox } from 'react-native-elements';
 import { View, Text } from 'react-native';
 import styled from 'styled-components';
@@ -25,19 +26,7 @@ const Label = styled(Text)`
 `;
 
 export const RadioGroupField = ({
-  items = [],
-  iconName = 'ios-arrow-down',
-  iconType = 'ionicon',
-  iconColor = '#5280e2',
-  returnKeyType,
-  keyboardType,
-  name,
-  placeholder,
-  label,
-  setFieldValue,
-  checked,
-  onPress,
-  value
+  items = [], name, label, onPress, value,
 }) => (
   <Container>
     {label && <Label>{label}</Label>}
@@ -56,7 +45,7 @@ export const RadioGroupField = ({
             fontStyle: 'normal',
             fontFamily: 'Open Sans',
             fontWeight: 'normal',
-            color: '#6b768d'
+            color: '#6b768d',
           }}
           checked={value === item.key}
           onPress={() => onPress(name, item.key)}
@@ -66,11 +55,19 @@ export const RadioGroupField = ({
   </Container>
 );
 
+RadioGroupField.propTypes = {
+  items: PropTypes.shape([]).isRequired,
+  name: PropTypes.string.isRequired,
+  label: PropTypes.string.isRequired,
+  onPress: PropTypes.func.isRequired,
+  value: PropTypes.string.isRequired,
+};
+
 const FormRadioGroup = props => (
-  <Fragment>
+  <>
     <RadioGroupField {...props} />
     <ErrorMessage {...props} />
-  </Fragment>
+  </>
 );
 
 export default FormRadioGroup;

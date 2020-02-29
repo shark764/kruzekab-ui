@@ -1,23 +1,18 @@
-import React, { Fragment } from 'react';
-import { Image, View, Text } from 'react-native';
+import React from 'react';
+import PropTypes from 'prop-types';
+import { View, Text } from 'react-native';
 import { Formik } from 'formik';
 import { Avatar, Icon, Badge } from 'react-native-elements';
 import styled from 'styled-components';
 import FormButton from '../../../../components/Form/FormButton';
 import { FormattedError } from '../../../../components/Form/ErrorMessage';
-import { ButtonContainer, BottomContainer, BottomButtonContainer } from '../../../../components/Form/Elements';
+import { ButtonContainer, BottomButtonContainer } from '../../../../components/Form/Elements';
 import FormInput from '../../../../components/Form/Fields/FormInput';
 
 const IconContainer = styled(ButtonContainer)`
   margin-bottom: 5px;
   margin-top: 120px;
   flex-direction: row;
-`;
-const StyledBottomContainer = styled(BottomContainer)`
-  left: 0;
-  right: 0;
-  margin-left: 25px;
-  margin-right: 25px;
 `;
 
 const PhotoAvatar = props => (
@@ -27,7 +22,7 @@ const PhotoAvatar = props => (
     icon={{
       name: 'md-person',
       type: 'ionicon',
-      color: '#5280e2'
+      color: '#5280e2',
     }}
     overlayContainerStyle={{ backgroundColor: '#dde5f7' }}
     activeOpacity={0.7}
@@ -36,7 +31,7 @@ const PhotoAvatar = props => (
   />
 );
 
-const Form = ({ handleOnSubmit, initialValues, validationSchema, handleChoosePhoto, photo }) => (
+const Form = ({ handleOnSubmit, initialValues, validationSchema }) => (
   <Formik
     enableReinitialize
     initialValues={initialValues}
@@ -44,9 +39,12 @@ const Form = ({ handleOnSubmit, initialValues, validationSchema, handleChoosePho
       console.log('values =>', values);
       handleOnSubmit(values, actions);
     }}
-    validationSchema={validationSchema}>
-    {({ handleChange, values, handleSubmit, errors, isValid, isSubmitting, touched, handleBlur }) => (
-      <Fragment>
+    validationSchema={validationSchema}
+  >
+    {({
+      handleChange, values, handleSubmit, errors, isValid, isSubmitting, touched, handleBlur,
+    }) => (
+      <>
         <View style={{ flexDirection: 'column' }}>
           <IconContainer>
             <PhotoAvatar source={require('../../../../assets/driver-photo.png')} />
@@ -56,7 +54,15 @@ const Form = ({ handleOnSubmit, initialValues, validationSchema, handleChoosePho
             </View>
           </IconContainer>
 
-          <View style={{ flexDirection: 'row', flex: 1, marginLeft: 25, marginTop: 15, fontSize: 20 }}>
+          <View
+            style={{
+              flexDirection: 'row',
+              flex: 1,
+              marginLeft: 25,
+              marginTop: 15,
+              fontSize: 20,
+            }}
+          >
             <Badge
               value="HS785K"
               badgeStyle={{
@@ -65,12 +71,21 @@ const Form = ({ handleOnSubmit, initialValues, validationSchema, handleChoosePho
                 paddingTop: 15,
                 paddingBottom: 15,
                 paddingLeft: 15,
-                paddingRight: 15
+                paddingRight: 15,
               }}
               textStyle={{ fontSize: 18 }}
             />
           </View>
-          <View style={{ flexDirection: 'row', flex: 1, marginLeft: 25, marginTop: 5, fontSize: 20, color: '#3e4958' }}>
+          <View
+            style={{
+              flexDirection: 'row',
+              flex: 1,
+              marginLeft: 25,
+              marginTop: 5,
+              fontSize: 20,
+              color: '#3e4958',
+            }}
+          >
             <Text>Volkswagen Jetta</Text>
           </View>
         </View>
@@ -99,9 +114,15 @@ const Form = ({ handleOnSubmit, initialValues, validationSchema, handleChoosePho
             loading={isSubmitting}
           />
         </BottomButtonContainer>
-      </Fragment>
+      </>
     )}
   </Formik>
 );
+
+Form.propTypes = {
+  handleOnSubmit: PropTypes.func.isRequired,
+  initialValues: PropTypes.shape.isRequired,
+  validationSchema: PropTypes.shape.isRequired,
+};
 
 export default Form;

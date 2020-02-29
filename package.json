@@ -17,6 +17,7 @@
   "lint-staged": {
     "src/**/*.{js,jsx,json,css}": [
       "npx prettier --single-quote --write --print-width 120",
+      "eslint . --fix",
       "git add"
     ]
   },
@@ -36,9 +37,8 @@
     "core-js": "^3.6.4",
     "expo": "^36.0.2",
     "formik": "^2.1.2",
-    "husky": "^4.2.1",
     "immutable": "^4.0.0-rc.12",
-    "lint-staged": "^10.0.7",
+    "lint-staged": "^10.0.8",
     "moment": "^2.24.0",
     "prettier": "^1.19.1",
     "prop-types": "^15.7.2",
@@ -58,6 +58,7 @@
     "react-native-reanimated": "^1.7.0",
     "react-native-safe-area-context": "^0.6.2",
     "react-native-screens": "^2.0.0-alpha.29",
+    "react-native-sha1": "^1.2.3",
     "react-native-splash-screen": "^3.2.0",
     "react-native-svg": "^11.0.1",
     "react-native-text-input-mask": "^2.0.0",
@@ -83,8 +84,18 @@
     "@babel/core": "^7.8.3",
     "@babel/runtime": "^7.8.3",
     "@react-native-community/eslint-config": "^0.0.6",
+    "babel-eslint": "^10.0.3",
     "babel-jest": "^25.1.0",
     "eslint": "^6.8.0",
+    "eslint-config-airbnb": "^18.0.1",
+    "eslint-config-standard": "^14.1.0",
+    "eslint-plugin-import": "^2.20.1",
+    "eslint-plugin-jsx-a11y": "^6.2.3",
+    "eslint-plugin-node": "^11.0.0",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-react": "^7.18.3",
+    "eslint-plugin-standard": "^4.0.1",
+    "husky": "^4.2.3",
     "jest": "^25.1.0",
     "metro-react-native-babel-preset": "^0.58.0",
     "react-test-renderer": "16.9.0"

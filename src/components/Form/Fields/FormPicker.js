@@ -1,4 +1,5 @@
-import React, { Fragment } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { Icon } from 'react-native-elements';
 import RNPickerSelect from 'react-native-picker-select';
 import { View, Text } from 'react-native';
@@ -47,9 +48,7 @@ export const PickerField = ({
         placeholder={placeholder}
         items={items}
         textInputProps={{ underlineColor: 'gray' }}
-        Icon={() => {
-          return <Icon name={iconName} type={iconType} size={20} color={iconColor} />;
-        }}
+        Icon={() => <Icon name={iconName} type={iconType} size={20} color={iconColor} />}
         style={{
           inputIOS: {
             paddingHorizontal: 25,
@@ -60,7 +59,7 @@ export const PickerField = ({
             fontStyle: 'normal',
             fontFamily: 'Open Sans',
             fontWeight: 'normal',
-            color: '#6b768d'
+            color: '#6b768d',
           },
           inputAndroid: {
             paddingHorizontal: 25,
@@ -71,23 +70,35 @@ export const PickerField = ({
             fontStyle: 'normal',
             fontFamily: 'Open Sans',
             fontWeight: 'normal',
-            color: '#6b768d'
+            color: '#6b768d',
           },
           iconContainer: {
             top: 10,
-            right: 10
-          }
+            right: 10,
+          },
         }}
       />
     </InputContainer>
   </Container>
 );
 
+PickerField.propTypes = {
+  items: PropTypes.shape([]).isRequired,
+  iconName: PropTypes.string.isRequired,
+  iconType: PropTypes.string.isRequired,
+  iconColor: PropTypes.string.isRequired,
+  returnKeyType: PropTypes.string.isRequired,
+  keyboardType: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired,
+  placeholder: PropTypes.string.isRequired,
+  label: PropTypes.string.isRequired,
+};
+
 const FormPicker = props => (
-  <Fragment>
+  <>
     <PickerField {...props} />
     <ErrorMessage {...props} />
-  </Fragment>
+  </>
 );
 
 export default FormPicker;

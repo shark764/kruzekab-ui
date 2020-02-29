@@ -1,4 +1,5 @@
-import React, { Fragment } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { Input, Icon } from 'react-native-elements';
 import { View } from 'react-native';
 import styled from 'styled-components';
@@ -26,7 +27,7 @@ export const InputField = ({
       {...rest}
       leftIcon={<Icon name={iconName} type={iconType} size={28} color={iconColor} />}
       leftIconContainerStyle={{
-        marginRight: 10
+        marginRight: 10,
       }}
       placeholderTextColor="grey"
       name={name}
@@ -39,7 +40,7 @@ export const InputField = ({
         fontStyle: 'normal',
         fontFamily: 'Open Sans',
         fontWeight: '600',
-        color: '#6b768d'
+        color: '#6b768d',
       }}
       inputStyle={{
         lineHeight: 20,
@@ -47,17 +48,27 @@ export const InputField = ({
         fontStyle: 'normal',
         fontFamily: 'Open Sans',
         fontWeight: 'normal',
-        color: '#6b768d'
+        color: '#6b768d',
       }}
     />
   </InputContainer>
 );
 
+InputField.propTypes = {
+  iconName: PropTypes.string.isRequired,
+  iconType: PropTypes.string.isRequired,
+  iconColor: PropTypes.string.isRequired,
+  returnKeyType: PropTypes.string.isRequired,
+  keyboardType: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired,
+  placeholder: PropTypes.string.isRequired,
+};
+
 const FormInput = props => (
-  <Fragment>
+  <>
     <InputField {...props} />
     <ErrorMessage {...props} />
-  </Fragment>
+  </>
 );
 
 export default FormInput;
