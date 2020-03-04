@@ -207,8 +207,8 @@ const Form = ({ handleOnSubmit, initialValues, validationSchema }) => (
 
 Form.propTypes = {
   handleOnSubmit: PropTypes.func.isRequired,
-  initialValues: PropTypes.shape.isRequired,
-  validationSchema: PropTypes.shape.isRequired,
+  initialValues: PropTypes.shape({}).isRequired,
+  validationSchema: PropTypes.shape({}).isRequired,
 };
 
 export default Form;

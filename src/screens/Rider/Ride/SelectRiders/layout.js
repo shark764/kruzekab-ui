@@ -61,15 +61,15 @@ export default class SelectRiders extends Component {
 
       updateSelectedAddress(location, navigation.state.params.selectedAddress);
 
+      // This is avoiding submit button loading icon
       actions.setSubmitting(false);
+
       navigation.navigate('Home', { userType: 'rider', groupId: selected });
     } catch (error) {
       actions.setFieldError('general', error.message);
-    } finally {
+
       // This is avoiding submit button loading icon
-      setTimeout(() => {
-        actions.setSubmitting(false);
-      }, 1500);
+      actions.setSubmitting(false);
     }
   };
 

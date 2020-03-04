@@ -31,14 +31,15 @@ export default class DriverInformation extends Component {
       const { photo } = this.state;
       addToNewUser({ ...values, licensePicture: photo });
 
+      // This is avoiding submit button loading icon
+      actions.setSubmitting(false);
+
       this.navigateTo('ProfilePhoto', { userType: 'driver' });
     } catch (error) {
       actions.setFieldError('general', error.message);
-    } finally {
+
       // This is avoiding submit button loading icon
-      setTimeout(() => {
-        actions.setSubmitting(false);
-      }, 1500);
+      actions.setSubmitting(false);
     }
   };
 
@@ -76,6 +77,6 @@ export default class DriverInformation extends Component {
 }
 
 DriverInformation.propTypes = {
-  initialValues: PropTypes.shape.isRequired,
+  initialValues: PropTypes.shape({}).isRequired,
   addToNewUser: PropTypes.func.isRequired,
 };

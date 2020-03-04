@@ -181,8 +181,8 @@ const Form = ({
 
 Form.propTypes = {
   handleOnSubmit: PropTypes.func.isRequired,
-  initialValues: PropTypes.shape.isRequired,
-  validationSchema: PropTypes.shape.isRequired,
+  initialValues: PropTypes.shape({}).isRequired,
+  validationSchema: PropTypes.shape({}).isRequired,
   handleOnSelected: PropTypes.shape.isRequired,
   handleOnAddGroup: PropTypes.shape.isRequired,
   selected: PropTypes.string.isRequired,

@@ -3,22 +3,14 @@ import PropTypes from 'prop-types';
 import { ScrollView, Image } from 'react-native';
 import styled from 'styled-components';
 import ImagePicker from 'react-native-image-picker';
-import { Container, Headline } from '../../../../../components/Form/Elements';
+import { Container } from '../../../../../components/Form/Elements';
 import { ExtendedGoBackButton } from '../../../../../components/Header/Navigator';
 import Form from './form';
 import validationSchema from './validation';
-import { createRider } from '../../../../../redux/requests';
+import { createRider, addRiderToGroupRequest } from '../../../../../redux/requests';
 
 const StyledContainer = styled(Container)`
   margin-top: 130px;
-`;
-const StyledHeadline = styled(Headline)`
-  font-weight: bold;
-  font-size: 18px;
-  line-height: 28px;
-  letter-spacing: 0.2px;
-  color: #212226;
-  margin-bottom: 10px;
 `;
 
 export default class NewRider extends Component {
@@ -50,19 +42,35 @@ export default class NewRider extends Component {
 
   handleOnSubmit = async (values, actions) => {
     try {
-      const { addRider } = this.props;
+      const {
+        groupId, addRider, addRiderToGroup, navigation,
+      } = this.props;
       const { photo } = this.state;
-      const { data } = await createRider({ ...values, profilePicture: photo });
-      addRider(data.data);
+      const context = navigation.getParam('context', null);
 
-      this.navigateTo('Riders', {});
+      let data;
+      ({ data } = await createRider({ ...values, profilePicture: photo }));
+      addRider(data.data);
+      if (context === 'edit-group' && groupId) {
+        const riderId = data.data.id;
+        ({ data } = await addRiderToGroupRequest(groupId, riderId));
+        addRiderToGroup(groupId, data.data);
+
+        // This is avoiding submit button loading icon
+        actions.setSubmitting(false);
+
+        this.navigateTo('EditGroup', { groupId });
+      } else {
+        // This is avoiding submit button loading icon
+        actions.setSubmitting(false);
+
+        this.navigateTo('Riders', {});
+      }
     } catch (error) {
       actions.setFieldError('general', error.message);
-    } finally {
+
       // This is avoiding submit button loading icon
-      setTimeout(() => {
-        actions.setSubmitting(false);
-      }, 1500);
+      actions.setSubmitting(false);
     }
   };
 
@@ -84,8 +92,6 @@ export default class NewRider extends Component {
     return (
       <StyledContainer enabled behavior="">
         <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
-          <StyledHeadline>General</StyledHeadline>
-
           <Form
             handleOnSubmit={this.handleOnSubmit}
             initialValues={initialValues}
@@ -100,6 +106,8 @@ export default class NewRider extends Component {
 }
 
 NewRider.propTypes = {
-  initialValues: PropTypes.shape.isRequired,
+  initialValues: PropTypes.shape({}).isRequired,
   addRider: PropTypes.func.isRequired,
+  addRiderToGroup: PropTypes.func.isRequired,
+  groupId: PropTypes.number.isRequired,
 };

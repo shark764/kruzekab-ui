@@ -45,7 +45,9 @@ export default class SelectGroup extends Component {
       setTimeout(() => {
         const { navigation } = this.props;
 
+        // This is avoiding submit button loading icon
         actions.setSubmitting(false);
+
         navigation.navigate('SelectRiders', {
           userType: 'rider',
           groupId: selected,
@@ -54,11 +56,9 @@ export default class SelectGroup extends Component {
       }, 1500);
     } catch (error) {
       actions.setFieldError('general', error.message);
-    } finally {
+
       // This is avoiding submit button loading icon
-      setTimeout(() => {
-        actions.setSubmitting(false);
-      }, 1500);
+      actions.setSubmitting(false);
     }
   };
 

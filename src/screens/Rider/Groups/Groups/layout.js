@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import { Icon, Avatar } from 'react-native-elements';
 import { ButtonContainer, Container, Headline } from '../../../../components/Form/Elements';
 import { ExtendedGoBackButton } from '../../../../components/Header/Navigator';
+import { fetchGroups } from '../../../../redux/requests';
 
 const StyledContainer = styled(Container)`
   margin-top: 30px;
@@ -49,6 +50,28 @@ export default class Groups extends Component {
     ),
   });
 
+  componentDidMount() {
+    this.getGroups();
+  }
+
+  getGroups = async () => {
+    const { setGroups } = this.props;
+    setGroups([]);
+
+    const data = await fetchGroups();
+    const groups = data.data.map(group => ({
+      riders: [],
+      ...group,
+    }));
+    setGroups(groups);
+  };
+
+  editGroup = groupId => {
+    const { setSelectedGroup } = this.props;
+    setSelectedGroup(groupId);
+    this.navigateTo('EditGroup');
+  };
+
   navigateTo = (destinationScreen, params = {}) => {
     const { navigation } = this.props;
     navigation.navigate(destinationScreen, params);
@@ -56,6 +79,8 @@ export default class Groups extends Component {
 
   render() {
     const { groups } = this.props;
+    console.log('Groups list - groups ===>', groups.toJS());
+
     return (
       <StyledContainer enabled behavior="">
         <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
@@ -74,7 +99,7 @@ export default class Groups extends Component {
                 overlayContainerStyle={{ backgroundColor: '#dde5f7' }}
                 activeOpacity={0.7}
                 size={53}
-                onPress={() => this.navigateTo('EditGroup', { groupId: group.get('id') })}
+                onPress={() => this.editGroup(group.get('id'))}
                 disabled={false}
               />
               <LabelText>{`  ${group.get('name')}`}</LabelText>
@@ -102,5 +127,7 @@ export default class Groups extends Component {
 }
 
 Groups.propTypes = {
-  groups: PropTypes.shape.isRequired,
+  groups: PropTypes.shape([]).isRequired,
+  setGroups: PropTypes.func.isRequired,
+  setSelectedGroup: PropTypes.func.isRequired,
 };

@@ -7,6 +7,7 @@ import { Container } from '../../../../../components/Form/Elements';
 import { ExtendedGoBackButton } from '../../../../../components/Header/Navigator';
 import Form from './form';
 import validationSchema from './validation';
+import { updateRiderRequest } from '../../../../../redux/requests';
 
 const StyledContainer = styled(Container)`
   margin-top: 130px;
@@ -42,16 +43,18 @@ export default class EditRider extends Component {
   handleOnSubmit = async (values, actions) => {
     try {
       const { updateRider } = this.props;
-      await updateRider(values, values.id);
+      const { data } = await updateRiderRequest(values);
+      updateRider(values.id, data.data);
+
+      // This is avoiding submit button loading icon
+      actions.setSubmitting(false);
 
       this.navigateTo('Riders', {});
     } catch (error) {
       actions.setFieldError('general', error.message);
-    } finally {
+
       // This is avoiding submit button loading icon
-      setTimeout(() => {
-        actions.setSubmitting(false);
-      }, 1500);
+      actions.setSubmitting(false);
     }
   };
 
@@ -99,7 +102,7 @@ export default class EditRider extends Component {
 }
 
 EditRider.propTypes = {
-  initialValues: PropTypes.shape.isRequired,
+  initialValues: PropTypes.shape({}).isRequired,
   riderId: PropTypes.number.isRequired,
   updateRider: PropTypes.func.isRequired,
   removeRider: PropTypes.func.isRequired,

@@ -13,14 +13,7 @@ const InputContainer = styled(View)`
 `;
 
 export const InputField = ({
-  iconName,
-  iconType = 'ionicon',
-  iconColor = 'black',
-  returnKeyType,
-  keyboardType,
-  name,
-  placeholder,
-  ...rest
+  iconName, iconType, iconColor, keyboardType, name, placeholder, ...rest
 }) => (
   <InputContainer>
     <Input
@@ -33,7 +26,6 @@ export const InputField = ({
       name={name}
       placeholder={placeholder}
       keyboardType={keyboardType}
-      returnKeyType={returnKeyType}
       labelStyle={{
         lineHeight: 20,
         fontSize: 13,
@@ -56,12 +48,17 @@ export const InputField = ({
 
 InputField.propTypes = {
   iconName: PropTypes.string.isRequired,
-  iconType: PropTypes.string.isRequired,
-  iconColor: PropTypes.string.isRequired,
-  returnKeyType: PropTypes.string.isRequired,
-  keyboardType: PropTypes.string.isRequired,
+  iconType: PropTypes.string,
+  iconColor: PropTypes.string,
+  keyboardType: PropTypes.string,
   name: PropTypes.string.isRequired,
   placeholder: PropTypes.string.isRequired,
+};
+
+InputField.defaultProps = {
+  iconType: 'ionicon',
+  iconColor: 'black',
+  keyboardType: 'default',
 };
 
 const FormInput = props => (

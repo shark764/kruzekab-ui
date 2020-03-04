@@ -75,7 +75,7 @@ const Form = ({
           onChangeText={handleChange('name')}
           onBlur={handleBlur('name')}
           placeholder="name..."
-          autoCapitalize="none"
+          autoCapitalize="words"
           iconName="md-person"
           iconColor="#2C384A"
           touched={touched}
@@ -106,10 +106,12 @@ const Form = ({
         <StyledHeadline>Riders</StyledHeadline>
 
         {values.riders.map(rider => (
-          <RiderContainer key={rider.get('id')}>
+          <RiderContainer key={rider.id.toString()}>
             <Avatar
               rounded
-              source={rider.get('id')}
+              source={{
+                uri: `http://${rider.pictureUrl}`,
+              }}
               showEditButton={false}
               icon={{
                 name: 'md-person',
@@ -119,10 +121,10 @@ const Form = ({
               overlayContainerStyle={{ backgroundColor: '#dde5f7' }}
               activeOpacity={0.7}
               size={53}
-              onPress={() => handleOnEditNewRider(rider.get('id'))}
+              onPress={() => handleOnEditNewRider(rider.id)}
               disabled={false}
             />
-            <LabelText>{`  ${rider.get('name')}`}</LabelText>
+            <LabelText>{`  ${rider.name}`}</LabelText>
           </RiderContainer>
         ))}
 
@@ -189,8 +191,8 @@ const Form = ({
 
 Form.propTypes = {
   handleOnSubmit: PropTypes.func.isRequired,
-  initialValues: PropTypes.shape.isRequired,
-  validationSchema: PropTypes.shape.isRequired,
+  initialValues: PropTypes.shape({}).isRequired,
+  validationSchema: PropTypes.shape({}).isRequired,
   handleOnEditNewRider: PropTypes.func.isRequired,
   handleOnAddRider: PropTypes.func.isRequired,
   handleOnImportRider: PropTypes.func.isRequired,

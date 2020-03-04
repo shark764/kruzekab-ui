@@ -6,6 +6,7 @@ import { Container, Headline } from '../../../../../components/Form/Elements';
 import { ExtendedGoBackButton } from '../../../../../components/Header/Navigator';
 import Form from './form';
 import validationSchema from './validation';
+import { createGroup } from '../../../../../redux/requests';
 
 const StyledContainer = styled(Container)`
   margin-top: 30px;
@@ -37,17 +38,23 @@ export default class NewGroup extends Component {
 
   handleOnSubmit = async (values, actions) => {
     try {
-      const { addGroup, addToNewGroup } = this.props;
-      await addGroup(values);
+      const { addGroup } = this.props;
+      const { data } = await createGroup(values);
+      const group = {
+        riders: [],
+        ...data.data,
+      };
+      addGroup(group);
+
+      // This is avoiding submit button loading icon
+      actions.setSubmitting(false);
 
       this.navigateTo('Groups', {});
     } catch (error) {
       actions.setFieldError('general', error.message);
-    } finally {
+
       // This is avoiding submit button loading icon
-      setTimeout(() => {
-        actions.setSubmitting(false);
-      }, 1500);
+      actions.setSubmitting(false);
     }
   };
 
@@ -74,7 +81,7 @@ export default class NewGroup extends Component {
 }
 
 NewGroup.propTypes = {
-  initialValues: PropTypes.shape.isRequired,
+  initialValues: PropTypes.shape({}).isRequired,
   addGroup: PropTypes.func.isRequired,
   addToNewGroup: PropTypes.func.isRequired,
 };

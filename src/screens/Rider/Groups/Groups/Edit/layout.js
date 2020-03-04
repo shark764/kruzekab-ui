@@ -6,6 +6,7 @@ import { Container, Headline } from '../../../../../components/Form/Elements';
 import { ExtendedGoBackButton } from '../../../../../components/Header/Navigator';
 import Form from './form';
 import validationSchema from './validation';
+import { fetchGroup, updateGroupRequest } from '../../../../../redux/requests';
 
 const StyledContainer = styled(Container)`
   margin-top: 30px;
@@ -30,6 +31,19 @@ export default class EditGroup extends Component {
     ),
   });
 
+  componentDidMount() {
+    this.getGroupRiders();
+  }
+
+  getGroupRiders = async () => {
+    const { setGroupRiders, groupId } = this.props;
+    setGroupRiders(groupId, []);
+
+    const { data } = await fetchGroup(groupId);
+
+    setGroupRiders(groupId, data.groupRiders);
+  };
+
   navigateTo = (destinationScreen, params = {}) => {
     const { navigation } = this.props;
     navigation.navigate(destinationScreen, params);
@@ -38,16 +52,18 @@ export default class EditGroup extends Component {
   handleOnSubmit = async (values, actions) => {
     try {
       const { updateGroup } = this.props;
-      await updateGroup(values, values.id);
+      const { data } = await updateGroupRequest(values);
+      updateGroup(values.id, data.data);
+
+      // This is avoiding submit button loading icon
+      actions.setSubmitting(false);
 
       this.navigateTo('Groups', {});
     } catch (error) {
       actions.setFieldError('general', error.message);
-    } finally {
+
       // This is avoiding submit button loading icon
-      setTimeout(() => {
-        actions.setSubmitting(false);
-      }, 1500);
+      actions.setSubmitting(false);
     }
   };
 
@@ -63,6 +79,7 @@ export default class EditGroup extends Component {
 
   render() {
     const { groupId, initialValues } = this.props;
+    console.log('%c INITIALVALUES', 'background: black; color: white;', initialValues);
 
     return (
       <StyledContainer enabled behavior="">
@@ -86,8 +103,9 @@ export default class EditGroup extends Component {
 }
 
 EditGroup.propTypes = {
-  initialValues: PropTypes.shape.isRequired,
+  initialValues: PropTypes.shape({}).isRequired,
   groupId: PropTypes.number.isRequired,
   updateGroup: PropTypes.func.isRequired,
   removeGroup: PropTypes.func.isRequired,
+  setGroupRiders: PropTypes.func.isRequired,
 };

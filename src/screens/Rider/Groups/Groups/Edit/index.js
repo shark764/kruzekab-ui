@@ -1,19 +1,17 @@
 import { connect } from 'react-redux';
 import Layout from './layout';
-import { getGroup } from '../../../../../redux/selectors';
-import { updateGroup, removeGroup } from '../../../../../redux/actions';
+import { getSelectedGroup, getSelectedGroupId } from '../../../../../redux/selectors';
+import { updateGroup, removeGroup, setGroupRiders } from '../../../../../redux/actions';
 
-const mapStateToProps = (state, props) => {
-  const groupId = props.navigation.getParam('groupId', null);
-  return {
-    initialValues: getGroup(state, groupId).toJS(),
-    groupId,
-  };
-};
+const mapStateToProps = state => ({
+  initialValues: getSelectedGroup(state).toJS(),
+  groupId: getSelectedGroupId(state),
+});
 
 const actions = {
   updateGroup,
   removeGroup,
+  setGroupRiders,
 };
 
 export default connect(mapStateToProps, actions)(Layout);

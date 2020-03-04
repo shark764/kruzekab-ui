@@ -466,8 +466,8 @@ export default class Home extends Component {
 Home.propTypes = {
   updateCurrentPosition: PropTypes.func.isRequired,
   updateSelectedAddress: PropTypes.func.isRequired,
-  selectedAddress: PropTypes.shape.isRequired,
-  location: PropTypes.shape.isRequired,
-  currentPosition: PropTypes.shape.isRequired,
+  selectedAddress: PropTypes.shape({}).isRequired,
+  location: PropTypes.string.isRequired,
+  currentPosition: PropTypes.shape({}).isRequired,
   updateLocation: PropTypes.func.isRequired,
 };

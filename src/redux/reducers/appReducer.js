@@ -5,7 +5,9 @@ const INITIAL_STATE = fromJS({
   loggedInAs: '',
   userData: {},
   riders: [],
+  selectedRiderId: '',
   groups: [],
+  selectedGroupId: '',
   newUser: {},
   newGroup: {},
   selectedAddress: {
@@ -48,6 +50,11 @@ const appReducer = (state = INITIAL_STATE, action) => {
 
       return state.setIn(['riders'], fromJS(action.payload));
     }
+    case 'SET_SELECTED_RIDER': {
+      console.log(action);
+
+      return state.setIn(['selectedRiderId'], fromJS(action.riderId));
+    }
     case 'ADD_RIDER':
       console.log(action);
 
@@ -70,6 +77,11 @@ const appReducer = (state = INITIAL_STATE, action) => {
 
       return state.setIn(['groups'], fromJS(action.payload));
     }
+    case 'SET_SELECTED_GROUP': {
+      console.log(action);
+
+      return state.setIn(['selectedGroupId'], fromJS(action.groupId));
+    }
     case 'ADD_GROUP':
       return state.update('groups', groups => groups.push(fromJS(action.payload)));
     case 'UPDATE_GROUP': {
@@ -80,14 +92,17 @@ const appReducer = (state = INITIAL_STATE, action) => {
       const itemIndex = getItemIndex(state, 'groups', action.groupId);
       return state.deleteIn(['groups', itemIndex]);
     }
-    case 'ADD_RIDER_TO_GROUP': {
+    case 'SET_GROUP_RIDERS': {
+      console.log(action);
+
       const itemIndex = getItemIndex(state, 'groups', action.groupId);
-      return state.updateIn(['groups', itemIndex, 'riders'], riders => {
-        if (!riders) {
-          return fromJS([action.riderId]);
-        }
-        return riders.push(action.riderId);
-      });
+      return state.setIn(['groups', itemIndex, 'riders'], fromJS(action.payload));
+    }
+    case 'ADD_RIDER_TO_GROUP': {
+      console.log(action);
+
+      const itemIndex = getItemIndex(state, 'groups', action.groupId);
+      return state.updateIn(['groups', itemIndex, 'riders'], riders => riders.push(fromJS(action.payload)));
     }
     case 'REMOVE_RIDER_FROM_GROUP': {
       const itemIndex = getItemIndex(state, 'groups', action.groupId);

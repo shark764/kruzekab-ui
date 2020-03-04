@@ -55,9 +55,11 @@ export default class Riders extends Component {
   }
 
   getRiders = async () => {
+    const { setRiders } = this.props;
+    setRiders([]);
+
     const data = await fetchRiders();
 
-    const { setRiders } = this.props;
     setRiders(data.data);
   };
 
@@ -119,6 +121,6 @@ export default class Riders extends Component {
 }
 
 Riders.propTypes = {
-  riders: PropTypes.shape.isRequired,
+  riders: PropTypes.shape([]).isRequired,
   setRiders: PropTypes.func.isRequired,
 };

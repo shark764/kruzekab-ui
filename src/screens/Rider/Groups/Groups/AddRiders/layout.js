@@ -76,14 +76,15 @@ export default class AddRiders extends Component {
       });
       await Promise.all(promises);
 
+      // This is avoiding submit button loading icon
+      actions.setSubmitting(false);
+
       this.navigateTo('EditGroup', {});
     } catch (error) {
       actions.setFieldError('general', error.message);
-    } finally {
+
       // This is avoiding submit button loading icon
-      setTimeout(() => {
-        actions.setSubmitting(false);
-      }, 1500);
+      actions.setSubmitting(false);
     }
   };
 

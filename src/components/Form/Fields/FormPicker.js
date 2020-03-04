@@ -27,11 +27,10 @@ const Label = styled(Text)`
 `;
 
 export const PickerField = ({
-  items = [],
-  iconName = 'ios-arrow-down',
-  iconType = 'ionicon',
-  iconColor = '#5280e2',
-  returnKeyType,
+  items,
+  iconName,
+  iconType,
+  iconColor,
   keyboardType,
   name,
   placeholder,
@@ -83,15 +82,22 @@ export const PickerField = ({
 );
 
 PickerField.propTypes = {
-  items: PropTypes.shape([]).isRequired,
-  iconName: PropTypes.string.isRequired,
-  iconType: PropTypes.string.isRequired,
-  iconColor: PropTypes.string.isRequired,
-  returnKeyType: PropTypes.string.isRequired,
-  keyboardType: PropTypes.string.isRequired,
+  items: PropTypes.shape([]),
+  iconName: PropTypes.string,
+  iconType: PropTypes.string,
+  iconColor: PropTypes.string,
+  keyboardType: PropTypes.string,
   name: PropTypes.string.isRequired,
   placeholder: PropTypes.string.isRequired,
   label: PropTypes.string.isRequired,
+};
+
+PickerField.defaultProps = {
+  items: [],
+  iconName: 'ios-arrow-down',
+  iconType: 'ionicon',
+  iconColor: '#5280e2',
+  keyboardType: 'default',
 };
 
 const FormPicker = props => (

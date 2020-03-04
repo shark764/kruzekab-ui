@@ -42,15 +42,20 @@ export const setRider = payload => ({
   payload,
 });
 
+export const setSelectedRider = riderId => ({
+  type: 'SET_SELECTED_RIDER',
+  riderId,
+});
+
 export const addRider = payload => ({
   type: 'ADD_RIDER',
   payload,
 });
 
-export const updateRider = (payload, riderId) => ({
+export const updateRider = (riderId, payload) => ({
   type: 'UPDATE_RIDER',
-  payload,
   riderId,
+  payload,
 });
 
 export const removeRider = riderId => ({
@@ -76,15 +81,20 @@ export const setGroup = payload => ({
   payload,
 });
 
+export const setSelectedGroup = groupId => ({
+  type: 'SET_SELECTED_GROUP',
+  groupId,
+});
+
 export const addGroup = payload => ({
   type: 'ADD_GROUP',
   payload,
 });
 
-export const updateGroup = (payload, groupId) => ({
+export const updateGroup = (groupId, payload) => ({
   type: 'UPDATE_GROUP',
-  payload,
   groupId,
+  payload,
 });
 
 export const removeGroup = groupId => ({
@@ -92,10 +102,16 @@ export const removeGroup = groupId => ({
   groupId,
 });
 
-export const addRiderToGroup = (groupId, riderId) => ({
+export const setGroupRiders = (groupId, payload) => ({
+  type: 'SET_GROUP_RIDERS',
+  groupId,
+  payload,
+});
+
+export const addRiderToGroup = (groupId, payload) => ({
   type: 'ADD_RIDER_TO_GROUP',
   groupId,
-  riderId,
+  payload,
 });
 
 export const removeRiderFromGroup = (groupId, riderId) => ({

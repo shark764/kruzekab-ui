@@ -52,14 +52,15 @@ export default class ForgotPassword extends Component {
       const { phoneNumber } = values;
       const userType = navigation.getParam('userType', null);
 
+      // This is avoiding submit button loading icon
+      actions.setSubmitting(false);
+
       this.navigateTo('Confirm', { userType, phoneNumber });
     } catch (error) {
       actions.setFieldError('general', error.message);
-    } finally {
+
       // This is avoiding submit button loading icon
-      setTimeout(() => {
-        actions.setSubmitting(false);
-      }, 1500);
+      actions.setSubmitting(false);
     }
   };
 
@@ -93,5 +94,5 @@ export default class ForgotPassword extends Component {
 }
 
 ForgotPassword.propTypes = {
-  initialValues: PropTypes.shape.isRequired,
+  initialValues: PropTypes.shape({}).isRequired,
 };

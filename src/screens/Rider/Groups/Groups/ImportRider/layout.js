@@ -37,14 +37,15 @@ export default class ImportRider extends Component {
       const { parentPhoneNumber } = values;
       await importRiders(groupId, parentPhoneNumber);
 
+      // This is avoiding submit button loading icon
+      actions.setSubmitting(false);
+
       this.navigateTo('EditGroup', {});
     } catch (error) {
       actions.setFieldError('general', error.message);
-    } finally {
+
       // This is avoiding submit button loading icon
-      setTimeout(() => {
-        actions.setSubmitting(false);
-      }, 1500);
+      actions.setSubmitting(false);
     }
   };
 
@@ -71,7 +72,7 @@ export default class ImportRider extends Component {
 }
 
 ImportRider.propTypes = {
-  initialValues: PropTypes.shape.isRequired,
+  initialValues: PropTypes.shape({}).isRequired,
   importRiders: PropTypes.func.isRequired,
   groupId: PropTypes.number.isRequired,
 };

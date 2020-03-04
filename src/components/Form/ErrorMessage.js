@@ -29,8 +29,8 @@ const ErrorMessage = ({ name, errors, touched }) => {
 
 ErrorMessage.propTypes = {
   name: PropTypes.string.isRequired,
-  errors: PropTypes.shape.isRequired,
-  touched: PropTypes.shape.isRequired,
+  errors: PropTypes.shape([]).isRequired,
+  touched: PropTypes.shape([]).isRequired,
 };
 
 export default ErrorMessage;

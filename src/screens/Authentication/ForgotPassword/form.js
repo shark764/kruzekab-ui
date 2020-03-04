@@ -102,8 +102,8 @@ const Form = ({
 
 Form.propTypes = {
   handleOnSubmit: PropTypes.func.isRequired,
-  initialValues: PropTypes.shape.isRequired,
-  validationSchema: PropTypes.shape.isRequired,
+  initialValues: PropTypes.shape({}).isRequired,
+  validationSchema: PropTypes.shape({}).isRequired,
   handlePasswordVisibility: PropTypes.func.isRequired,
   passwordVisibility: PropTypes.bool.isRequired,
   passwordIcon: PropTypes.string.isRequired,

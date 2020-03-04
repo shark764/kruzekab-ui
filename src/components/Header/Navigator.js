@@ -55,7 +55,12 @@ export const ExtendedGoBackButton = ({
 
 ExtendedGoBackButton.propTypes = {
   iconOnPress: PropTypes.func.isRequired,
-  icon: PropTypes.shape.isRequired,
+  icon: PropTypes.shape({}),
   itemOnPress: PropTypes.func.isRequired,
-  item: PropTypes.shape.isRequired,
+  item: PropTypes.shape({}),
+};
+
+ExtendedGoBackButton.defaultProps = {
+  icon: {},
+  item: {},
 };

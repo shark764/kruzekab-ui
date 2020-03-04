@@ -71,7 +71,7 @@ const Form = ({
           onChangeText={handleChange('name')}
           onBlur={handleBlur('name')}
           placeholder="name..."
-          autoCapitalize="none"
+          autoCapitalize="words"
           iconName="md-person"
           iconColor="#2C384A"
           touched={touched}
@@ -170,8 +170,8 @@ const Form = ({
 
 Form.propTypes = {
   handleOnSubmit: PropTypes.func.isRequired,
-  initialValues: PropTypes.shape.isRequired,
-  validationSchema: PropTypes.shape.isRequired,
+  initialValues: PropTypes.shape({}).isRequired,
+  validationSchema: PropTypes.shape({}).isRequired,
   handleOnEditNewRider: PropTypes.func.isRequired,
   handleOnAddRider: PropTypes.func.isRequired,
   handleOnImportRider: PropTypes.func.isRequired,

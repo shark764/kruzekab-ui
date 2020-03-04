@@ -56,10 +56,11 @@ export default class Login extends Component {
   };
 
   handleOnLogin = async (values, actions) => {
+    console.log('TONCES?');
+
     try {
       const { navigation, login } = this.props;
       let userType = navigation.getParam('userType', null);
-
       const { phoneNumber, password } = values;
       const { data } = await loginRequest(phoneNumber, password);
       if (data.data.user.client !== null) {
@@ -70,17 +71,20 @@ export default class Login extends Component {
       login(userType, data.data.user);
 
       if (userType === 'rider') {
+        // This is avoiding submit button loading icon
+        actions.setSubmitting(false);
+
         this.navigateTo('Rider', { userType });
       } else {
+        // This is avoiding submit button loading icon
+        actions.setSubmitting(false);
+
         this.navigateTo('ApplicationReviewed', { userType });
       }
     } catch (error) {
       actions.setFieldError('general', error.message);
-    } finally {
       // This is avoiding submit button loading icon
-      setTimeout(() => {
-        actions.setSubmitting(false);
-      }, 1500);
+      actions.setSubmitting(false);
     }
   };
 
@@ -115,6 +119,6 @@ export default class Login extends Component {
 }
 
 Login.propTypes = {
-  initialValues: PropTypes.shape.isRequired,
+  initialValues: PropTypes.shape({}).isRequired,
   login: PropTypes.func.isRequired,
 };

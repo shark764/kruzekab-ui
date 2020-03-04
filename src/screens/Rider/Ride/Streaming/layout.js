@@ -43,14 +43,15 @@ export default class Streaming extends Component {
 
         actions.setSubmitting(false);
         navigation.navigate('Riders');
+
+        // This is avoiding submit button loading icon
+        actions.setSubmitting(false);
       }, 1500);
     } catch (error) {
       actions.setFieldError('general', error.message);
-    } finally {
+
       // This is avoiding submit button loading icon
-      setTimeout(() => {
-        actions.setSubmitting(false);
-      }, 1500);
+      actions.setSubmitting(false);
     }
   };
 

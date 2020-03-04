@@ -34,14 +34,15 @@ export default class VehicleRegister extends Component {
       await createDriver();
       createUser(values);
 
+      // This is avoiding submit button loading icon
+      actions.setSubmitting(false);
+
       this.navigateTo('ApplicationReviewed', { userType: 'driver' });
     } catch (error) {
       actions.setFieldError('general', error.message);
-    } finally {
+
       // This is avoiding submit button loading icon
-      setTimeout(() => {
-        actions.setSubmitting(false);
-      }, 1500);
+      actions.setSubmitting(false);
     }
   };
 
@@ -79,7 +80,7 @@ export default class VehicleRegister extends Component {
 }
 
 VehicleRegister.propTypes = {
-  initialValues: PropTypes.shape.isRequired,
+  initialValues: PropTypes.shape({}).isRequired,
   addToNewUser: PropTypes.func.isRequired,
   createUser: PropTypes.func.isRequired,
 };

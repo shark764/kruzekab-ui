@@ -122,6 +122,6 @@ export default class Confirmation extends Component {
 }
 
 Confirmation.propTypes = {
-  initialValues: PropTypes.shape.isRequired,
+  initialValues: PropTypes.shape({}).isRequired,
   phoneNumber: PropTypes.string.isRequired,
 };

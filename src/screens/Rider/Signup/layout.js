@@ -59,14 +59,15 @@ export default class Signup extends Component {
       const userType = 'rider';
       addToNewUser({ ...values, userType });
 
+      // This is avoiding submit button loading icon
+      actions.setSubmitting(false);
+
       this.navigateTo('Confirm', { userType, phoneNumber });
     } catch (error) {
       actions.setFieldError('general', error.message);
-    } finally {
+
       // This is avoiding submit button loading icon
-      setTimeout(() => {
-        actions.setSubmitting(false);
-      }, 1500);
+      actions.setSubmitting(false);
     }
   };
 
@@ -101,6 +102,6 @@ export default class Signup extends Component {
 }
 
 Signup.propTypes = {
-  initialValues: PropTypes.shape.isRequired,
+  initialValues: PropTypes.shape({}).isRequired,
   addToNewUser: PropTypes.func.isRequired,
 };
