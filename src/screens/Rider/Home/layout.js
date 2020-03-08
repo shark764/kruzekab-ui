@@ -1,20 +1,22 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import {
-  View, Text, StyleSheet, Image,
+  View, Text, StyleSheet, Image, Platform, Dimensions,
 } from 'react-native';
 import styled from 'styled-components';
 import {
   Input, Divider, Avatar, Overlay,
 } from 'react-native-elements';
 import MapView, {
-  PROVIDER_GOOGLE, Marker, Polyline, Circle,
+  PROVIDER_GOOGLE, Marker, Polyline, Circle, AnimatedRegion,
 } from 'react-native-maps';
+import decodePolyline from 'decode-google-map-polyline';
 import Geolocation from '@react-native-community/geolocation';
 import axios from 'axios';
 import { Container } from '../../../components/Form/Elements';
 import goal from '../../../assets/goal.png';
 import pin from '../../../assets/ic_dest.png';
+import car from '../../../assets/car_.png';
 
 const styles = StyleSheet.create({
   map: {
@@ -54,35 +56,115 @@ const WhereToView = styled(View)`
   padding-right: 10px;
 `;
 
+const screen = Dimensions.get('window');
+const ASPECT_RATIO = screen.width / screen.height;
+const LATITUDE_DELTA = 0.0199;
+const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
+
+let i = 0;
+let to;
 export default class Home extends Component {
   mapRef = null;
+
+  carMarker = null;
 
   constructor(props) {
     super(props);
 
     this.state = {
-      coords: null,
-      latitudeDelta: 0.01,
-      longitudeDelta: 0.0004,
+      coords: [],
+      latitudeDelta: LATITUDE_DELTA,
+      longitudeDelta: LONGITUDE_DELTA,
       regionLatitude: null,
       regionLongitude: null,
       mapLoaded: false,
       isOverlayVisible: false,
+      carPosition: null,
+      carAngle: 0,
     };
   }
 
-  decode = (t, e) => {
-    for (var n, o, u = 0, l = 0, r = 0, d = [], h = 0, i = 0, a = null, c = Math.pow(10, e || 5); u < t.length;) {
-      (a = null), (h = 0), (i = 0);
-      do (a = t.charCodeAt(u++) - 63), (i |= (31 & a) << h), (h += 5);
-      while (a >= 32);
-      (n = 1 & i ? ~(i >> 1) : i >> 1), (h = i = 0);
-      do (a = t.charCodeAt(u++) - 63), (i |= (31 & a) << h), (h += 5);
-      while (a >= 32);
-      (o = 1 & i ? ~(i >> 1) : i >> 1), (l += n), (r += o), d.push([l / c, r / c]);
-    }
-    return (d = d.map(t => ({ latitude: t[0], longitude: t[1] })));
+  componentDidMount = () => {
+    const { updateCurrentPosition, updateSelectedAddress } = this.props;
+    Geolocation.getCurrentPosition(
+      info => {
+        updateCurrentPosition({
+          longitude: info.coords.longitude,
+          latitude: info.coords.latitude,
+        });
+        updateSelectedAddress('from', {
+          longitude: info.coords.longitude,
+          latitude: info.coords.latitude,
+          name: 'Current position',
+        });
+        this.setState({
+          mapLoaded: true,
+          carPosition: new AnimatedRegion({
+            longitude: info.coords.longitude,
+            latitude: info.coords.latitude,
+            latitudeDelta: 0.01,
+            longitudeDelta: 0.0004,
+          }),
+        });
+      },
+      error => console.error(error),
+      { enableHighAccuracy: true, timeout: 10000 },
+    );
   };
+
+  componentDidUpdate(prevProps) {
+    const { selectedAddress } = this.props;
+    if (prevProps.selectedAddress.get('to') !== selectedAddress.get('to') && selectedAddress.getIn(['to', 'name'])) {
+      /* setTimeout(() => {
+        this.setState({
+          isOverlayVisible: false,
+        });
+        this.navigateTo('RideAccepted', {});
+      }, 5000); */
+      to = setInterval(this.carDemo, 5000);
+    }
+    // if selected address has changed (from or to) and coordinates exists for both locations
+    if (
+      (prevProps.selectedAddress.get('to') !== selectedAddress.get('to')
+        || prevProps.selectedAddress.get('from') !== selectedAddress.get('from'))
+      && selectedAddress.getIn(['to', 'latitude'])
+      && selectedAddress.getIn(['from', 'latitude'])
+    ) {
+      this.drawRoute();
+    }
+  }
+
+  carDemo = () => {
+    const { coords, carPosition } = this.state;
+    if (i > coords.length - 1) {
+      clearInterval(to);
+    } else {
+      if (Platform.OS === 'android') {
+        if (this.carMarker) {
+          /* eslint-disable no-underscore-dangle */
+          this.setState({
+            carAngle: coords[i].angle,
+          });
+          this.carMarker._component.animateMarkerToCoordinate(coords[i], 1);
+        }
+      } else {
+        carPosition.timing(coords[i]).start();
+      }
+      i += 1;
+    }
+  }
+
+  decode = encoded => {
+    const coords = decodePolyline(encoded);
+
+    return coords.map((val, index) => ({
+      longitude: val.lng,
+      latitude: val.lat,
+      angle: coords[index + 1]
+        ? this.getBearing(coords[index], coords[index + 1])
+        : this.getBearing(coords[index - 1], coords[index]),
+    }));
+  }
 
   drawRoute = async () => {
     const { selectedAddress } = this.props;
@@ -96,7 +178,7 @@ export default class Home extends Component {
       const coords = this.decode(data.routes[0].overview_polyline.points);
       this.setState({
         coords,
-        isOverlayVisible: true,
+        // isOverlayVisible: true,
       });
       this.mapRef.fitToCoordinates(coords, {
         edgePadding: {
@@ -122,49 +204,6 @@ export default class Home extends Component {
     );
   };
 
-  componentDidMount = () => {
-    const { updateCurrentPosition, updateSelectedAddress } = this.props;
-    Geolocation.getCurrentPosition(
-      info => {
-        updateCurrentPosition({
-          longitude: info.coords.longitude,
-          latitude: info.coords.latitude,
-        });
-        updateSelectedAddress('from', {
-          longitude: info.coords.longitude,
-          latitude: info.coords.latitude,
-          name: 'Current position',
-        });
-        this.setState({
-          mapLoaded: true,
-        });
-      },
-      error => console.error(error),
-      { enableHighAccuracy: true, timeout: 10000 },
-    );
-  };
-
-  componentDidUpdate(prevProps) {
-    const { selectedAddress } = this.props;
-    if (prevProps.selectedAddress.get('to') !== selectedAddress.get('to') && selectedAddress.getIn(['to', 'name'])) {
-      setTimeout(() => {
-        this.setState({
-          isOverlayVisible: false,
-        });
-        this.navigateTo('RideAccepted', {});
-      }, 5000);
-    }
-    // if selected address has changed (from or to) and coordinates exists for both locations
-    if (
-      (prevProps.selectedAddress.get('to') !== selectedAddress.get('to')
-        || prevProps.selectedAddress.get('from') !== selectedAddress.get('from'))
-      && selectedAddress.getIn(['to', 'latitude'])
-      && selectedAddress.getIn(['from', 'latitude'])
-    ) {
-      this.drawRoute();
-    }
-  }
-
   navigateTo = (destinationScreen, params = {}) => {
     const { navigation } = this.props;
     navigation.navigate(destinationScreen, params);
@@ -184,12 +223,38 @@ export default class Home extends Component {
     navigation.openDrawer();
   };
 
+  radians = n => n * (Math.PI / 180);
+
+  degrees = n => n * (180 / Math.PI);
+
+  getBearing = (startLocation, endLocation) => {
+    const startLat = this.radians(startLocation.lat);
+    const startLong = this.radians(startLocation.lng);
+    const endLat = this.radians(endLocation.lat);
+    const endLong = this.radians(endLocation.lng);
+
+    let dLong = endLong - startLong;
+
+    const dPhi = Math.log(Math.tan(endLat / 2.0 + Math.PI / 4.0) / Math.tan(startLat / 2.0 + Math.PI / 4.0));
+    if (Math.abs(dLong) > Math.PI) {
+      if (dLong > 0.0) {
+        dLong = -(2.0 * Math.PI - dLong);
+      } else {
+        dLong = (2.0 * Math.PI + dLong);
+      }
+    }
+
+    return (this.degrees(Math.atan2(dLong, dPhi)) + 360.0) % 360.0;
+  }
+
   render() {
     const {
       mapLoaded,
       regionLatitude,
       regionLongitude,
       coords,
+      carPosition,
+      carAngle,
       isOverlayVisible,
       latitudeDelta,
       longitudeDelta,
@@ -204,7 +269,7 @@ export default class Home extends Component {
           {mapLoaded === true ? (
             <MapView
               provider={PROVIDER_GOOGLE} // remove if not using Google Maps
-              ref={ref => (this.mapRef = ref)}
+              ref={ref => { this.mapRef = ref; }}
               style={styles.map}
               showsCompass={false}
               loadingEnabled
@@ -215,6 +280,21 @@ export default class Home extends Component {
                 longitudeDelta,
               }}
             >
+              <Marker.Animated
+                ref={marker => {
+                  this.carMarker = marker;
+                }}
+                style={{
+                  transform: [
+                    { rotate: `${carAngle}deg` },
+                  ],
+                  zIndex: 3,
+                }}
+                coordinate={carPosition}
+                rotation={carPosition.angle}
+              >
+                <Image source={car} style={{ height: 30, width: 40 }} />
+              </Marker.Animated>
               <Circle
                 key={(currentPosition.get('latitude') + currentPosition.get('longitude')).toString()}
                 center={currentPosition.toJS()}
@@ -257,7 +337,7 @@ export default class Home extends Component {
                 </Marker>
               )}
 
-              {coords && (
+              {coords.length > 0 && (
                 <Polyline
                   coordinates={[
                     {
@@ -466,8 +546,16 @@ export default class Home extends Component {
 Home.propTypes = {
   updateCurrentPosition: PropTypes.func.isRequired,
   updateSelectedAddress: PropTypes.func.isRequired,
-  selectedAddress: PropTypes.shape({}).isRequired,
+  selectedAddress: PropTypes.shape({
+    toJS: PropTypes.func,
+    getIn: PropTypes.func,
+    get: PropTypes.func,
+  }).isRequired,
   location: PropTypes.string.isRequired,
-  currentPosition: PropTypes.shape({}).isRequired,
+  currentPosition: PropTypes.shape({
+    toJS: PropTypes.func,
+    getIn: PropTypes.func,
+    get: PropTypes.func,
+  }).isRequired,
   updateLocation: PropTypes.func.isRequired,
 };
