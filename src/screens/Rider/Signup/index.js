@@ -5,6 +5,7 @@ import { addToNewUser } from '../../../redux/actions';
 const mapStateToProps = () => ({
   initialValues: {
     userType: 1,
+    username: '',
     name: '',
     phoneNumber: '',
     password: '',

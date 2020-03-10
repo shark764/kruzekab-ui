@@ -143,6 +143,7 @@ export const createClient = async () => {
       {
         name: newUser.name,
         phone_number: newUser.phoneNumber,
+        username: newUser.username,
         password: newUser.password,
       },
       {

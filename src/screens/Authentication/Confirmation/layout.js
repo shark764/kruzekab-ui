@@ -70,13 +70,22 @@ export default class Confirmation extends Component {
       }
       if (userType === 'rider') {
         await createClient();
+
+        // This is avoiding submit button loading icon
+        actions.setSubmitting(false);
+
         this.navigateTo('Login', { userType });
       } else {
+        // This is avoiding submit button loading icon
+        actions.setSubmitting(false);
+
         this.navigateTo('DriverInformation', { userType });
       }
     } catch (error) {
+      console.log('error', error);
+
       actions.setFieldError('general', error.message);
-    } finally {
+
       // This is avoiding submit button loading icon
       actions.setSubmitting(false);
     }

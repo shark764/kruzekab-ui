@@ -30,6 +30,20 @@ const Form = ({
     }) => (
       <>
         <FormInput
+          name="username"
+          label="Username"
+          value={values.username}
+          onChangeText={handleChange('username')}
+          onBlur={handleBlur('username')}
+          placeholder="username..."
+          autoCapitalize="words"
+          iconName="md-person"
+          iconColor="#2C384A"
+          touched={touched}
+          errors={errors}
+        />
+
+        <FormInput
           name="name"
           label="Name"
           value={values.name}
