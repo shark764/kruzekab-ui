@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { Image, ScrollView } from 'react-native';
 import styled from 'styled-components';
 
@@ -6,6 +7,7 @@ import { Container } from '../../../../components/Form/Elements';
 import { ExtendedGoBackButton } from '../../../../components/Header/Navigator';
 import Form from './form';
 import validationSchema from './validation';
+import { fetchGroups } from '../../../../redux/requests';
 
 const StyledContainer = styled(Container)`
   margin-top: 130px;
@@ -33,33 +35,42 @@ export default class SelectGroup extends Component {
     };
   }
 
+  componentDidMount() {
+    this.getGroups();
+  }
+
+  getGroups = async () => {
+    const { setGroups } = this.props;
+    setGroups([]);
+
+    const data = await fetchGroups();
+    const groups = data.data.map(group => ({
+      riders: [],
+      ...group,
+    }));
+    setGroups(groups);
+  };
+
   navigateTo = (destinationScreen, params = {}) => {
     const { navigation } = this.props;
     navigation.navigate(destinationScreen, params);
   };
 
   handleOnSubmit = async (values, actions) => {
-    try {
-      const { selected } = this.state;
+    const { selected } = this.state;
+    const { setSelectedGroup } = this.props;
+    setSelectedGroup(selected);
 
-      setTimeout(() => {
-        const { navigation } = this.props;
+    const { navigation } = this.props;
 
-        // This is avoiding submit button loading icon
-        actions.setSubmitting(false);
+    // This is avoiding submit button loading icon
+    actions.setSubmitting(false);
 
-        navigation.navigate('SelectRiders', {
-          userType: 'rider',
-          groupId: selected,
-          selectedAddress: navigation.state.params.selectedAddress,
-        });
-      }, 1500);
-    } catch (error) {
-      actions.setFieldError('general', error.message);
-
-      // This is avoiding submit button loading icon
-      actions.setSubmitting(false);
-    }
+    this.navigateTo('SelectRiders', {
+      userType: 'rider',
+      groupId: selected,
+      selectedAddress: navigation.state.params.selectedAddress,
+    });
   };
 
   handleOnAddGroup = async (values, actions) => {
@@ -81,6 +92,7 @@ export default class SelectGroup extends Component {
 
   render() {
     const { selected } = this.state;
+    const { groups } = this.props;
 
     return (
       <StyledContainer enabled behavior="">
@@ -94,6 +106,7 @@ export default class SelectGroup extends Component {
             validationSchema={validationSchema}
             handleOnAddGroup={this.handleOnAddGroup}
             handleOnSelected={this.handleOnSelected}
+            groups={groups}
             selected={selected}
           />
         </ScrollView>
@@ -101,3 +114,9 @@ export default class SelectGroup extends Component {
     );
   }
 }
+
+SelectGroup.propTypes = {
+  groups: PropTypes.shape([]).isRequired,
+  setGroups: PropTypes.func.isRequired,
+  setSelectedGroup: PropTypes.func.isRequired,
+};

@@ -3,9 +3,12 @@ import { fromJS } from 'immutable';
 const INITIAL_STATE = fromJS({
   loggedIn: false,
   loggedInAs: '',
+  token: '',
   userData: {},
   riders: [],
   selectedRiderId: '',
+  externalClients: [],
+  selectedExternalClientId: '',
   groups: [],
   selectedGroupId: '',
   newUser: {},
@@ -33,6 +36,7 @@ const appReducer = (state = INITIAL_STATE, action) => {
       return state
         .set('loggedIn', true)
         .set('loggedInAs', action.userType)
+        .set('token', action.token)
         .set('userData', action.payload);
     case 'SIGN_UP':
       return state.set('userData', fromJS(action.payload)).set('loggedInAs', action.userType);
@@ -134,6 +138,22 @@ const appReducer = (state = INITIAL_STATE, action) => {
       // sendData(newUser);
 
       return state;
+    }
+    case 'SET_EXTERNAL_CLIENTS': {
+      console.log(action);
+
+      return state.setIn(['externalClients'], fromJS(action.payload));
+    }
+    case 'SET_SELECTED_EXTERNAL_CLIENT': {
+      console.log(action);
+
+      return state.setIn(['selectedExternalClientId'], fromJS(action.clientId));
+    }
+    case 'SET_EXTERNAL_RIDERS': {
+      console.log(action);
+
+      const itemIndex = getItemIndex(state, 'externalClients', action.clientId);
+      return state.setIn(['externalClients', itemIndex, 'riders'], fromJS(action.payload));
     }
     default:
       return state;

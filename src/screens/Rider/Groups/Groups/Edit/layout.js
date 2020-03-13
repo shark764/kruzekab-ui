@@ -91,9 +91,11 @@ export default class EditGroup extends Component {
             groupId={groupId}
             initialValues={initialValues}
             validationSchema={validationSchema}
-            handleOnAddRider={() => this.navigateTo('NewRider', { context: 'edit-group', groupId })}
+            handleOnAddRider={() => this.navigateTo('AddRiders', { context: 'edit-group', groupId })}
+            handleOnCreateRider={() => this.navigateTo('NewRider', { context: 'edit-group', groupId })}
             handleOnEditNewRider={riderId => this.navigateTo('EditRider', { context: 'edit-group', riderId, groupId })}
             handleOnImportRider={() => this.navigateTo('ImportRider', { context: 'edit-group', groupId })}
+            handleOnAddExternalRider={() => this.navigateTo('ParentAccess', { context: 'edit-group', groupId })}
             handleOnDelete={this.handleOnDelete}
           />
         </ScrollView>

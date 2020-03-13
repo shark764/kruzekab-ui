@@ -61,14 +61,14 @@ export default class Login extends Component {
     try {
       const { navigation, login } = this.props;
       let userType = navigation.getParam('userType', null);
-      const { phoneNumber, password } = values;
-      const { data } = await loginRequest(phoneNumber, password);
+      const { username, password } = values;
+      const { data } = await loginRequest(username, password);
       if (data.data.user.client !== null) {
         userType = 'rider';
       } else if (data.data.user.driver !== null) {
         userType = 'driver';
       }
-      login(userType, data.data.user);
+      login(userType, data.data.token, data.data.user);
 
       if (userType === 'rider') {
         // This is avoiding submit button loading icon

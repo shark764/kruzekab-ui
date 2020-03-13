@@ -20,6 +20,8 @@ export const getAllRidersInGroup = state => state.getIn(['app', 'groups', 'rider
 
 export const getNewUserData = state => state.getIn(['app', 'newUser']);
 
+export const getUserToken = state => state.getIn(['app', 'token']);
+
 export const getNewGroupData = state => state.getIn(['app', 'newGroup']);
 
 export const getSelectedAddress = state => state.getIn(['app', 'selectedAddress']);
@@ -41,3 +43,24 @@ export const getClientId = state => state.getIn(['app', 'userData', 'client', 'i
 export const getDriverData = state => state.getIn(['app', 'userData', 'driver']);
 
 export const getDriverId = state => state.getIn(['app', 'userData', 'driver', 'id']);
+
+export const getAllExternalClients = state => state.getIn(['app', 'externalClients'], new List([]));
+
+export const getSelectedExternalClientId = state => state.getIn(['app', 'selectedExternalClientId']);
+
+export const getAllExternalRidersByClient = (state, clientId) => {
+  const index = getAllExternalClients(state).findIndex(client => client.get('id') === clientId);
+  return state.getIn(['app', 'externalClients', index, 'riders'], new List([]));
+};
+
+export const getAllExternalRidersBySelectedClient = state => {
+  const index = getAllExternalClients(state).findIndex(
+    client => client.get('id') === getSelectedExternalClientId(state),
+  );
+  return state.getIn(['app', 'externalClients', index, 'riders'], new List([]));
+};
+
+export const getExternalRider = (state, clientId, riderId) => {
+  const index = getAllExternalClients(state).findIndex(client => client.get('id') === clientId);
+  state.getIn(['app', 'externalClients', index, 'riders'], new List([])).find(rider => rider.get('id') === riderId);
+};

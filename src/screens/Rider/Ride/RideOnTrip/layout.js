@@ -25,6 +25,14 @@ export default class RideOnTrip extends Component {
     ),
   });
 
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      photo: null,
+    };
+  }
+
   componentDidMount() {
     setTimeout(() => {
       this.navigateTo('Streaming', { userType: 'rider' });

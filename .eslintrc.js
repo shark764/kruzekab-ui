@@ -26,6 +26,19 @@ module.exports = {
     'react/jsx-props-no-spreading': ['error', { custom: 'ignore' }],
     'global-require': 0,
     'no-console': 'off',
-    'max-len': ['error', { code: 120, tabWidth: 2 }],
+    'max-len': [
+      'error',
+      {
+        code: 150,
+        tabWidth: 2,
+        comments: 80,
+        ignoreComments: true,
+        ignoreTrailingComments: true,
+        ignoreUrls: true,
+        ignoreStrings: true,
+        ignoreTemplateLiterals: true,
+        ignoreRegExpLiterals: true,
+      },
+    ],
   },
 };

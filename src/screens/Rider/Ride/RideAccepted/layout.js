@@ -25,6 +25,14 @@ export default class RideAccepted extends Component {
     ),
   });
 
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      photo: null,
+    };
+  }
+
   componentDidMount() {
     setTimeout(() => {
       this.navigateTo('RideArrived', { userType: 'rider' });

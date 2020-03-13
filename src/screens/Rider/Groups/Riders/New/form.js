@@ -112,8 +112,8 @@ Form.propTypes = {
   handleOnSubmit: PropTypes.func.isRequired,
   initialValues: PropTypes.shape({}).isRequired,
   validationSchema: PropTypes.shape({}).isRequired,
-  handleChoosePhoto: PropTypes.shape.isRequired,
-  photo: PropTypes.shape.isRequired,
+  handleChoosePhoto: PropTypes.func.isRequired,
+  photo: PropTypes.shape({}).isRequired,
 };
 
 export default Form;

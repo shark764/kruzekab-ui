@@ -53,7 +53,9 @@ const Form = ({
   handleOnDelete,
   handleOnEditNewRider,
   handleOnAddRider,
+  handleOnCreateRider,
   handleOnImportRider,
+  handleOnAddExternalRider,
 }) => (
   <Formik
     enableReinitialize
@@ -132,12 +134,27 @@ const Form = ({
           <Icon
             raised
             reverse
+            type="material"
+            name="group-add"
+            color="#dde5f7"
+            reverseColor="#5280e2"
+            size={25}
+            onPress={handleOnAddRider}
+            disabled={false}
+          />
+          <LabelText>Add riders</LabelText>
+        </IconContainer>
+
+        <IconContainer>
+          <Icon
+            raised
+            reverse
             type="ionicon"
             name="md-person-add"
             color="#dde5f7"
             reverseColor="#5280e2"
             size={25}
-            onPress={handleOnAddRider}
+            onPress={handleOnCreateRider}
             disabled={false}
           />
           <LabelText>Create new rider</LabelText>
@@ -153,6 +170,21 @@ const Form = ({
             reverseColor="#5280e2"
             size={25}
             onPress={handleOnImportRider}
+            disabled={false}
+          />
+          <LabelText>Request parent access</LabelText>
+        </IconContainer>
+
+        <IconContainer>
+          <Icon
+            raised
+            reverse
+            type="material"
+            name="import-export"
+            color="#dde5f7"
+            reverseColor="#5280e2"
+            size={25}
+            onPress={handleOnAddExternalRider}
             disabled={false}
           />
           <LabelText>Import user&apos;s riders</LabelText>
@@ -195,7 +227,9 @@ Form.propTypes = {
   validationSchema: PropTypes.shape({}).isRequired,
   handleOnEditNewRider: PropTypes.func.isRequired,
   handleOnAddRider: PropTypes.func.isRequired,
+  handleOnCreateRider: PropTypes.func.isRequired,
   handleOnImportRider: PropTypes.func.isRequired,
+  handleOnAddExternalRider: PropTypes.func.isRequired,
   handleOnDelete: PropTypes.func.isRequired,
 };
 

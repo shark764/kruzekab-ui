@@ -2,10 +2,10 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { ScrollView } from 'react-native';
 import styled from 'styled-components';
-import { ExtendedGoBackButton } from '../../../../../components/Header/Navigator';
+import { ExtendedGoBackButton } from '../../../../../../components/Header/Navigator';
 import Form from './form';
-import { fetchRiders, addRidersToGroupRequest } from '../../../../../redux/requests';
-import { Container, Headline } from '../../../../../components/Form/Elements';
+import { fetchExternalRiders, addParentToGroup } from '../../../../../../redux/requests';
+import { Container, Headline } from '../../../../../../components/Form/Elements';
 
 const StyledContainer = styled(Container)`
   margin-top: 30px;
@@ -19,13 +19,13 @@ const StyledHeadline = styled(Headline)`
   margin-bottom: 15px;
 `;
 
-export default class AddRiders extends Component {
+export default class SelectExternalRiders extends Component {
   static navigationOptions = ({ navigation }) => ({
-    title: 'Add Riders to Group',
+    title: 'Add External Riders',
     headerLeft: () => (
       <ExtendedGoBackButton
-        iconOnPress={() => navigation.navigate('EditGroup')}
-        itemOnPress={() => navigation.navigate('EditGroup')}
+        iconOnPress={() => navigation.navigate('ParentAccess')}
+        itemOnPress={() => navigation.navigate('ParentAccess')}
       />
     ),
   });
@@ -34,6 +34,7 @@ export default class AddRiders extends Component {
     super(props);
 
     this.state = {
+      loading: false,
       dataSource: [],
     };
   }
@@ -43,17 +44,21 @@ export default class AddRiders extends Component {
   }
 
   getRiders = async () => {
-    const { setRiders } = this.props;
-    setRiders([]);
+    this.setState({
+      loading: true,
+    });
+    const { externalClientId, setExternalRiders } = this.props;
+    setExternalRiders(externalClientId, []);
 
-    const { data } = await fetchRiders();
+    const { data } = await fetchExternalRiders();
 
-    setRiders(data);
+    setExternalRiders(externalClientId, data);
     const dataSource = data.map(item => ({
       isSelect: false,
       ...item,
     }));
     this.setState({
+      loading: false,
       dataSource,
     });
   };
@@ -79,7 +84,7 @@ export default class AddRiders extends Component {
         data: {
           data: { riders },
         },
-      } = await addRidersToGroupRequest(dataSource);
+      } = await addParentToGroup(dataSource);
       const { setGroupRiders, groupId } = this.props;
       setGroupRiders(groupId, riders);
 
@@ -103,7 +108,7 @@ export default class AddRiders extends Component {
   render() {
     const { riders } = this.props;
     const { dataSource } = this.state;
-    console.log('riders ===>', riders.toJS());
+    console.log('external riders ===>', riders.toJS());
     console.log('dataSource ===>', dataSource);
 
     return (
@@ -116,7 +121,6 @@ export default class AddRiders extends Component {
             dataSource={dataSource}
             handleOnSubmit={this.handleOnSubmit}
             handleOnSelected={this.handleOnSelected}
-            handleOnCreateRider={() => this.navigateTo('NewRider', { context: 'add-riders' })}
           />
         </ScrollView>
       </StyledContainer>
@@ -124,9 +128,10 @@ export default class AddRiders extends Component {
   }
 }
 
-AddRiders.propTypes = {
+SelectExternalRiders.propTypes = {
   groupId: PropTypes.number.isRequired,
   riders: PropTypes.shape([]).isRequired,
+  externalClientId: PropTypes.number.isRequired,
+  setExternalRiders: PropTypes.func.isRequired,
   setGroupRiders: PropTypes.func.isRequired,
-  setRiders: PropTypes.func.isRequired,
 };

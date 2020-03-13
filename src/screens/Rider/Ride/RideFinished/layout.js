@@ -25,6 +25,14 @@ export default class RideFinished extends Component {
     ),
   });
 
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      photo: null,
+    };
+  }
+
   navigateTo = (destinationScreen, params = {}) => {
     const { navigation } = this.props;
     navigation.navigate(destinationScreen, params);

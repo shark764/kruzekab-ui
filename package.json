@@ -26,8 +26,10 @@
     "ios": "react-native run-ios",
     "start": "react-native start",
     "test": "jest",
-    "lint": "eslint . --fix",
-    "precommit": "npm run lint && lint-staged"
+    "lint": "eslint ./",
+    "lint:fix": "eslint ./ --fix",
+    "format": "npx prettier --single-quote --write --print-width 120 \"./src/**/*.{js,jsx,json,css}\"",
+    "precommit": "npm run lint:fix && lint-staged"
   },
   "dependencies": {
     "@react-native-community/geolocation": "^2.0.2",

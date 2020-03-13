@@ -139,7 +139,7 @@ Form.propTypes = {
   initialValues: PropTypes.shape({}).isRequired,
   validationSchema: PropTypes.shape({}).isRequired,
   handleChoosePhoto: PropTypes.func.isRequired,
-  photo: PropTypes.shape.isRequired,
+  photo: PropTypes.shape({}).isRequired,
   handleOnDelete: PropTypes.func.isRequired,
 };
 

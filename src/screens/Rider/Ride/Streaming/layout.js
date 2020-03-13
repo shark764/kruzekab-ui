@@ -25,6 +25,14 @@ export default class Streaming extends Component {
     ),
   });
 
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      photo: null,
+    };
+  }
+
   componentDidMount() {
     setTimeout(() => {
       this.navigateTo('RideFinished', { userType: 'rider' });

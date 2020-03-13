@@ -1,6 +1,7 @@
-export const login = (userType, payload) => ({
+export const login = (userType, token, payload) => ({
   type: 'LOGIN',
   userType,
+  token,
   payload,
 });
 
@@ -145,4 +146,20 @@ export const updateLocation = location => ({
 export const updateCurrentPosition = currentPosition => ({
   type: 'UPDATE_CURRENT_POSITION',
   currentPosition,
+});
+
+export const setExternalClients = payload => ({
+  type: 'SET_EXTERNAL_CLIENTS',
+  payload,
+});
+
+export const setSelectedExternalClient = clientId => ({
+  type: 'SET_SELECTED_EXTERNAL_CLIENT',
+  clientId,
+});
+
+export const setExternalRiders = (clientId, payload) => ({
+  type: 'SET_EXTERNAL_RIDERS',
+  clientId,
+  payload,
 });

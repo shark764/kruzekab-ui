@@ -99,9 +99,9 @@ const Listview = ({ groupList, handleOnSelected, selected }) => (
     renderItem={({ item }) => (
       <ListContainer>
         <ListRow
-          key={`${item.key}`}
-          id={item.key}
-          title={item.title}
+          key={`${item.id.toString()}`}
+          id={item.id}
+          title={item.name}
           handleOnSelected={handleOnSelected}
           selected={selected}
         />
@@ -110,20 +110,19 @@ const Listview = ({ groupList, handleOnSelected, selected }) => (
   />
 );
 Listview.propTypes = {
-  groupList: PropTypes.shape.isRequired,
+  groupList: PropTypes.shape([]).isRequired,
   handleOnSelected: PropTypes.shape.isRequired,
   selected: PropTypes.string.isRequired,
 };
 
-const getData = [
-  { key: 1, title: 'Soccer Team' },
-  { key: 2, title: "Ben's Class" },
-  { key: 3, title: "Nancy's theater classes" },
-  { key: 4, title: "Kid's School" },
-];
-
 const Form = ({
-  handleOnSubmit, initialValues, validationSchema, handleOnSelected, selected, handleOnAddGroup,
+  handleOnSubmit,
+  initialValues,
+  validationSchema,
+  handleOnSelected,
+  selected,
+  handleOnAddGroup,
+  groups,
 }) => (
   <Formik
     enableReinitialize
@@ -139,7 +138,7 @@ const Form = ({
     }) => (
       <>
         <SelectGroupContainer>
-          <Listview groupList={getData} handleOnSelected={handleOnSelected} selected={selected} />
+          <Listview groupList={groups} handleOnSelected={handleOnSelected} selected={selected} />
 
           <ListContainer>
             <TouchableOpacity onPress={handleOnAddGroup}>
@@ -185,6 +184,7 @@ Form.propTypes = {
   validationSchema: PropTypes.shape({}).isRequired,
   handleOnSelected: PropTypes.shape.isRequired,
   handleOnAddGroup: PropTypes.shape.isRequired,
+  groups: PropTypes.shape([]).isRequired,
   selected: PropTypes.string.isRequired,
 };
 

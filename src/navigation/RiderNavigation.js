@@ -20,6 +20,9 @@ import RideArrived from '../screens/Rider/Ride/RideArrived';
 import RideOnTrip from '../screens/Rider/Ride/RideOnTrip';
 import Streaming from '../screens/Rider/Ride/Streaming';
 import RideFinished from '../screens/Rider/Ride/RideFinished';
+import ParentAccess from '../screens/Rider/Groups/Groups/ImportRider/ParentAccess';
+import SelectExternalRiders from '../screens/Rider/Groups/Groups/ImportRider/SelectExternalRiders';
+import AddRiders from '../screens/Rider/Groups/Groups/AddRiders';
 
 const defaultNavigationOptions = {
   headerStyle: {
@@ -69,6 +72,9 @@ const GroupStack = createStackNavigator(
     NewGroup: { screen: NewGroup },
     EditGroup: { screen: EditGroup },
     ImportRider: { screen: ImportRider },
+    AddRiders: { screen: AddRiders },
+    ParentAccess: { screen: ParentAccess },
+    SelectExternalRiders: { screen: SelectExternalRiders },
   },
   {
     initialRouteName: 'Groups',

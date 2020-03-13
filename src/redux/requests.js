@@ -2,7 +2,12 @@ import Axios from 'axios';
 import { sha1 } from 'react-native-sha1';
 import store from './store';
 import {
-  getClientId, getNewUserData, getNewGroupData, getSelectedGroupId, getSelectedRiderId,
+  getClientId,
+  getNewUserData,
+  getSelectedGroupId,
+  getSelectedRiderId,
+  getSelectedExternalClientId,
+  getUserToken,
 } from './selectors';
 import { keysToCamel } from '../utils/string';
 
@@ -12,9 +17,11 @@ export const getEnvironment = () => environment;
 
 export const fetchRiders = async () => {
   const clientId = getClientId(store.getState());
+  const token = getUserToken(store.getState());
   const { data } = await Axios.get(`${environment}/client/${clientId}/rider`, {
     headers: {
       'Content-Type': 'application/json',
+      Authorization: `${token}`,
     },
     params: {},
   });
@@ -25,9 +32,11 @@ export const fetchRiders = async () => {
 
 export const fetchGroups = async () => {
   const clientId = getClientId(store.getState());
+  const token = getUserToken(store.getState());
   const { data } = await Axios.get(`${environment}/client/${clientId}/groups`, {
     headers: {
       'Content-Type': 'application/json',
+      Authorization: `${token}`,
     },
     params: {},
   });
@@ -38,9 +47,11 @@ export const fetchGroups = async () => {
 
 export const fetchGroup = async groupId => {
   const clientId = getClientId(store.getState());
+  const token = getUserToken(store.getState());
   const { data } = await Axios.get(`${environment}/client/${clientId}/group/${groupId}`, {
     headers: {
       'Content-Type': 'application/json',
+      Authorization: `${token}`,
     },
     params: {},
   });
@@ -51,6 +62,7 @@ export const fetchGroup = async groupId => {
 
 export const createDriver = async () => {
   const newUser = getNewUserData(store.getState()).toJS();
+  const token = getUserToken(store.getState());
 
   const formdata = new FormData();
 
@@ -87,7 +99,7 @@ export const createDriver = async () => {
     const { data, status } = await Axios.post(`${environment}/user/driver`, formdata, {
       headers: {
         'Content-Type': 'application/json',
-        Authorization: '$2y$12$x5ulIrUynT/QlLZz7Xh4q.6YXYF7o2z18MVGAJCbUDnkANoyi6uJC',
+        Authorization: `${token}`,
       },
     });
 
@@ -105,8 +117,8 @@ export const createDriver = async () => {
   }
 };
 
-export const loginRequest = async (phoneNumber, password) => {
-  const hash = await sha1(`${phoneNumber}:${password}`);
+export const loginRequest = async (username, password) => {
+  const hash = await sha1(`${username}:${password}`);
 
   try {
     const { data, status } = await Axios.post(
@@ -136,6 +148,7 @@ export const loginRequest = async (phoneNumber, password) => {
 
 export const createClient = async () => {
   const newUser = getNewUserData(store.getState()).toJS();
+  const token = getUserToken(store.getState());
 
   try {
     const { data, status } = await Axios.post(
@@ -149,7 +162,7 @@ export const createClient = async () => {
       {
         headers: {
           'Content-Type': 'application/json',
-          Authorization: '$2y$12$x5ulIrUynT/QlLZz7Xh4q.6YXYF7o2z18MVGAJCbUDnkANoyi6uJC',
+          Authorization: `${token}`,
         },
       },
     );
@@ -170,6 +183,7 @@ export const createClient = async () => {
 
 export const createRider = async ({ name, profilePicture }) => {
   const clientId = getClientId(store.getState());
+  const token = getUserToken(store.getState());
 
   const formdata = new FormData();
 
@@ -184,7 +198,7 @@ export const createRider = async ({ name, profilePicture }) => {
     const { data, status } = await Axios.post(`${environment}/client/${clientId}/rider`, formdata, {
       headers: {
         'Content-Type': 'application/json',
-        Authorization: '$2y$12$x5ulIrUynT/QlLZz7Xh4q.6YXYF7o2z18MVGAJCbUDnkANoyi6uJC',
+        Authorization: `${token}`,
       },
     });
 
@@ -205,6 +219,7 @@ export const createRider = async ({ name, profilePicture }) => {
 export const updateRiderRequest = async ({ name, profilePicture }) => {
   const clientId = getClientId(store.getState());
   const riderId = getSelectedRiderId(store.getState());
+  const token = getUserToken(store.getState());
 
   const formdata = new FormData();
 
@@ -219,7 +234,7 @@ export const updateRiderRequest = async ({ name, profilePicture }) => {
     const { data, status } = await Axios.post(`${environment}/client/${clientId}/rider/${riderId}`, formdata, {
       headers: {
         'Content-Type': 'application/json',
-        Authorization: '$2y$12$x5ulIrUynT/QlLZz7Xh4q.6YXYF7o2z18MVGAJCbUDnkANoyi6uJC',
+        Authorization: `${token}`,
       },
     });
 
@@ -237,8 +252,9 @@ export const updateRiderRequest = async ({ name, profilePicture }) => {
   }
 };
 
-export const createGroup = async ({ name }) => {
+export const createGroup = async ({ name, isDefault }) => {
   const clientId = getClientId(store.getState());
+  const token = getUserToken(store.getState());
   // const newGroup = getNewGroupData(store.getState()).toJS();
 
   try {
@@ -246,11 +262,12 @@ export const createGroup = async ({ name }) => {
       `${environment}/client/${clientId}/group`,
       {
         name,
+        is_default: isDefault ? 1 : 0,
       },
       {
         headers: {
           'Content-Type': 'application/json',
-          Authorization: '$2y$12$x5ulIrUynT/QlLZz7Xh4q.6YXYF7o2z18MVGAJCbUDnkANoyi6uJC',
+          Authorization: `${token}`,
         },
       },
     );
@@ -269,20 +286,22 @@ export const createGroup = async ({ name }) => {
   }
 };
 
-export const updateGroupRequest = async ({ name }) => {
+export const updateGroupRequest = async ({ name, isDefault }) => {
   const clientId = getClientId(store.getState());
   const groupId = getSelectedGroupId(store.getState());
+  const token = getUserToken(store.getState());
 
   try {
-    const { data, status } = await Axios.post(
+    const { data, status } = await Axios.put(
       `${environment}/client/${clientId}/group/${groupId}`,
       {
         name,
+        is_default: isDefault ? 1 : 0,
       },
       {
         headers: {
           'Content-Type': 'application/json',
-          Authorization: '$2y$12$x5ulIrUynT/QlLZz7Xh4q.6YXYF7o2z18MVGAJCbUDnkANoyi6uJC',
+          Authorization: `${token}`,
         },
       },
     );
@@ -303,19 +322,135 @@ export const updateGroupRequest = async ({ name }) => {
 
 export const addRiderToGroupRequest = async (groupId, riderId) => {
   const clientId = getClientId(store.getState());
+  const token = getUserToken(store.getState());
   // const newGroup = getNewGroupData(store.getState()).toJS();
 
   try {
     const { data, status } = await Axios.post(
-      `${environment}/client/${clientId}/group/${groupId}/rider/${riderId}`,
-      {},
+      `${environment}/client/${clientId}/group/${groupId}/riders`,
+      {
+        riders: [
+          {
+            id: riderId,
+          },
+        ],
+      },
       {
         headers: {
           'Content-Type': 'application/json',
-          Authorization: '$2y$12$x5ulIrUynT/QlLZz7Xh4q.6YXYF7o2z18MVGAJCbUDnkANoyi6uJC',
+          Authorization: `${token}`,
         },
       },
     );
+
+    return { data: keysToCamel(data), status };
+  } catch (error) {
+    const {
+      data: {
+        data: { result },
+      },
+      status,
+    } = error.response;
+
+    const errorResponse = { code: status, message: result };
+    throw errorResponse;
+  }
+};
+
+export const fetchParentAccess = async () => {
+  const clientId = getClientId(store.getState());
+  const token = getUserToken(store.getState());
+  const { data } = await Axios.get(`${environment}/client/${clientId}/parentAccess`, {
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `${token}`,
+    },
+    params: {},
+  });
+  console.log('DATA || =>', keysToCamel(data));
+
+  return keysToCamel(data);
+};
+
+export const fetchExternalRiders = async () => {
+  const clientId = getSelectedExternalClientId(store.getState());
+  const token = getUserToken(store.getState());
+  const { data } = await Axios.get(`${environment}/client/${clientId}/rider`, {
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `${token}`,
+    },
+    params: {},
+  });
+  console.log('DATA || =>', keysToCamel(data));
+
+  return keysToCamel(data);
+};
+
+export const addParentToGroup = async riders => {
+  const clientId = getClientId(store.getState());
+  const groupId = getSelectedGroupId(store.getState());
+  const parentId = getSelectedExternalClientId(store.getState());
+  const token = getUserToken(store.getState());
+
+  const mapRiders = riders
+    .filter(rider => rider.isSelect)
+    .map(rider => ({
+      id: rider.id,
+    }));
+
+  try {
+    const { data, status } = await Axios.post(
+      `${environment}/client/${clientId}/group/${groupId}/parent/${parentId}/riders`,
+      { riders: mapRiders },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `${token}`,
+        },
+      },
+    );
+
+    console.log('DATA || =>', keysToCamel(data));
+
+    return { data: keysToCamel(data), status };
+  } catch (error) {
+    const {
+      data: {
+        data: { result },
+      },
+      status,
+    } = error.response;
+
+    const errorResponse = { code: status, message: result };
+    throw errorResponse;
+  }
+};
+
+export const addRidersToGroupRequest = async riders => {
+  const clientId = getClientId(store.getState());
+  const groupId = getSelectedGroupId(store.getState());
+  const token = getUserToken(store.getState());
+
+  const mapRiders = riders
+    .filter(rider => rider.isSelect)
+    .map(rider => ({
+      id: rider.id,
+    }));
+
+  try {
+    const { data, status } = await Axios.post(
+      `${environment}/client/${clientId}/group/${groupId}/riders`,
+      { riders: mapRiders },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `${token}`,
+        },
+      },
+    );
+
+    console.log('DATA || =>', keysToCamel(data));
 
     return { data: keysToCamel(data), status };
   } catch (error) {

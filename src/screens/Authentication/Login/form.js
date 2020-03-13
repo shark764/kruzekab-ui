@@ -37,14 +37,14 @@ const Form = ({
     }) => (
       <>
         <FormInput
-          name="phoneNumber"
-          label="Phone Number"
-          value={values.phoneNumber}
-          onChangeText={handleChange('phoneNumber')}
-          onBlur={handleBlur('phoneNumber')}
-          placeholder="+1 ([000]) [000] [00] [00]"
-          autoCapitalize="none"
-          iconName="ios-call"
+          name="username"
+          label="Username"
+          value={values.username}
+          onChangeText={handleChange('username')}
+          onBlur={handleBlur('username')}
+          placeholder="username..."
+          autoCapitalize="words"
+          iconName="md-person"
           iconColor="#2C384A"
           touched={touched}
           errors={errors}

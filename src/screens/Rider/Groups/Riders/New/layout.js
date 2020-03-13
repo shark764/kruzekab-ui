@@ -43,18 +43,21 @@ export default class NewRider extends Component {
   handleOnSubmit = async (values, actions) => {
     try {
       const {
-        groupId, addRider, addRiderToGroup, navigation,
+        setGroupRiders, groupId, addRider, navigation,
       } = this.props;
       const { photo } = this.state;
       const context = navigation.getParam('context', null);
 
-      let data;
-      ({ data } = await createRider({ ...values, profilePicture: photo }));
+      const { data } = await createRider({ ...values, profilePicture: photo });
       addRider(data.data);
       if (context === 'edit-group' && groupId) {
         const riderId = data.data.id;
-        ({ data } = await addRiderToGroupRequest(groupId, riderId));
-        addRiderToGroup(groupId, data.data);
+        const {
+          data: {
+            data: { riders },
+          },
+        } = await addRiderToGroupRequest(groupId, riderId);
+        setGroupRiders(groupId, riders);
 
         // This is avoiding submit button loading icon
         actions.setSubmitting(false);
@@ -108,6 +111,6 @@ export default class NewRider extends Component {
 NewRider.propTypes = {
   initialValues: PropTypes.shape({}).isRequired,
   addRider: PropTypes.func.isRequired,
-  addRiderToGroup: PropTypes.func.isRequired,
+  setGroupRiders: PropTypes.func.isRequired,
   groupId: PropTypes.number.isRequired,
 };
