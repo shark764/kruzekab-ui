@@ -24,6 +24,10 @@ const INITIAL_STATE = fromJS({
     longitude: 90,
     latitude: 180,
   },
+  fcmToken: '',
+  firebaseInstanceId: '',
+  fcmPermissionGranted: false,
+  registeredForRemoteNotifications: false,
 });
 
 const getItemIndex = (state, entity, itemId) => state.get(entity).findIndex(item => item.get('id') === itemId);
@@ -47,17 +51,17 @@ const appReducer = (state = INITIAL_STATE, action) => {
     case 'FETCH_RIDERS': {
       console.log(action);
 
-      return state.setIn(['riders'], fromJS(action.payload));
+      return state.set('riders', fromJS(action.payload));
     }
     case 'SET_RIDERS': {
       console.log(action);
 
-      return state.setIn(['riders'], fromJS(action.payload));
+      return state.set('riders', fromJS(action.payload));
     }
     case 'SET_SELECTED_RIDER': {
       console.log(action);
 
-      return state.setIn(['selectedRiderId'], fromJS(action.riderId));
+      return state.set('selectedRiderId', fromJS(action.riderId));
     }
     case 'ADD_RIDER':
       console.log(action);
@@ -74,17 +78,17 @@ const appReducer = (state = INITIAL_STATE, action) => {
     case 'FETCH_GROUPS': {
       console.log(action);
 
-      return state.setIn(['groups'], fromJS(action.payload));
+      return state.set('groups', fromJS(action.payload));
     }
     case 'SET_GROUPS': {
       console.log(action);
 
-      return state.setIn(['groups'], fromJS(action.payload));
+      return state.set('groups', fromJS(action.payload));
     }
     case 'SET_SELECTED_GROUP': {
       console.log(action);
 
-      return state.setIn(['selectedGroupId'], fromJS(action.groupId));
+      return state.set('selectedGroupId', fromJS(action.groupId));
     }
     case 'ADD_GROUP':
       return state.update('groups', groups => groups.push(fromJS(action.payload)));
@@ -120,6 +124,16 @@ const appReducer = (state = INITIAL_STATE, action) => {
     }
     case 'ADD_TO_NEW_GROUP':
       return state.mergeIn(['newGroup'], fromJS(action.payload));
+    case 'UPDATE_GROUP_RIDER': {
+      const itemIndex = getItemIndex(state, 'groups', action.groupId);
+      return state.updateIn(['groups', itemIndex, 'riders'], riders => {
+        const riderIndex = riders.findIndex(rider => rider.get('id') === action.riderId);
+        if (riderIndex !== -1) {
+          return riders.mergeIn([riderIndex], fromJS(action.payload));
+        }
+        return riders;
+      });
+    }
     case 'UPDATE_SELECTED_ADDRESS':
       return state.updateIn(['selectedAddress', action.location], selectedAddress => {
         if (selectedAddress) {
@@ -142,18 +156,38 @@ const appReducer = (state = INITIAL_STATE, action) => {
     case 'SET_EXTERNAL_CLIENTS': {
       console.log(action);
 
-      return state.setIn(['externalClients'], fromJS(action.payload));
+      return state.set('externalClients', fromJS(action.payload));
     }
     case 'SET_SELECTED_EXTERNAL_CLIENT': {
       console.log(action);
 
-      return state.setIn(['selectedExternalClientId'], fromJS(action.clientId));
+      return state.set('selectedExternalClientId', fromJS(action.clientId));
     }
     case 'SET_EXTERNAL_RIDERS': {
       console.log(action);
 
       const itemIndex = getItemIndex(state, 'externalClients', action.clientId);
       return state.setIn(['externalClients', itemIndex, 'riders'], fromJS(action.payload));
+    }
+    case 'SET_FCM_TOKEN': {
+      console.log(action);
+
+      return state.set('fcmToken', fromJS(action.fcmToken));
+    }
+    case 'SET_INSTANCE_ID': {
+      console.log(action);
+
+      return state.set('firebaseInstanceId', fromJS(action.iid));
+    }
+    case 'SET_IS_PERMISSION_GRANTED': {
+      console.log(action);
+
+      return state.set('fcmPermissionGranted', fromJS(action.permissionGranted));
+    }
+    case 'SET_IS_REGISTERED_FOR_REMOTE_NOTIFICATIONS': {
+      console.log(action);
+
+      return state.set('registeredForRemoteNotifications', fromJS(action.isRegisteredForRemoteNotifications));
     }
     default:
       return state;

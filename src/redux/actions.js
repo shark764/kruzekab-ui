@@ -121,6 +121,13 @@ export const removeRiderFromGroup = (groupId, riderId) => ({
   riderId,
 });
 
+export const updateGroupRider = (groupId, riderId, payload) => ({
+  type: 'UPDATE_GROUP_RIDER',
+  groupId,
+  riderId,
+  payload,
+});
+
 export const importRiders = (groupId, phoneNumber) => ({
   type: 'IMPORT_RIDERS',
   groupId,
@@ -162,4 +169,24 @@ export const setExternalRiders = (clientId, payload) => ({
   type: 'SET_EXTERNAL_RIDERS',
   clientId,
   payload,
+});
+
+export const setFCMToken = fcmToken => ({
+  type: 'SET_FCM_TOKEN',
+  fcmToken,
+});
+
+export const setInstanceId = iid => ({
+  type: 'SET_INSTANCE_ID',
+  iid,
+});
+
+export const setIsPermissionGranted = permissionGranted => ({
+  type: 'SET_IS_PERMISSION_GRANTED',
+  permissionGranted,
+});
+
+export const setIsRegisteredForRemoteNotifications = isRegisteredForRemoteNotifications => ({
+  type: 'SET_IS_REGISTERED_FOR_REMOTE_NOTIFICATIONS',
+  isRegisteredForRemoteNotifications,
 });

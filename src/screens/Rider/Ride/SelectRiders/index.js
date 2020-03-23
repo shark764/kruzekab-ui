@@ -1,10 +1,10 @@
 import { connect } from 'react-redux';
 import Layout from './layout';
-import { getAllGroups, getLocation } from '../../../../redux/selectors';
+import { getLocation, getAllRidersBySelectedGroup } from '../../../../redux/selectors';
 import { addRiderToGroup, updateSelectedAddress } from '../../../../redux/actions';
 
 const mapStateToProps = state => ({
-  groups: getAllGroups(state),
+  riders: getAllRidersBySelectedGroup(state),
   location: getLocation(state),
 });
 

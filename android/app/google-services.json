@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "781126567082",
+    "firebase_url": "https://kruze-kab-ui.firebaseio.com",
+    "project_id": "kruze-kab-ui",
+    "storage_bucket": "kruze-kab-ui.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:781126567082:android:f6656f02a71f6a459b3cd3",
+        "android_client_info": {
+          "package_name": "com.kruzekabui"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "781126567082-s7hbqd2uf889anbcftj53d99c7ahvf04.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDBRBJ6TCEjxIfaAHyXzY07R7XYgZW-xPc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "781126567082-s7hbqd2uf889anbcftj53d99c7ahvf04.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
