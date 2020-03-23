@@ -2869,6 +2869,11 @@ decamelize@^1.1.1, decamelize@^1.2.0:
   resolved "https://registry.yarnpkg.com/decamelize/-/decamelize-1.2.0.tgz#f6534d15148269b20352e7bee26f501f9a191290"
   integrity sha1-9lNNFRSCabIDUue+4m9QH5oZEpA=
 
+decode-google-map-polyline@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/decode-google-map-polyline/-/decode-google-map-polyline-1.0.1.tgz#d9a708410db4e8dea03d2df00e6e96315784ec51"
+  integrity sha1-2acIQQ206N6gPS3wDm6WMVeE7FE=
+
 decode-uri-component@^0.2.0:
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/decode-uri-component/-/decode-uri-component-0.2.0.tgz#eb3913333458775cb84cd1a1fae062106bb87545"
@@ -6941,11 +6946,6 @@ react-native-confirmation-code-field@^4.2.0:
   version "4.2.0"
   resolved "https://registry.yarnpkg.com/react-native-confirmation-code-field/-/react-native-confirmation-code-field-4.2.0.tgz#6d0e75bd20bab8910d3d1e02d9d23c89d1203fa7"
   integrity sha512-lA02xyvb0Ss0tadR+dsz9ma3xIRFYY0j8AfVeOxWmZ6vWOezsmt2gIPQ/FBR17rtM7Pem8Pay9IlcXSwZszMVg==
-
-react-native-dialog-input@^1.0.7:
-  version "1.0.7"
-  resolved "https://registry.yarnpkg.com/react-native-dialog-input/-/react-native-dialog-input-1.0.7.tgz#b2fefb4193d1784b3ae78c4a18d8fd6759466009"
-  integrity sha512-boi++dT2tzV8eCZud5Qe3LY/cdTGfgf93Vy4MFxq3O/4rBehllwCfBn5fhWMuf3JcVlzrk0fBsv/Ny766BiyVA==
 
 react-native-elements@^1.2.7:
   version "1.2.7"

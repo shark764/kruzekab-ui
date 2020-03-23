@@ -62,12 +62,10 @@ export default class AddressDetails extends Component {
 
     const { navigation } = props;
 
-    this.address = (navigation.state.params.selectedAddress.address
-      && navigation.state.params.selectedAddress.address.split(','))
+    this.address = (navigation.state.params.selectedAddress.address && navigation.state.params.selectedAddress.address.split(','))
       || (navigation.state.params.selectedAddress.formatted_address
         && navigation.state.params.selectedAddress.formatted_address.split(','))
-      || (navigation.state.params.selectedAddress.vicinity
-        && navigation.state.params.selectedAddress.vicinity.split(','));
+      || (navigation.state.params.selectedAddress.vicinity && navigation.state.params.selectedAddress.vicinity.split(','));
 
     this.state = {
       selectedAddress: navigation.state.params.selectedAddress,
@@ -193,14 +191,12 @@ export default class AddressDetails extends Component {
                       rounded
                       size="small"
                       icon={{ name: saveIcon, type: 'font-awesome', color: saveIconColor }}
-                      onPress={
-                          () => this.setState({
-                            saveStatus: 'Saved',
-                            saveIconBackgroundColor: '#5280E2',
-                            saveIconColor: '#FFFFFF',
-                            saveIcon: 'check',
-                          })
-                        }
+                      onPress={() => this.setState({
+                        saveStatus: 'Saved',
+                        saveIconBackgroundColor: '#5280E2',
+                        saveIconColor: '#FFFFFF',
+                        saveIcon: 'check',
+                      })}
                       activeOpacity={0.7}
                       overlayContainerStyle={{
                         backgroundColor: saveIconBackgroundColor,

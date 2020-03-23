@@ -4,22 +4,17 @@ export const getAllRiders = state => state.getIn(['app', 'riders'], new List([])
 
 export const getAllGroups = state => state.getIn(['app', 'groups'], new List([]));
 
-export const getRider = (state, riderId) => state
-  .getIn(['app', 'riders'], new List([]))
-  .find(rider => rider.get('id') === riderId);
+export const getRider = (state, riderId) => state.getIn(['app', 'riders'], new List([])).find(rider => rider.get('id') === riderId);
 
 export const getSelectedRiderId = state => state.getIn(['app', 'selectedRiderId']);
 
-export const getSelectedRider = state => state.getIn(['app', 'riders'], new List([]))
-  .find(rider => rider.get('id') === getSelectedRiderId(state));
+export const getSelectedRider = state => state.getIn(['app', 'riders'], new List([])).find(rider => rider.get('id') === getSelectedRiderId(state));
 
-export const getGroup = (state, groupId) => state.getIn(['app', 'groups'], new List([]))
-  .find(group => group.get('id') === groupId);
+export const getGroup = (state, groupId) => state.getIn(['app', 'groups'], new List([])).find(group => group.get('id') === groupId);
 
 export const getSelectedGroupId = state => state.getIn(['app', 'selectedGroupId']);
 
-export const getSelectedGroup = state => state.getIn(['app', 'groups'], new List([]))
-  .find(group => group.get('id') === getSelectedGroupId(state));
+export const getSelectedGroup = state => state.getIn(['app', 'groups'], new List([])).find(group => group.get('id') === getSelectedGroupId(state));
 
 export const getAllRidersInGroup = state => state.getIn(['app', 'groups', 'riders'], new List([]));
 

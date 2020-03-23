@@ -58,6 +58,12 @@ export default class NewGroup extends Component {
     }
   };
 
+  editGroup = groupId => {
+    const { addToNewGroup } = this.props;
+    addToNewGroup(groupId);
+    // this.navigateTo('EditGroup');
+  };
+
   render() {
     const { initialValues } = this.props;
 
@@ -70,9 +76,11 @@ export default class NewGroup extends Component {
             handleOnSubmit={this.handleOnSubmit}
             initialValues={initialValues}
             validationSchema={validationSchema}
-            handleOnAddRider={() => this.navigateTo('NewRider', { context: 'create-group' })}
+            handleOnAddRider={() => this.navigateTo('AddRiders', { context: 'create-group' })}
+            handleOnCreateRider={() => this.navigateTo('NewRider', { context: 'create-group' })}
             handleOnEditNewRider={riderId => this.navigateTo('EditRider', { context: 'create-group', riderId })}
             handleOnImportRider={() => this.navigateTo('ImportRider', { context: 'create-group' })}
+            handleOnAddExternalRider={() => this.navigateTo('ParentAccess', { context: 'create-group' })}
           />
         </ScrollView>
       </StyledContainer>

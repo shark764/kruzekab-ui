@@ -49,7 +49,9 @@ const Form = ({
   validationSchema,
   handleOnEditNewRider,
   handleOnAddRider,
+  handleOnCreateRider,
   handleOnImportRider,
+  handleOnAddExternalRider,
 }) => (
   <Formik
     enableReinitialize
@@ -102,10 +104,12 @@ const Form = ({
         <StyledHeadline>Riders</StyledHeadline>
 
         {values.riders.map(rider => (
-          <RiderContainer key={rider.get('id')}>
+          <RiderContainer key={rider.id.toString()}>
             <Avatar
               rounded
-              source={rider.imgPath}
+              source={{
+                uri: `http://${rider.pictureUrl}`,
+              }}
               showEditButton={false}
               icon={{
                 name: 'md-person',
@@ -115,7 +119,7 @@ const Form = ({
               overlayContainerStyle={{ backgroundColor: '#dde5f7' }}
               activeOpacity={0.7}
               size={53}
-              onPress={() => handleOnEditNewRider(rider.get('id'))}
+              onPress={() => handleOnEditNewRider(rider.id)}
               disabled={false}
             />
             <LabelText>{`  ${rider.name}`}</LabelText>
@@ -126,15 +130,45 @@ const Form = ({
           <Icon
             raised
             reverse
-            type="ionicon"
-            name="md-person-add"
+            type="material"
+            name="group-add"
             color="#dde5f7"
             reverseColor="#5280e2"
             size={25}
             onPress={handleOnAddRider}
             disabled={false}
           />
+          <LabelText>Add riders</LabelText>
+        </IconContainer>
+
+        <IconContainer>
+          <Icon
+            raised
+            reverse
+            type="ionicon"
+            name="md-person-add"
+            color="#dde5f7"
+            reverseColor="#5280e2"
+            size={25}
+            onPress={handleOnCreateRider}
+            disabled={false}
+          />
           <LabelText>Create new rider</LabelText>
+        </IconContainer>
+
+        <IconContainer>
+          <Icon
+            raised
+            reverse
+            type="material"
+            name="import-export"
+            color="#dde5f7"
+            reverseColor="#5280e2"
+            size={25}
+            onPress={handleOnImportRider}
+            disabled={false}
+          />
+          <LabelText>Request parent access</LabelText>
         </IconContainer>
 
         <IconContainer>
@@ -146,7 +180,7 @@ const Form = ({
             color="#dde5f7"
             reverseColor="#5280e2"
             size={25}
-            onPress={handleOnImportRider}
+            onPress={handleOnAddExternalRider}
             disabled={false}
           />
           <LabelText>Import user&apos;s riders</LabelText>
@@ -174,7 +208,9 @@ Form.propTypes = {
   validationSchema: PropTypes.shape({}).isRequired,
   handleOnEditNewRider: PropTypes.func.isRequired,
   handleOnAddRider: PropTypes.func.isRequired,
+  handleOnCreateRider: PropTypes.func.isRequired,
   handleOnImportRider: PropTypes.func.isRequired,
+  handleOnAddExternalRider: PropTypes.func.isRequired,
 };
 
 export default Form;

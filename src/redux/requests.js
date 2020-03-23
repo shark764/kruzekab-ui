@@ -9,7 +9,7 @@ import {
   getSelectedExternalClientId,
   getUserToken,
 } from './selectors';
-import { keysToCamel } from '../utils/string';
+import { keysToCamel, urlencode } from '../utils/string';
 
 const environment = 'https://api.kruzekab.com/api';
 
@@ -442,6 +442,56 @@ export const addRidersToGroupRequest = async riders => {
     const { data, status } = await Axios.post(
       `${environment}/client/${clientId}/group/${groupId}/riders`,
       { riders: mapRiders },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `${token}`,
+        },
+      },
+    );
+
+    console.log('DATA || =>', keysToCamel(data));
+
+    return { data: keysToCamel(data), status };
+  } catch (error) {
+    const {
+      data: {
+        data: { result },
+      },
+      status,
+    } = error.response;
+
+    const errorResponse = { code: status, message: result };
+    throw errorResponse;
+  }
+};
+
+export const searchClientByPhoneNumber = async phoneNumber => {
+  const encodeNumber = urlencode(phoneNumber);
+  const token = getUserToken(store.getState());
+  const { data } = await Axios.get(`${environment}/client/byphone?phone_number=${encodeNumber}`, {
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `${token}`,
+    },
+    params: {},
+  });
+  console.log('DATA || =>', keysToCamel(data));
+
+  return keysToCamel(data);
+};
+
+export const createAccessRequest = async phoneNumber => {
+  const clientId = getClientId(store.getState());
+  const {
+    data: { id: parentId },
+  } = await searchClientByPhoneNumber(phoneNumber);
+  const token = getUserToken(store.getState());
+
+  try {
+    const { data, status } = await Axios.post(
+      `${environment}/request/client/${clientId}/${parentId}`,
+      {},
       {
         headers: {
           'Content-Type': 'application/json',

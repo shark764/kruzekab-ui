@@ -152,7 +152,7 @@ export default class Home extends Component {
       }
       i += 1;
     }
-  }
+  };
 
   decode = encoded => {
     const coords = decodePolyline(encoded);
@@ -164,7 +164,7 @@ export default class Home extends Component {
         ? this.getBearing(coords[index], coords[index + 1])
         : this.getBearing(coords[index - 1], coords[index]),
     }));
-  }
+  };
 
   drawRoute = async () => {
     const { selectedAddress } = this.props;
@@ -240,12 +240,12 @@ export default class Home extends Component {
       if (dLong > 0.0) {
         dLong = -(2.0 * Math.PI - dLong);
       } else {
-        dLong = (2.0 * Math.PI + dLong);
+        dLong = 2.0 * Math.PI + dLong;
       }
     }
 
     return (this.degrees(Math.atan2(dLong, dPhi)) + 360.0) % 360.0;
-  }
+  };
 
   render() {
     const {
@@ -269,7 +269,9 @@ export default class Home extends Component {
           {mapLoaded === true ? (
             <MapView
               provider={PROVIDER_GOOGLE} // remove if not using Google Maps
-              ref={ref => { this.mapRef = ref; }}
+              ref={ref => {
+                this.mapRef = ref;
+              }}
               style={styles.map}
               showsCompass={false}
               loadingEnabled
@@ -285,9 +287,7 @@ export default class Home extends Component {
                   this.carMarker = marker;
                 }}
                 style={{
-                  transform: [
-                    { rotate: `${carAngle}deg` },
-                  ],
+                  transform: [{ rotate: `${carAngle}deg` }],
                   zIndex: 3,
                 }}
                 coordinate={carPosition}
