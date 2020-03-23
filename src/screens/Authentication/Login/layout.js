@@ -56,8 +56,6 @@ export default class Login extends Component {
   };
 
   handleOnLogin = async (values, actions) => {
-    console.log('TONCES?');
-
     try {
       const { navigation, login } = this.props;
       let userType = navigation.getParam('userType', null);

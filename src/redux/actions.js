@@ -163,3 +163,23 @@ export const setExternalRiders = (clientId, payload) => ({
   clientId,
   payload,
 });
+
+export const setFCMToken = fcmToken => ({
+  type: 'SET_FCM_TOKEN',
+  fcmToken,
+});
+
+export const setInstanceId = iid => ({
+  type: 'SET_INSTANCE_ID',
+  iid,
+});
+
+export const setIsPermissionGranted = permissionGranted => ({
+  type: 'SET_IS_PERMISSION_GRANTED',
+  permissionGranted,
+});
+
+export const setIsRegisteredForRemoteNotifications = isRegisteredForRemoteNotifications => ({
+  type: 'SET_IS_REGISTERED_FOR_REMOTE_NOTIFICATIONS',
+  isRegisteredForRemoteNotifications,
+});

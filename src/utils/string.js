@@ -24,6 +24,34 @@ export const keysToCamel = o => {
   return o;
 };
 
+export const camelCaseKeysToUnderscore = obj => {
+  if (typeof obj !== 'object') {
+    return obj;
+  }
+
+  const obj2 = { ...obj };
+
+  Object.keys(obj2).forEach(oldName => {
+    // Camel to underscore
+    const newName = oldName.replace(/([A-Z])/g, $1 => `_${$1.toLowerCase()}`);
+
+    // Only process if names are different
+    if (newName !== oldName) {
+      // Check for the old property name to avoid a ReferenceError in strict mode.
+      if (Object.prototype.hasOwnProperty.call(obj2, oldName)) {
+        obj2[newName] = obj2[oldName];
+        delete obj2[oldName];
+      }
+    }
+
+    // Recursion
+    if (typeof obj2[newName] === 'object') {
+      obj2[newName] = camelCaseKeysToUnderscore(obj2[newName]);
+    }
+  });
+  return obj2;
+};
+
 export const urlencode = s => {
   const symbols = {
     '@': '%40',

@@ -108,7 +108,7 @@ const Form = ({
             <Avatar
               rounded
               source={{
-                uri: `http://${rider.pictureUrl}`,
+                uri: `https://${rider.pictureUrl}`,
               }}
               showEditButton={false}
               icon={{

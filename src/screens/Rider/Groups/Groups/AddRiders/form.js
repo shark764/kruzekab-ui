@@ -68,7 +68,7 @@ const renderItem = (data, handleOnSelected) => (
     <Avatar
       rounded
       source={{
-        uri: `http://${data.item.pictureUrl}`,
+        uri: `https://${data.item.pictureUrl}`,
       }}
       showEditButton={false}
       icon={{

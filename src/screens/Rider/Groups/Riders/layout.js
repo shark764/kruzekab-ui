@@ -82,7 +82,7 @@ export default class Riders extends Component {
               <Avatar
                 rounded
                 source={{
-                  uri: `http://${rider.get('pictureUrl')}`,
+                  uri: `https://${rider.get('pictureUrl')}`,
                 }}
                 showEditButton={false}
                 icon={{

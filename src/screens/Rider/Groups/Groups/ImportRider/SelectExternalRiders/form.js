@@ -29,7 +29,7 @@ const renderItem = (item, handleOnSelected) => (
     title={item.name}
     leftAvatar={{
       source: {
-        uri: `http://${item.pictureUrl}`,
+        uri: `https://${item.pictureUrl}`,
       },
       title: item.initials,
     }}
@@ -112,7 +112,12 @@ const Form = ({
 Form.propTypes = {
   handleOnSelected: PropTypes.func.isRequired,
   handleOnSubmit: PropTypes.func.isRequired,
-  dataSource: PropTypes.shape([]).isRequired,
+  dataSource: PropTypes.arrayOf(
+    PropTypes.shape({
+      name: PropTypes.string,
+      id: PropTypes.number,
+    }),
+  ).isRequired,
   handleRefresh: PropTypes.func.isRequired,
   loading: PropTypes.bool.isRequired,
   refreshing: PropTypes.bool.isRequired,

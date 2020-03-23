@@ -64,3 +64,11 @@ export const getExternalRider = (state, clientId, riderId) => {
   const index = getAllExternalClients(state).findIndex(client => client.get('id') === clientId);
   state.getIn(['app', 'externalClients', index, 'riders'], new List([])).find(rider => rider.get('id') === riderId);
 };
+
+export const getFCMToken = state => state.getIn(['app', 'fcmToken']);
+
+export const getFirebaseInstanceId = state => state.getIn(['app', 'firebaseInstanceId']);
+
+export const getIsFCMPermissionGranted = state => state.getIn(['app', 'fcmPermissionGranted'], false);
+
+export const getIsRegisteredForRemoteNotifications = state => state.getIn(['app', 'registeredForRemoteNotifications'], false);
