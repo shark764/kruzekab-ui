@@ -6,6 +6,7 @@ import { ExtendedGoBackButton } from '../../../../../../components/Header/Naviga
 import Form from './form';
 import { fetchExternalRiders, addParentToGroup } from '../../../../../../redux/requests';
 import { Container, Headline } from '../../../../../../components/Form/Elements';
+import { getInitials } from '../../../../../../utils/string';
 
 const StyledContainer = styled(Container)`
   margin-top: 30px;
@@ -35,6 +36,7 @@ export default class SelectExternalRiders extends Component {
 
     this.state = {
       loading: false,
+      refreshing: false,
       dataSource: [],
     };
   }
@@ -55,22 +57,35 @@ export default class SelectExternalRiders extends Component {
     setExternalRiders(externalClientId, data);
     const dataSource = data.map(item => ({
       isSelect: false,
+      initials: getInitials(item.name),
       ...item,
     }));
     this.setState({
       loading: false,
+      refreshing: false,
       dataSource,
     });
   };
 
-  handleOnSelected = data => {
+  handleRefresh = () => {
+    this.setState(
+      {
+        refreshing: true,
+      },
+      () => {
+        this.getRiders();
+      },
+    );
+  };
+
+  handleOnSelected = selected => {
     const { dataSource } = this.state;
 
-    const index = dataSource.findIndex(item => data.item.id === item.id);
+    const index = dataSource.findIndex(item => selected.id === item.id);
     const newDataSource = [...dataSource];
-    const isSelect = !data.item.isSelect;
+    const isSelect = !selected.isSelect;
 
-    newDataSource[index] = { ...data.item, isSelect };
+    newDataSource[index] = { ...selected, isSelect };
 
     this.setState({
       dataSource: newDataSource,
@@ -106,9 +121,7 @@ export default class SelectExternalRiders extends Component {
   };
 
   render() {
-    const { riders } = this.props;
-    const { dataSource } = this.state;
-    console.log('external riders ===>', riders.toJS());
+    const { dataSource, loading, refreshing } = this.state;
     console.log('dataSource ===>', dataSource);
 
     return (
@@ -117,10 +130,12 @@ export default class SelectExternalRiders extends Component {
           <StyledHeadline>Riders</StyledHeadline>
 
           <Form
-            riders={riders.toJS()}
             dataSource={dataSource}
             handleOnSubmit={this.handleOnSubmit}
             handleOnSelected={this.handleOnSelected}
+            loading={loading}
+            refreshing={refreshing}
+            handleRefresh={this.handleRefresh}
           />
         </ScrollView>
       </StyledContainer>
@@ -130,7 +145,6 @@ export default class SelectExternalRiders extends Component {
 
 SelectExternalRiders.propTypes = {
   groupId: PropTypes.number.isRequired,
-  riders: PropTypes.shape([]).isRequired,
   externalClientId: PropTypes.number.isRequired,
   setExternalRiders: PropTypes.func.isRequired,
   setGroupRiders: PropTypes.func.isRequired,

@@ -2,76 +2,73 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Formik } from 'formik';
 import styled from 'styled-components';
-import { Avatar } from 'react-native-elements';
-import {
-  Text, View, FlatList, TouchableOpacity,
-} from 'react-native';
+import { ListItem } from 'react-native-elements';
+import { View, FlatList, ActivityIndicator } from 'react-native';
 import { FormattedError } from '../../../../../../components/Form/ErrorMessage';
-import { ButtonContainer, BottomButtonContainer } from '../../../../../../components/Form/Elements';
+import { BottomButtonContainer } from '../../../../../../components/Form/Elements';
 import FormButton from '../../../../../../components/Form/FormButton';
 
 const ListContainer = styled(View)`
-  margin-left: 20px;
-  margin-right: 25px;
+  margin-left: 10px;
+  margin-right: 10px;
   flex: 1;
   position: relative;
+  border-top-width: 1px;
+  border-color: #bbb;
+  background-color: white;
 `;
-const LightText = styled(Text)`
-  width: 200px;
-  padding-left: 15px;
-  font-family: Open Sans;
-  font-style: normal;
-  font-weight: normal;
-  font-size: 14px;
-  color: #6b768d;
-`;
-const ListItem = styled(TouchableOpacity)`
-  padding-vertical: 5px;
-  padding-left: 5px;
-  margin-top: 3px;
-  margin-right: 3px;
-  margin-bottom: 3px;
-  margin-left: 0px;
-  flex-direction: row;
-  justify-content: flex-start;
-  align-items: center;
-  z-index: -1;
-  border-radius: 4px;
-  ${props => props.isSelect && 'background-color: #eee'};
-`;
-const LineSeparator = styled(View)`
-  height: 0.5px;
-  width: 100%;
-  background-color: rgba(255, 255, 255, 0.5);
+const LoadingIcon = styled(View)`
+  padding-vertical: 20px;
+  border-top-width: 1px;
+  border-color: #ced0ce;
 `;
 
-const FlatListItemSeparator = () => <LineSeparator />;
-
-const renderItem = (data, handleOnSelected) => (
-  <ListItem isSelect={data.item.isSelect} onPress={() => handleOnSelected(data)}>
-    <Avatar
-      rounded
-      source={{
-        uri: `http://${data.item.pictureUrl}`,
-      }}
-      showEditButton={false}
-      icon={{
-        name: 'md-person',
-        type: 'ionicon',
-        color: '#5280e2',
-      }}
-      overlayContainerStyle={{ backgroundColor: '#dde5f7' }}
-      activeOpacity={0.7}
-      size={53}
-      onPress={() => handleOnSelected(data)}
-      disabled={false}
-    />
-    <LightText>{data.item.name}</LightText>
-  </ListItem>
+const renderItem = (item, handleOnSelected) => (
+  <ListItem
+    roundAvatar
+    title={item.name}
+    leftAvatar={{
+      source: {
+        uri: `http://${item.pictureUrl}`,
+      },
+      title: item.initials,
+    }}
+    onPress={() => handleOnSelected(item)}
+    bottomDivider
+    titleStyle={{
+      width: 200,
+      fontFamily: 'Open Sans',
+      fontStyle: 'normal',
+      fontWeight: 'normal',
+      fontSize: 14,
+      color: '#6b768d',
+    }}
+    rightIcon={
+      item.isSelect
+        ? {
+          name: 'ios-checkmark-circle',
+          type: 'ionicon',
+          color: '#5280e2',
+        }
+        : {}
+    }
+  />
 );
 
+const renderFooter = loading => {
+  if (!loading) {
+    return null;
+  }
+
+  return (
+    <LoadingIcon>
+      <ActivityIndicator animating size="large" />
+    </LoadingIcon>
+  );
+};
+
 const Form = ({
-  riders, dataSource, handleOnSelected, handleOnSubmit,
+  dataSource, handleOnSelected, handleOnSubmit, handleRefresh, loading, refreshing,
 }) => (
   <Formik
     enableReinitialize
@@ -88,9 +85,11 @@ const Form = ({
         <ListContainer>
           <FlatList
             data={dataSource}
-            ItemSeparatorComponent={FlatListItemSeparator}
-            renderItem={item => renderItem(item, handleOnSelected)}
+            renderItem={({ item }) => renderItem(item, handleOnSelected)}
             keyExtractor={item => item.id.toString()}
+            ListFooterComponent={() => renderFooter(loading)}
+            onRefresh={handleRefresh}
+            refreshing={refreshing}
           />
         </ListContainer>
 
@@ -113,8 +112,10 @@ const Form = ({
 Form.propTypes = {
   handleOnSelected: PropTypes.func.isRequired,
   handleOnSubmit: PropTypes.func.isRequired,
-  riders: PropTypes.shape([]).isRequired,
   dataSource: PropTypes.shape([]).isRequired,
+  handleRefresh: PropTypes.func.isRequired,
+  loading: PropTypes.bool.isRequired,
+  refreshing: PropTypes.bool.isRequired,
 };
 
 export default Form;

@@ -87,7 +87,7 @@ const renderItem = (data, handleOnSelected) => (
 );
 
 const Form = ({
-  riders, dataSource, handleOnSelected, handleOnSubmit, handleOnCreateRider,
+  dataSource, handleOnSelected, handleOnSubmit, handleOnCreateRider,
 }) => (
   <Formik
     enableReinitialize
@@ -145,7 +145,6 @@ Form.propTypes = {
   handleOnSelected: PropTypes.func.isRequired,
   handleOnSubmit: PropTypes.func.isRequired,
   handleOnCreateRider: PropTypes.func.isRequired,
-  riders: PropTypes.shape([]).isRequired,
   dataSource: PropTypes.shape([]).isRequired,
 };
 

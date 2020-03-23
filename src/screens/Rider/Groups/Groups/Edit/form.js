@@ -164,8 +164,8 @@ const Form = ({
           <Icon
             raised
             reverse
-            type="ionicon"
-            name="md-download"
+            type="material"
+            name="import-export"
             color="#dde5f7"
             reverseColor="#5280e2"
             size={25}
@@ -179,8 +179,8 @@ const Form = ({
           <Icon
             raised
             reverse
-            type="material"
-            name="import-export"
+            type="ionicon"
+            name="md-download"
             color="#dde5f7"
             reverseColor="#5280e2"
             size={25}

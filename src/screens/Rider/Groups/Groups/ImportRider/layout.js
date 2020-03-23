@@ -6,6 +6,7 @@ import { Container, HeaderMessage } from '../../../../../components/Form/Element
 import { ExtendedGoBackButton } from '../../../../../components/Header/Navigator';
 import Form from './form';
 import validationSchema from './validation';
+import { createAccessRequest } from '../../../../../redux/requests';
 
 const StyledContainer = styled(Container)`
   margin-top: 30px;
@@ -33,9 +34,10 @@ export default class ImportRider extends Component {
 
   handleOnSubmit = async (values, actions) => {
     try {
-      const { importRiders, groupId } = this.props;
+      const { importRiders } = this.props;
       const { parentPhoneNumber } = values;
-      await importRiders(groupId, parentPhoneNumber);
+      const { data } = await createAccessRequest(parentPhoneNumber);
+      await importRiders(data);
 
       // This is avoiding submit button loading icon
       actions.setSubmitting(false);
