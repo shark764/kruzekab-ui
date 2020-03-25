@@ -121,6 +121,13 @@ export const removeRiderFromGroup = (groupId, riderId) => ({
   riderId,
 });
 
+export const updateGroupRider = (groupId, riderId, payload) => ({
+  type: 'UPDATE_GROUP_RIDER',
+  groupId,
+  riderId,
+  payload,
+});
+
 export const importRiders = (groupId, phoneNumber) => ({
   type: 'IMPORT_RIDERS',
   groupId,

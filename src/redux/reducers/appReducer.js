@@ -124,6 +124,16 @@ const appReducer = (state = INITIAL_STATE, action) => {
     }
     case 'ADD_TO_NEW_GROUP':
       return state.mergeIn(['newGroup'], fromJS(action.payload));
+    case 'UPDATE_GROUP_RIDER': {
+      const itemIndex = getItemIndex(state, 'groups', action.groupId);
+      return state.updateIn(['groups', itemIndex, 'riders'], riders => {
+        const riderIndex = riders.findIndex(rider => rider.get('id') === action.riderId);
+        if (riderIndex !== -1) {
+          return riders.mergeIn([riderIndex], fromJS(action.payload));
+        }
+        return riders;
+      });
+    }
     case 'UPDATE_SELECTED_ADDRESS':
       return state.updateIn(['selectedAddress', action.location], selectedAddress => {
         if (selectedAddress) {
