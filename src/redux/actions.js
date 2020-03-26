@@ -190,3 +190,13 @@ export const setIsRegisteredForRemoteNotifications = isRegisteredForRemoteNotifi
   type: 'SET_IS_REGISTERED_FOR_REMOTE_NOTIFICATIONS',
   isRegisteredForRemoteNotifications,
 });
+
+export const addPushNotification = payload => ({
+  type: 'ADD_PUSH_NOTIFICATION',
+  payload,
+});
+
+export const setPushServerToken = pushServerToken => ({
+  type: 'SET_PUSH_SERVER_TOKEN',
+  pushServerToken,
+});

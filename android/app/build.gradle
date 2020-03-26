@@ -196,8 +196,8 @@ android {
 dependencies {
     implementation project(':@react-native-community_image-editor')
     implementation project(':react-native-push-notification')
-    implementation project(':@react-native-firebase_iid')
     implementation project(':@react-native-firebase_messaging')
+    implementation project(':@react-native-firebase_iid')
     implementation project(':@react-native-firebase_app')
     implementation project(':react-native-sha1')
     implementation project(':react-native-video')

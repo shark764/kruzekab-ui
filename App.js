@@ -13,6 +13,8 @@ import {
   setIsPermissionGranted,
   setIsRegisteredForRemoteNotifications,
 } from './src/redux/actions';
+import PushController from './src/components/notifications/PushController';
+import Notifications from './src/components/notifications/Notifications';
 
 console.disableYellowBox = true;
 
@@ -81,9 +83,15 @@ class App extends Component {
   };
 
   render() {
-    console.log('\nfirebase.apps.length', firebase.apps.length);
+    // console.log('\nfirebase.apps.length', firebase.apps.length);
 
-    return <AppNavigator />;
+    return (
+      <>
+        <AppNavigator />
+        <PushController />
+        <Notifications />
+      </>
+    );
   }
 }
 
