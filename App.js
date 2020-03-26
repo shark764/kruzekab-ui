@@ -22,6 +22,20 @@ class App extends Component {
     this.requestPermission();
     this.getInstanceId();
     this.getFCMToken();
+
+    this.messageListener = firebase.messaging().onMessage(async remoteMessage => {
+      console.log('FCM Message Data:', remoteMessage);
+
+      // Update a users messages list using AsyncStorage
+      // const currentMessages = await AsyncStorage.getItem('messages');
+      // const messageArray = JSON.parse(currentMessages);
+      // messageArray.push(remoteMessage.data);
+      // await AsyncStorage.setItem('messages', JSON.stringify(messageArray));
+    });
+  }
+
+  componentWillUnmount() {
+    this.messageListener();
   }
 
   registerAppWithFCM = async () => {
@@ -80,8 +94,6 @@ App.propTypes = {
   storeIsRegisteredForRemoteNotifications: PropTypes.func.isRequired,
 };
 
-const mapStateToProps = () => ({});
-
 const actions = {
   storeFCMToken: setFCMToken,
   storeInstanceId: setInstanceId,
@@ -89,4 +101,4 @@ const actions = {
   storeIsRegisteredForRemoteNotifications: setIsRegisteredForRemoteNotifications,
 };
 
-export default connect(mapStateToProps, actions)(App);
+export default connect(null, actions)(App);

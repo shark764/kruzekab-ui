@@ -7,14 +7,10 @@ import { Text } from 'react-native';
 import { FormattedError } from '../../../../../../components/Form/ErrorMessage';
 import { ButtonContainer } from '../../../../../../components/Form/Elements';
 
-const IconContainer = styled(ButtonContainer)`
-  margin-top: -6px;
+const ClientContainer = styled(ButtonContainer)`
   margin-bottom: 15px;
   flex-direction: row;
   align-items: center;
-  margin-left: 18px;
-`;
-const GroupContainer = styled(IconContainer)`
   margin-top: 0;
   margin-left: 25px;
 `;
@@ -39,7 +35,7 @@ const Form = ({ externalClients, handleOnSelected }) => (
     {({ errors }) => (
       <>
         {externalClients.map(client => (
-          <GroupContainer key={client.get('id')}>
+          <ClientContainer key={client.get('id')}>
             <Avatar
               rounded
               showEditButton={false}
@@ -55,7 +51,7 @@ const Form = ({ externalClients, handleOnSelected }) => (
               disabled={false}
             />
             <LabelText>{`  ${client.get('name')}`}</LabelText>
-          </GroupContainer>
+          </ClientContainer>
         ))}
 
         {errors.general && <FormattedError errorValue={errors.general} />}
@@ -66,7 +62,12 @@ const Form = ({ externalClients, handleOnSelected }) => (
 
 Form.propTypes = {
   handleOnSelected: PropTypes.func.isRequired,
-  externalClients: PropTypes.shape([]).isRequired,
+  externalClients: PropTypes.arrayOf(
+    PropTypes.shape({
+      name: PropTypes.string,
+      id: PropTypes.number,
+    }),
+  ).isRequired,
 };
 
 export default Form;

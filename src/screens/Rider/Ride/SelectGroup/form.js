@@ -110,28 +110,26 @@ const Listview = ({ groupList, handleOnSelected, selected }) => (
   />
 );
 Listview.propTypes = {
-  groupList: PropTypes.shape([]).isRequired,
-  handleOnSelected: PropTypes.shape.isRequired,
+  groupList: PropTypes.arrayOf(
+    PropTypes.shape({
+      name: PropTypes.string,
+      id: PropTypes.number,
+    }),
+  ).isRequired,
+  handleOnSelected: PropTypes.func.isRequired,
   selected: PropTypes.string.isRequired,
 };
 
 const Form = ({
-  handleOnSubmit,
-  initialValues,
-  validationSchema,
-  handleOnSelected,
-  selected,
-  handleOnAddGroup,
-  groups,
+  handleOnSubmit, handleOnSelected, selected, handleOnAddGroup, groups,
 }) => (
   <Formik
     enableReinitialize
-    initialValues={initialValues}
+    initialValues={{}}
     onSubmit={(values, actions) => {
       console.log('values =>', values);
       handleOnSubmit(values, actions);
     }}
-    validationSchema={validationSchema}
   >
     {({
       handleSubmit, errors, isValid, isSubmitting,
@@ -180,12 +178,24 @@ const Form = ({
 
 Form.propTypes = {
   handleOnSubmit: PropTypes.func.isRequired,
-  initialValues: PropTypes.shape({}).isRequired,
-  validationSchema: PropTypes.shape({}).isRequired,
   handleOnSelected: PropTypes.shape.isRequired,
   handleOnAddGroup: PropTypes.shape.isRequired,
-  groups: PropTypes.shape([]).isRequired,
+  groups: PropTypes.arrayOf(
+    PropTypes.shape({
+      name: PropTypes.string,
+      id: PropTypes.number,
+    }),
+  ).isRequired,
+  // dataSource: PropTypes.arrayOf(
+  //   PropTypes.shape({
+  //     name: PropTypes.string,
+  //     id: PropTypes.number,
+  //   }),
+  // ).isRequired,
   selected: PropTypes.string.isRequired,
+  // handleRefresh: PropTypes.func.isRequired,
+  // loading: PropTypes.bool.isRequired,
+  // refreshing: PropTypes.bool.isRequired,
 };
 
 export default Form;
