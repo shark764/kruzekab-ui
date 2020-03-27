@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import {
-  View, Text, StyleSheet, Image, Platform, Dimensions,
+  View, Text, StyleSheet, Image, Platform, Dimensions, ScrollView,
 } from 'react-native';
 import styled from 'styled-components';
 import {
@@ -17,6 +17,8 @@ import { Container } from '../../../components/Form/Elements';
 import goal from '../../../assets/goal.png';
 import pin from '../../../assets/ic_dest.png';
 import car from '../../../assets/car_.png';
+import Form from './form';
+import validationSchema from './validation';
 
 const styles = StyleSheet.create({
   map: {
@@ -28,7 +30,13 @@ const StyledContainer = styled(Container)`
   align-items: center;
   justify-content: flex-end;
 `;
-const ImageContainer = styled(View)`
+
+const StyledContainer2 = styled(Container)`
+  margin-top: 400px;
+  width: 100%;
+`;
+
+const ImageContainerFull = styled(View)`
   flex: 1;
   position: absolute;
   top: 0;
@@ -36,7 +44,14 @@ const ImageContainer = styled(View)`
   width: 100%;
   height: 100%;
 `;
-
+const ImageContainer = styled(View)`
+  flex: 1;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 400px;
+`;
 const LocationView = styled(View)`
   position: absolute;
   height: 120px;
@@ -56,9 +71,29 @@ const WhereToView = styled(View)`
   padding-right: 10px;
 `;
 
+const HeaderView = styled(View)`
+  position: absolute;
+  flex: 1;
+  flex-direction: row;
+  top: 25px;
+  align-items: center;
+`;
+
+const HeaderText = styled(Text)`
+  flex: 1;
+  font-family: Open Sans;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 20px;
+  line-height: 28px;
+  letter-spacing: 0.2px;
+  color: #3e4958;
+  margin-left: 50px;
+`;
+
 const screen = Dimensions.get('window');
 const ASPECT_RATIO = screen.width / screen.height;
-const LATITUDE_DELTA = 0.0199;
+const LATITUDE_DELTA = 0.01;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 
 let i = 0;
@@ -81,6 +116,8 @@ export default class Home extends Component {
       isOverlayVisible: false,
       carPosition: null,
       carAngle: 0,
+      driveState: '',
+      photo: null,
     };
   }
 
@@ -114,14 +151,18 @@ export default class Home extends Component {
 
   componentDidUpdate(prevProps) {
     const { selectedAddress } = this.props;
+
     if (prevProps.selectedAddress.get('to') !== selectedAddress.get('to') && selectedAddress.getIn(['to', 'name'])) {
-      /* setTimeout(() => {
+      setTimeout(() => {
         this.setState({
           isOverlayVisible: false,
+          driveState: 'On trip',
         });
-        this.navigateTo('RideAccepted', {});
-      }, 5000); */
-      to = setInterval(this.carDemo, 5000);
+        to = setInterval(this.carDemo, 3000);
+        // Ride Arrived, Ride On Trip, Ride Finished
+        // this.navigateTo('RideAccepted', {});
+      }, 5000);
+      // to = setInterval(this.carDemo, 5000);
     }
     // if selected address has changed (from or to) and coordinates exists for both locations
     if (
@@ -136,19 +177,47 @@ export default class Home extends Component {
 
   carDemo = () => {
     const { coords, carPosition } = this.state;
+
     if (i > coords.length - 1) {
       clearInterval(to);
+      this.setState({
+        driveState: 'Arrived',
+      });
     } else {
       if (Platform.OS === 'android') {
         if (this.carMarker) {
           /* eslint-disable no-underscore-dangle */
           this.setState({
             carAngle: coords[i].angle,
+            carPosition: new AnimatedRegion({
+              longitude: coords[i].longitude,
+              latitude: coords[i].latitude,
+              latitudeDelta: 0.01,
+              longitudeDelta: 0.0004,
+            }),
           });
-          this.carMarker._component.animateMarkerToCoordinate(coords[i], 1);
+          // this.carMarker._component.animateMarkerToCoordinate(coords[i], 1);
+          this.mapRef.fitToCoordinates(coords, {
+            edgePadding: {
+              top: 0,
+              right: 0,
+              bottom: 25,
+              left: 0,
+            },
+            animated: false,
+          });
         }
       } else {
         carPosition.timing(coords[i]).start();
+        this.mapRef.fitToCoordinates(coords, {
+          edgePadding: {
+            top: 0,
+            right: 0,
+            bottom: 25,
+            left: 0,
+          },
+          animated: false,
+        });
       }
       i += 1;
     }
@@ -160,6 +229,8 @@ export default class Home extends Component {
     return coords.map((val, index) => ({
       longitude: val.lng,
       latitude: val.lat,
+      longitudeDelta: 0.01,
+      latitudeDelta: 0.01 * ASPECT_RATIO,
       angle: coords[index + 1]
         ? this.getBearing(coords[index], coords[index + 1])
         : this.getBearing(coords[index - 1], coords[index]),
@@ -178,7 +249,7 @@ export default class Home extends Component {
       const coords = this.decode(data.routes[0].overview_polyline.points);
       this.setState({
         coords,
-        // isOverlayVisible: true,
+        isOverlayVisible: true,
       });
       this.mapRef.fitToCoordinates(coords, {
         edgePadding: {
@@ -258,14 +329,18 @@ export default class Home extends Component {
       isOverlayVisible,
       latitudeDelta,
       longitudeDelta,
+      driveState,
+      photo,
     } = this.state;
     const {
       currentPosition, selectedAddress, updateLocation, location,
     } = this.props;
 
+    const MapContainer = driveState !== '' ? ImageContainer : ImageContainerFull;
+
     return (
       <StyledContainer>
-        <ImageContainer>
+        <MapContainer>
           {mapLoaded === true ? (
             <MapView
               provider={PROVIDER_GOOGLE} // remove if not using Google Maps
@@ -282,19 +357,18 @@ export default class Home extends Component {
                 longitudeDelta,
               }}
             >
-              <Marker.Animated
-                ref={marker => {
-                  this.carMarker = marker;
-                }}
-                style={{
-                  transform: [{ rotate: `${carAngle}deg` }],
-                  zIndex: 3,
-                }}
-                coordinate={carPosition}
-                rotation={carPosition.angle}
-              >
-                <Image source={car} style={{ height: 30, width: 40 }} />
-              </Marker.Animated>
+              {driveState === 'On trip' && (
+                <Marker.Animated
+                  ref={marker => {
+                    this.carMarker = marker;
+                  }}
+                  style={{ transform: [{ rotate: `${carAngle}deg` }] }}
+                  coordinate={carPosition}
+                  rotation={carPosition.angle}
+                >
+                  <Image source={car} style={{ height: 35, width: 30 }} />
+                </Marker.Animated>
+              )}
               <Circle
                 key={(currentPosition.get('latitude') + currentPosition.get('longitude')).toString()}
                 center={currentPosition.toJS()}
@@ -319,7 +393,6 @@ export default class Home extends Component {
                     latitude: selectedAddress.getIn(['to', 'latitude']) || 37.78825,
                     longitude: selectedAddress.getIn(['to', 'longitude']) || -122.4324,
                   }}
-                  pinColor="red"
                 >
                   <Image source={goal} style={{ height: 30, width: 30 }} />
                 </Marker>
@@ -358,14 +431,8 @@ export default class Home extends Component {
           ) : (
             <Text>Loading...</Text>
           )}
-        </ImageContainer>
-        <View
-          style={{
-            position: 'absolute',
-            left: 25,
-            top: 25,
-          }}
-        >
+        </MapContainer>
+        <HeaderView>
           <Avatar
             rounded
             size="medium"
@@ -374,14 +441,17 @@ export default class Home extends Component {
               type: 'ionicon',
               color: '#212226',
             }}
+            containerStyle={{
+              marginLeft: 25,
+            }}
             onPress={this.handleOpenDrawer}
             activeOpacity={0.7}
-            containerStyle={{ flex: 2 }}
             overlayContainerStyle={{
               backgroundColor: '#ffffff',
             }}
           />
-        </View>
+          <HeaderText>{driveState}</HeaderText>
+        </HeaderView>
         <View
           style={{
             position: 'absolute',
@@ -401,73 +471,93 @@ export default class Home extends Component {
             }}
           />
         </View>
-        <LocationView>
-          <LineView>
-            <Text
-              style={{
-                color: location === 'from' ? '#5280E2' : '#212226',
-                position: 'absolute',
-                left: 12,
-                fontSize: 15,
-                top: 15,
-              }}
-            >
-              ●
-            </Text>
-            <View
-              style={{
-                borderLeftWidth: 1,
-                borderLeftColor: 'black',
-                position: 'absolute',
-                height: 40,
-                left: 20,
-                top: 35,
-              }}
-            />
-            <Text
-              style={{
-                position: 'absolute',
-                fontSize: 15,
-                left: 13,
-                top: 70,
-                color: location === 'to' ? '#5280E2' : '#212226',
-              }}
-            >
-              ▼
-            </Text>
-          </LineView>
-          <WhereToView>
-            <Input
-              placeholder="from ?"
-              value={selectedAddress.getIn(['from', 'alias']) || selectedAddress.getIn(['from', 'name'])}
-              onFocus={() => {
-                updateLocation('from');
-                this.navigateTo('SelectAddress', {
-                  addressPlaceholder: 'Where from?',
-                  // setSelectedAddress: this.setSelectedAddress
-                });
-              }}
-              inputContainerStyle={{
-                borderColor: 'white',
-              }}
-            />
-            <Divider />
-            <Input
-              placeholder="Where to?"
-              value={selectedAddress.getIn(['to', 'alias']) || selectedAddress.getIn(['to', 'name'])}
-              onFocus={() => {
-                updateLocation('to');
-                this.navigateTo('SelectAddress', {
-                  addressPlaceholder: 'Where to?',
-                  setSelectedAddress: this.setSelectedAddress,
-                });
-              }}
-              inputContainerStyle={{
-                borderColor: 'white',
-              }}
-            />
-          </WhereToView>
-        </LocationView>
+
+        {driveState === '' && (
+          <LocationView>
+            <LineView>
+              <Text
+                style={{
+                  color: location === 'from' ? '#5280E2' : '#212226',
+                  position: 'absolute',
+                  left: 12,
+                  fontSize: 15,
+                  top: 15,
+                }}
+              >
+                ●
+              </Text>
+              <View
+                style={{
+                  borderLeftWidth: 1,
+                  borderLeftColor: 'black',
+                  position: 'absolute',
+                  height: 40,
+                  left: 20,
+                  top: 35,
+                }}
+              />
+              <Text
+                style={{
+                  position: 'absolute',
+                  fontSize: 15,
+                  left: 13,
+                  top: 70,
+                  color: location === 'to' ? '#5280E2' : '#212226',
+                }}
+              >
+                ▼
+              </Text>
+            </LineView>
+            <WhereToView>
+              <Input
+                placeholder="from ?"
+                value={selectedAddress.getIn(['from', 'alias']) || selectedAddress.getIn(['from', 'name'])}
+                onFocus={() => {
+                  updateLocation('from');
+                  this.navigateTo('SelectAddress', {
+                    addressPlaceholder: 'Where from?',
+                    // setSelectedAddress: this.setSelectedAddress
+                  });
+                }}
+                inputContainerStyle={{
+                  borderColor: 'white',
+                }}
+              />
+              <Divider />
+              <Input
+                placeholder="Where to?"
+                value={selectedAddress.getIn(['to', 'alias']) || selectedAddress.getIn(['to', 'name'])}
+                onFocus={() => {
+                  updateLocation('to');
+                  this.navigateTo('SelectAddress', {
+                    addressPlaceholder: 'Where to?',
+                    setSelectedAddress: this.setSelectedAddress,
+                  });
+                }}
+                inputContainerStyle={{
+                  borderColor: 'white',
+                }}
+              />
+            </WhereToView>
+          </LocationView>
+        )}
+
+        {driveState !== '' && (
+          <StyledContainer2 enabled behavior="">
+            <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+              <Form
+                handleOnSubmit={this.handleOnSubmit}
+                initialValues={{
+                  userType: 2,
+                  name: '',
+                }}
+                validationSchema={validationSchema}
+                handleChoosePhoto={this.handleChoosePhoto}
+                photo={photo}
+              />
+            </ScrollView>
+          </StyledContainer2>
+        )}
         {mapLoaded && selectedAddress.getIn(['to', 'name']) && coords && (
           <Overlay
             isVisible={isOverlayVisible}
