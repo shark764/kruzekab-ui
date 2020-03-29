@@ -29,6 +29,7 @@ const INITIAL_STATE = fromJS({
   fcmPermissionGranted: false,
   registeredForRemoteNotifications: false,
   notifications: [],
+  currentNotificationId: '',
   pushServerToken: '',
 });
 
@@ -205,6 +206,11 @@ const appReducer = (state = INITIAL_STATE, action) => {
       console.log(JSON.stringify(action, null, 2));
 
       return state.set('pushServerToken', fromJS(action.pushServerToken));
+    }
+    case 'SET_CURRENT_NOTIFICATION': {
+      console.log(JSON.stringify(action, null, 2));
+
+      return state.set('currentNotificationId', fromJS(action.currentNotificationId));
     }
     default:
       return state;

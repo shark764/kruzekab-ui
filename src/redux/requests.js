@@ -8,6 +8,8 @@ import {
   getSelectedRiderId,
   getSelectedExternalClientId,
   getUserToken,
+  getFCMToken,
+  getUserId,
 } from './selectors';
 import { keysToCamel, urlencode } from '../utils/string';
 
@@ -481,6 +483,21 @@ export const searchClientByPhoneNumber = async phoneNumber => {
   return keysToCamel(data);
 };
 
+export const getPendingAccessRequest = async () => {
+  const clientId = getClientId(store.getState());
+  const token = getUserToken(store.getState());
+  const { data } = await Axios.get(`${environment}/request/client/${clientId}`, {
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `${token}`,
+    },
+    params: {},
+  });
+  console.log('DATA || =>', keysToCamel(data));
+
+  return keysToCamel(data);
+};
+
 export const createAccessRequest = async phoneNumber => {
   const clientId = getClientId(store.getState());
   const {
@@ -501,6 +518,152 @@ export const createAccessRequest = async phoneNumber => {
     );
 
     console.log('DATA || =>', keysToCamel(data));
+
+    return { data: keysToCamel(data), status };
+  } catch (error) {
+    const {
+      data: {
+        data: { result },
+      },
+      status,
+    } = error.response;
+
+    const errorResponse = { code: status, message: result };
+    throw errorResponse;
+  }
+};
+
+export const changeAccessRequestStatus = async (accessId, value = 0) => {
+  const clientId = getClientId(store.getState());
+  const token = getUserToken(store.getState());
+
+  console.log(clientId, token, accessId, value);
+
+  try {
+    const { data, status } = await Axios.put(
+      `${environment}/request/client/${clientId}/access/${accessId}/status/${value}`,
+      {},
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `${token}`,
+        },
+      },
+    );
+
+    console.log('DATA || =>', keysToCamel(data));
+
+    return { data: keysToCamel(data), status };
+  } catch (error) {
+    const {
+      data: {
+        data: { result },
+      },
+      status,
+    } = error.response;
+
+    const errorResponse = { code: status, message: result };
+    throw errorResponse;
+  }
+};
+
+export const deleteAccessRequest = async accessId => {
+  const clientId = getClientId(store.getState());
+  const token = getUserToken(store.getState());
+
+  try {
+    const { data, status } = await Axios.delete(`${environment}/request/client/${clientId}/access/${accessId}`, {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `${token}`,
+      },
+      data: {},
+    });
+
+    console.log('DATA || =>', keysToCamel(data));
+
+    return { data: keysToCamel(data), status };
+  } catch (error) {
+    const {
+      data: {
+        data: { result },
+      },
+      status,
+    } = error.response;
+
+    const errorResponse = { code: status, message: result };
+    throw errorResponse;
+  }
+};
+
+export const getAllUserDevices = async () => {
+  const userId = getUserId(store.getState());
+  const token = getUserToken(store.getState());
+  const { data } = await Axios.get(`${environment}/user/${userId}/device?environment=dev`, {
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `${token}`,
+    },
+    params: {
+      environment: 'dev',
+    },
+  });
+  console.log('DATA || =>', keysToCamel(data));
+
+  return keysToCamel(data);
+};
+
+export const newDeviceRequest = async () => {
+  const userId = getUserId(store.getState());
+  const fcmToken = getFCMToken(store.getState());
+  const token = getUserToken(store.getState());
+
+  try {
+    const { data, status } = await Axios.post(
+      `${environment}/user/${userId}/device`,
+      {
+        platform_id: 1,
+        token: fcmToken,
+        environment: 'dev',
+      },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `${token}`,
+        },
+      },
+    );
+
+    console.log('DATA || =>', keysToCamel(data));
+
+    return { data: keysToCamel(data), status };
+  } catch (error) {
+    const {
+      data: {
+        data: { result },
+      },
+      status,
+    } = error.response;
+
+    const errorResponse = { code: status, message: result };
+    throw errorResponse;
+  }
+};
+
+export const deleteUserDevice = async ({ deviceId }) => {
+  const userId = getUserId(store.getState());
+  const token = getUserToken(store.getState());
+
+  try {
+    const { data, status } = await Axios.delete(`${environment}/user/${userId}/device/${deviceId}`, {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `${token}`,
+      },
+      data: {
+        environment: 'dev',
+      },
+    });
 
     return { data: keysToCamel(data), status };
   } catch (error) {

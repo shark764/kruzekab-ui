@@ -200,3 +200,8 @@ export const setPushServerToken = pushServerToken => ({
   type: 'SET_PUSH_SERVER_TOKEN',
   pushServerToken,
 });
+
+export const setCurrentNotification = currentNotificationId => ({
+  type: 'SET_CURRENT_NOTIFICATION',
+  currentNotificationId,
+});

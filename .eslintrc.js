@@ -2,9 +2,10 @@ module.exports = {
   env: {
     browser: true,
     es6: true,
+    node: true,
     jest: true,
   },
-  extends: ['plugin:react/recommended', 'standard', 'airbnb'],
+  extends: ['eslint:recommended', 'plugin:react/recommended', 'prettier', 'standard', 'airbnb'],
   globals: {
     Atomics: 'readonly',
     SharedArrayBuffer: 'readonly',
@@ -22,7 +23,7 @@ module.exports = {
     'react/jsx-filename-extension': 'off',
     semi: [2, 'always'],
     'arrow-parens': ['error', 'as-needed'],
-    'react/prop-types': ['error', { ignore: ['navigation'] }],
+    'react/prop-types': ['error', { ignore: ['navigation'], skipUndeclared: true }],
     'react/jsx-props-no-spreading': ['error', { custom: 'ignore' }],
     'global-require': 0,
     'no-console': 'off',
