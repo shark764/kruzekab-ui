@@ -69,3 +69,7 @@ export const getFirebaseInstanceId = state => state.getIn(['app', 'firebaseInsta
 export const getIsFCMPermissionGranted = state => state.getIn(['app', 'fcmPermissionGranted'], false);
 
 export const getIsRegisteredForRemoteNotifications = state => state.getIn(['app', 'registeredForRemoteNotifications'], false);
+
+export const getPushNotifications = state => state.getIn(['app', 'notifications'], new List([]));
+
+export const getPushServerToken = state => state.getIn(['app', 'pushServerToken']);

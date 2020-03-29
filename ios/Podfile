@@ -49,17 +49,28 @@ target 'KruzeKabUI' do
   pod 'RNSha1', :path => '../node_modules/react-native-sha1'
 
 
-  pod 'RNFBApp', :path => '../node_modules/@react-native-firebase/app'
-
-  pod 'RNFBMessaging', :path => '../node_modules/@react-native-firebase/messaging'
 
 
 
-  pod 'RNFBIid', :path => '../node_modules/@react-native-firebase/iid'
+
 
 
 
   pod 'RNCPushNotificationIOS', :path => '../node_modules/@react-native-community/push-notification-ios'
+
+
+
+
+
+
+
+
+
+  pod 'RNFBApp', :path => '../node_modules/@react-native-firebase/app'
+
+  pod 'RNFBIid', :path => '../node_modules/@react-native-firebase/iid'
+
+  pod 'RNFBMessaging', :path => '../node_modules/@react-native-firebase/messaging'
 
   pod 'react-native-image-editor', :path => '../node_modules/@react-native-community/image-editor'
 
