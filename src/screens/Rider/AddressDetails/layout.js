@@ -110,7 +110,9 @@ export default class AddressDetails extends Component {
             <Avatar
               rounded
               size="small"
-              icon={{ name: 'chevron-left', type: 'font-awesome', color: '#000000' }}
+              icon={{
+                name: 'ios-arrow-back', type: 'ionicon', color: '#000000', size: 18,
+              }}
               onPress={() => navigation.goBack()}
               activeOpacity={0.7}
               overlayContainerStyle={{

@@ -23,6 +23,7 @@ import RideFinished from '../screens/Rider/Ride/RideFinished';
 import ParentAccess from '../screens/Rider/Groups/Groups/ImportRider/ParentAccess';
 import SelectExternalRiders from '../screens/Rider/Groups/Groups/ImportRider/SelectExternalRiders';
 import AddRiders from '../screens/Rider/Groups/Groups/AddRiders';
+import AddressMapPreview from '../screens/Rider/AddressMapPreview';
 
 const defaultNavigationOptions = {
   headerStyle: {
@@ -100,6 +101,7 @@ const RequestStack = createStackNavigator(
     RideOnTrip: { screen: RideOnTrip },
     Streaming: { screen: Streaming, navigationOptions: { headerShown: false } },
     RideFinished: { screen: RideFinished },
+    AddressMapPreview: { screen: AddressMapPreview, navigationOptions: { headerShown: false } },
   },
   {
     initialRouteName: 'Home',
