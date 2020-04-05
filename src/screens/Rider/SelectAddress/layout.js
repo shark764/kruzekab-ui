@@ -181,7 +181,9 @@ export default class SelectAddress extends Component {
             <Avatar
               rounded
               size="small"
-              icon={{ name: 'chevron-left', type: 'font-awesome', color: '#000000' }}
+              icon={{
+                name: 'ios-arrow-back', type: 'ionicon', color: '#000000', size: 18,
+              }}
               onPress={() => navigation.goBack()}
               activeOpacity={0.7}
               overlayContainerStyle={{
@@ -235,19 +237,34 @@ export default class SelectAddress extends Component {
               // onFocus={() => this.setState({ searchMode: true })}
               onClear={() => this.setState(prevState => ({
                 searchMode: false,
+                selectedAddress: {
+                  selected: false,
+                },
                 activeIndex: {
                   ...prevState.activeIndex,
                   searched: -1,
                 },
               }))}
             />
-            <View style={{ flex: 1, alignItems: 'flex-start' }}>
-              <Button
-                type="clear"
-                icon={<Icon name="map-marker-radius" type="material-community" size={20} color="#5280E2" />}
-                title="Show on a map"
-              />
-            </View>
+            {
+              selectedAddress.selected && (
+                <View style={{ flex: 1, alignItems: 'flex-start' }}>
+                  <Button
+                    type="clear"
+                    icon={<Icon name="map-marker-radius" type="material-community" size={20} color="#5280E2" />}
+                    title="Show on a map"
+                    onPress={() => {
+                      this.navigateTo('AddressMapPreview', {
+                        coords: {
+                          longitude: selectedAddress.longitude || selectedAddress.geometry.location.lng,
+                          latitude: selectedAddress.latitude || selectedAddress.geometry.location.lat,
+                        },
+                      });
+                    }}
+                  />
+                </View>
+              )
+            }
           </View>
           {!searchMode ? (
             <View style={{ marginTop: 30 }}>
