@@ -44,7 +44,7 @@ class App extends Component {
     try {
       await firebase.messaging().registerForRemoteNotifications();
     } catch (error) {
-      console.log('registerAppWithFCM ****', error);
+      console.log('registerAppWithFCM ****', JSON.stringify(error, null, 2));
     }
   };
 
@@ -54,7 +54,7 @@ class App extends Component {
       const { storeIsPermissionGranted } = this.props;
       storeIsPermissionGranted(permissionGranted);
     } catch (error) {
-      console.log('requestPermission ****', error);
+      console.log('requestPermission ****', JSON.stringify(error, null, 2));
     }
   };
 
@@ -64,7 +64,7 @@ class App extends Component {
       const { storeInstanceId } = this.props;
       storeInstanceId(id);
     } catch (error) {
-      console.log('getInstanceId ****', error);
+      console.log('getInstanceId ****', JSON.stringify(error, null, 2));
     }
   };
 
@@ -78,7 +78,7 @@ class App extends Component {
       const fcmToken = await firebase.messaging().getToken();
       storeFCMToken(fcmToken);
     } catch (error) {
-      console.log('getFCMToken ****', error);
+      console.log('getFCMToken ****', JSON.stringify(error, null, 2));
     }
   };
 

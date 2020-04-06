@@ -2,7 +2,8 @@ import { Component } from 'react';
 import { connect } from 'react-redux';
 import PushNotification from 'react-native-push-notification';
 import PushNotificationIOS from '@react-native-community/push-notification-ios';
-import { addPushNotification, setPushServerToken } from '../../redux/actions';
+import { addPushNotification, setPushServerToken, setCurrentNotification } from '../../redux/actions';
+import { deleteAccessRequest } from '../../redux/requests';
 
 class PushController extends Component {
   componentDidMount() {
@@ -18,22 +19,13 @@ class PushController extends Component {
       onNotification: async notification => {
         console.log('NOTIFICATION:', JSON.stringify(notification, null, 2));
 
-        switch (notification.type) {
-          case '1': {
-            break;
-          }
-          case '2': {
-            break;
-          }
-          case '3': {
-            break;
-          }
-          default:
-            break;
-        }
-
-        const { storePushNotification } = self.props;
+        const { storePushNotification, storeCurrentNotification } = self.props;
         storePushNotification(notification);
+        storeCurrentNotification(notification.id);
+
+        if (notification.type === '2' && notification.status === '0') {
+          await deleteAccessRequest(notification.accessRequestId);
+        }
 
         // Required on iOS only (see fetchCompletionHandler docs:
         // https://github.com/react-native-community/react-native-push-notification-ios)
@@ -42,7 +34,7 @@ class PushController extends Component {
       // Android only: GCM or FCM Sender ID (product_number)
       // (optional - not required for local notifications,
       // but is need to receive remote push notifications)
-      senderID: '781126567082',
+      senderID: '380409014283',
       // iOS only
       permissions: {
         alert: true,
@@ -62,6 +54,7 @@ class PushController extends Component {
 const actions = {
   storePushNotification: addPushNotification,
   storePushServerToken: setPushServerToken,
+  storeCurrentNotification: setCurrentNotification,
 };
 
 export default connect(null, actions)(PushController);

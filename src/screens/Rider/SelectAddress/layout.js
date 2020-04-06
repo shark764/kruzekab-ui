@@ -182,7 +182,10 @@ export default class SelectAddress extends Component {
               rounded
               size="small"
               icon={{
-                name: 'ios-arrow-back', type: 'ionicon', color: '#000000', size: 18,
+                name: 'ios-arrow-back',
+                type: 'ionicon',
+                color: '#000000',
+                size: 18,
               }}
               onPress={() => navigation.goBack()}
               activeOpacity={0.7}
@@ -246,25 +249,23 @@ export default class SelectAddress extends Component {
                 },
               }))}
             />
-            {
-              selectedAddress.selected && (
-                <View style={{ flex: 1, alignItems: 'flex-start' }}>
-                  <Button
-                    type="clear"
-                    icon={<Icon name="map-marker-radius" type="material-community" size={20} color="#5280E2" />}
-                    title="Show on a map"
-                    onPress={() => {
-                      this.navigateTo('AddressMapPreview', {
-                        coords: {
-                          longitude: selectedAddress.longitude || selectedAddress.geometry.location.lng,
-                          latitude: selectedAddress.latitude || selectedAddress.geometry.location.lat,
-                        },
-                      });
-                    }}
-                  />
-                </View>
-              )
-            }
+            {selectedAddress.selected && (
+              <View style={{ flex: 1, alignItems: 'flex-start' }}>
+                <Button
+                  type="clear"
+                  icon={<Icon name="map-marker-radius" type="material-community" size={20} color="#5280E2" />}
+                  title="Show on a map"
+                  onPress={() => {
+                    this.navigateTo('AddressMapPreview', {
+                      coords: {
+                        longitude: selectedAddress.longitude || selectedAddress.geometry.location.lng,
+                        latitude: selectedAddress.latitude || selectedAddress.geometry.location.lat,
+                      },
+                    });
+                  }}
+                />
+              </View>
+            )}
           </View>
           {!searchMode ? (
             <View style={{ marginTop: 30 }}>

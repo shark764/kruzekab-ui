@@ -40,10 +40,10 @@
 
       <meta-data
         android:name="com.dieam.reactnativepushnotification.notification_channel_name"
-        android:value="YOUR NOTIFICATION CHANNEL NAME"/>
+        android:value="KRUZE-KAB NOTIFICATIONS CHANNEL"/>
       <meta-data
         android:name="com.dieam.reactnativepushnotification.notification_channel_description"
-        android:value="YOUR NOTIFICATION CHANNEL DESCRIPTION"/>
+        android:value="THIS CHANNEL IS FOR NOTIFICATIONS PURPOSE | IT HANDLES ALL NOTIFICATIONS SENT/RECEIVED IN KRUZE-KAB APP"/>
       <meta-data
         android:name="com.dieam.reactnativepushnotification.notification_color"
         android:resource="@android:color/white"/>

@@ -13,7 +13,9 @@ import {
 import Form from './form';
 import validationSchema from './validation';
 import { GoBackButton } from '../../../components/Header/Navigator';
-import { loginRequest } from '../../../redux/requests';
+import { loginRequest, newDeviceRequest, getAllUserDevices } from '../../../redux/requests';
+import store from '../../../redux/store';
+import { getFCMToken } from '../../../redux/selectors';
 
 const StyledHeadline = styled(Headline)`
   margin-bottom: 0;
@@ -67,6 +69,13 @@ export default class Login extends Component {
         userType = 'driver';
       }
       login(userType, data.data.token, data.data.user);
+
+      // Register device with FCM token
+      const allD = await getAllUserDevices();
+
+      if (!allD.data.find(device => device.token === getFCMToken(store.getState()))) {
+        await newDeviceRequest();
+      }
 
       if (userType === 'rider') {
         // This is avoiding submit button loading icon

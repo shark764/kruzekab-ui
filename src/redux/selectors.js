@@ -38,6 +38,8 @@ export const getNewGroup = state => state.getIn(['app', 'newGroup']);
 
 export const getUserData = state => state.getIn(['app', 'userData']);
 
+export const getUserId = state => state.getIn(['app', 'userData', 'id']);
+
 export const getClientData = state => state.getIn(['app', 'userData', 'client']);
 
 export const getClientId = state => state.getIn(['app', 'userData', 'client', 'id']);
@@ -73,3 +75,7 @@ export const getIsRegisteredForRemoteNotifications = state => state.getIn(['app'
 export const getPushNotifications = state => state.getIn(['app', 'notifications'], new List([]));
 
 export const getPushServerToken = state => state.getIn(['app', 'pushServerToken']);
+
+export const getCurrentNotificationId = state => state.getIn(['app', 'currentNotificationId']);
+
+export const getCurrentNotification = state => getPushNotifications(state).find(notification => notification.get('id') === getCurrentNotificationId(state));

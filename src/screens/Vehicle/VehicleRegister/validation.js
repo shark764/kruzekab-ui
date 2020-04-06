@@ -1,12 +1,8 @@
 import * as Yup from 'yup';
 
 const validationSchema = Yup.object().shape({
-  car: Yup.string()
-    .label('Car')
-    .required(),
-  model: Yup.string()
-    .label('Model')
-    .required(),
+  car: Yup.string().label('Car').required(),
+  model: Yup.string().label('Model').required(),
   vehicleYear: Yup.number()
     .label('Year')
     .typeError('Value must be a number')
