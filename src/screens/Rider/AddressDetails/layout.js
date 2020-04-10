@@ -6,6 +6,7 @@ import { Input, Avatar, Button } from 'react-native-elements';
 import styled from 'styled-components';
 import { Formik } from 'formik';
 import { Container } from '../../../components/Form/Elements';
+import { createPlace, updatePlace } from '../../../redux/requests';
 
 const StyledHeadline = styled(Text)`
   width: 237px;
@@ -62,10 +63,16 @@ export default class AddressDetails extends Component {
 
     const { navigation } = props;
 
-    this.address = (navigation.state.params.selectedAddress.address && navigation.state.params.selectedAddress.address.split(','))
+    this.address = (navigation.state.params.selectedAddress.address
+      && navigation.state.params.selectedAddress.address.split(','))
       || (navigation.state.params.selectedAddress.formatted_address
         && navigation.state.params.selectedAddress.formatted_address.split(','))
-      || (navigation.state.params.selectedAddress.vicinity && navigation.state.params.selectedAddress.vicinity.split(','));
+      || (navigation.state.params.selectedAddress.vicinity
+        && navigation.state.params.selectedAddress.vicinity.split(',')) || [
+      navigation.state.params.selectedAddress.address_1,
+      navigation.state.params.selectedAddress.address_2,
+      navigation.state.params.selectedAddress.address_3,
+    ];
 
     this.state = {
       selectedAddress: navigation.state.params.selectedAddress,
@@ -78,8 +85,52 @@ export default class AddressDetails extends Component {
       saveIconBackgroundColor: '#DDE5F7',
       saveIcon: 'plus',
       locationAlias: '',
+      note: navigation.state.params.selectedAddress.note,
     };
   }
+
+  saveAddress = async ({
+    address1, address2, address3, name, note,
+  }) => {
+    const { selectedAddress } = this.state;
+    this.setState({
+      saveStatus: 'Saving...',
+      saveIconBackgroundColor: '#5280E2',
+      saveIconColor: '#FFFFFF',
+      saveIcon: 'hourglass-o',
+    });
+    try {
+      const placeData = {
+        address1,
+        address2,
+        address3,
+        name,
+        note,
+        longitude: selectedAddress.longitude || selectedAddress.geometry.location.lng,
+        latitude: selectedAddress.latitude || selectedAddress.geometry.location.lat,
+      };
+      if (!selectedAddress.id) {
+        await createPlace(placeData);
+      } else {
+        await updatePlace({ id: selectedAddress.id, ...placeData });
+      }
+
+      this.setState({
+        saveStatus: 'Saved',
+        saveIconBackgroundColor: '#5280E2',
+        saveIconColor: '#FFFFFF',
+        saveIcon: 'check',
+      });
+    } catch (error) {
+      console.log('tambien aca');
+      this.setState({
+        saveStatus: 'Error',
+        saveIconBackgroundColor: '#FAD0D2',
+        saveIconColor: '#EE0000',
+        saveIcon: 'exclamation-circle',
+      });
+    }
+  };
 
   render() {
     const { navigation } = this.props;
@@ -88,7 +139,7 @@ export default class AddressDetails extends Component {
       address2,
       name,
       selectedAddress,
-      notes,
+      note,
       locationAlias,
       saveIcon,
       saveIconColor,
@@ -144,6 +195,7 @@ export default class AddressDetails extends Component {
                 address1,
                 address2,
                 name,
+                note,
               }}
               validate={values => {
                 const errors = {};
@@ -153,13 +205,12 @@ export default class AddressDetails extends Component {
                 return errors;
               }}
               onSubmit={values => {
-                console.log(selectedAddress);
                 const address = `${values.address1}, ${values.address2}, ${values.address3}`;
                 const newSelectedAddress = {
                   longitude: selectedAddress.longitude || selectedAddress.geometry.location.lng,
                   latitude: selectedAddress.latitude || selectedAddress.geometry.location.lat,
                   name: values.name,
-                  notes,
+                  note: values.note,
                   alias: locationAlias,
                   address,
                 };
@@ -184,7 +235,13 @@ export default class AddressDetails extends Component {
                   <Input inputStyle={inputStyle} value={values.address1} onChangeText={handleChange('address1')} />
                   <Input inputStyle={inputStyle} value={values.address2} onChangeText={handleChange('address2')} />
                   <StyledText>Add a note</StyledText>
-                  <TextArea multiline numberOfLines={4} placeholder="Your message here..." />
+                  <TextArea
+                    value={values.note}
+                    multiline
+                    numberOfLines={4}
+                    placeholder="Your message here..."
+                    onChangeText={handleChange('note')}
+                  />
                   <View
                     style={{
                       marginTop: 29,
@@ -196,12 +253,7 @@ export default class AddressDetails extends Component {
                       rounded
                       size="small"
                       icon={{ name: saveIcon, type: 'font-awesome', color: saveIconColor }}
-                      onPress={() => this.setState({
-                        saveStatus: 'Saved',
-                        saveIconBackgroundColor: '#5280E2',
-                        saveIconColor: '#FFFFFF',
-                        saveIcon: 'check',
-                      })}
+                      onPress={() => this.saveAddress(values)}
                       activeOpacity={0.7}
                       overlayContainerStyle={{
                         backgroundColor: saveIconBackgroundColor,

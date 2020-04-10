@@ -32,6 +32,19 @@ export const fetchRiders = async () => {
   return keysToCamel(data);
 };
 
+export const fetchPlaces = async () => {
+  const clientId = getClientId(store.getState());
+  const { data } = await Axios.get(`${environment}/client/${clientId}/place`, {
+    headers: {
+      Accept: 'application/json',
+    },
+    params: {},
+  });
+  console.log('DATA || =>', keysToCamel(data.data));
+
+  return data.data.map(element => keysToCamel(element));
+};
+
 export const fetchGroups = async () => {
   const clientId = getClientId(store.getState());
   const token = getUserToken(store.getState());
@@ -57,6 +70,71 @@ export const fetchGroup = async groupId => {
     },
     params: {},
   });
+  console.log('DATA || =>', keysToCamel(data));
+
+  return keysToCamel(data);
+};
+
+export const createPlace = async ({
+  name, address1, address2, address3, note, longitude, latitude,
+}) => {
+  const clientId = getClientId(store.getState());
+  console.log('preliminar data =>', {
+    name,
+    address1,
+    address2,
+    address3,
+    note,
+    longitude,
+    latitude,
+  });
+  const { data } = await Axios.post(
+    `${environment}/client/${clientId}/place`,
+    {
+      name,
+      address_1: address1,
+      address_2: address2 || '',
+      address_3: address3 || '',
+      note,
+      longitude,
+      latitude,
+    },
+    {
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+    },
+  );
+
+  console.log('DATA || =>', keysToCamel(data));
+
+  return keysToCamel(data);
+};
+
+export const updatePlace = async ({
+  id, name, address1, address2, address3, note, longitude, latitude,
+}) => {
+  const clientId = getClientId(store.getState());
+  const { data } = await Axios.put(
+    `${environment}/client/${clientId}/place/${id}`,
+    {
+      name,
+      address_1: address1,
+      address_2: address2 || '',
+      address_3: address3 || '',
+      note: note || 'note',
+      longitude,
+      latitude,
+    },
+    {
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+    },
+  );
+
   console.log('DATA || =>', keysToCamel(data));
 
   return keysToCamel(data);
