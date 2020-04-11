@@ -27,22 +27,25 @@ export const fetchRiders = async () => {
     },
     params: {},
   });
-  console.log('DATA || =>', keysToCamel(data));
+  console.log('DATA || =>', JSON.stringify(keysToCamel(data), null, 2));
 
   return keysToCamel(data);
 };
 
 export const fetchPlaces = async () => {
   const clientId = getClientId(store.getState());
+  const token = getUserToken(store.getState());
   const { data } = await Axios.get(`${environment}/client/${clientId}/place`, {
     headers: {
       Accept: 'application/json',
+      'Content-Type': 'application/json',
+      Authorization: `${token}`,
     },
     params: {},
   });
-  console.log('DATA || =>', keysToCamel(data.data));
+  console.log('DATA || =>', JSON.stringify(keysToCamel(data.data), null, 2));
 
-  return data.data.map(element => keysToCamel(element));
+  return keysToCamel(data.data);
 };
 
 export const fetchGroups = async () => {
@@ -55,7 +58,7 @@ export const fetchGroups = async () => {
     },
     params: {},
   });
-  console.log('DATA || =>', keysToCamel(data));
+  console.log('DATA || =>', JSON.stringify(keysToCamel(data), null, 2));
 
   return keysToCamel(data);
 };
@@ -70,7 +73,7 @@ export const fetchGroup = async groupId => {
     },
     params: {},
   });
-  console.log('DATA || =>', keysToCamel(data));
+  console.log('DATA || =>', JSON.stringify(keysToCamel(data), null, 2));
 
   return keysToCamel(data);
 };
@@ -107,7 +110,7 @@ export const createPlace = async ({
     },
   );
 
-  console.log('DATA || =>', keysToCamel(data));
+  console.log('DATA || =>', JSON.stringify(keysToCamel(data), null, 2));
 
   return keysToCamel(data);
 };
@@ -135,7 +138,7 @@ export const updatePlace = async ({
     },
   );
 
-  console.log('DATA || =>', keysToCamel(data));
+  console.log('DATA || =>', JSON.stringify(keysToCamel(data), null, 2));
 
   return keysToCamel(data);
 };
@@ -447,7 +450,7 @@ export const fetchParentAccess = async () => {
     },
     params: {},
   });
-  console.log('DATA || =>', keysToCamel(data));
+  console.log('DATA || =>', JSON.stringify(keysToCamel(data), null, 2));
 
   return keysToCamel(data);
 };
@@ -462,7 +465,7 @@ export const fetchExternalRiders = async () => {
     },
     params: {},
   });
-  console.log('DATA || =>', keysToCamel(data));
+  console.log('DATA || =>', JSON.stringify(keysToCamel(data), null, 2));
 
   return keysToCamel(data);
 };
@@ -491,7 +494,7 @@ export const addParentToGroup = async riders => {
       },
     );
 
-    console.log('DATA || =>', keysToCamel(data));
+    console.log('DATA || =>', JSON.stringify(keysToCamel(data), null, 2));
 
     return { data: keysToCamel(data), status };
   } catch (error) {
@@ -530,7 +533,7 @@ export const addRidersToGroupRequest = async riders => {
       },
     );
 
-    console.log('DATA || =>', keysToCamel(data));
+    console.log('DATA || =>', JSON.stringify(keysToCamel(data), null, 2));
 
     return { data: keysToCamel(data), status };
   } catch (error) {
@@ -556,7 +559,7 @@ export const searchClientByPhoneNumber = async phoneNumber => {
     },
     params: {},
   });
-  console.log('DATA || =>', keysToCamel(data));
+  console.log('DATA || =>', JSON.stringify(keysToCamel(data), null, 2));
 
   return keysToCamel(data);
 };
@@ -571,7 +574,7 @@ export const getPendingAccessRequest = async () => {
     },
     params: {},
   });
-  console.log('DATA || =>', keysToCamel(data));
+  console.log('DATA || =>', JSON.stringify(keysToCamel(data), null, 2));
 
   return keysToCamel(data);
 };
@@ -595,7 +598,7 @@ export const createAccessRequest = async phoneNumber => {
       },
     );
 
-    console.log('DATA || =>', keysToCamel(data));
+    console.log('DATA || =>', JSON.stringify(keysToCamel(data), null, 2));
 
     return { data: keysToCamel(data), status };
   } catch (error) {
@@ -629,7 +632,7 @@ export const changeAccessRequestStatus = async (accessId, value = 0) => {
       },
     );
 
-    console.log('DATA || =>', keysToCamel(data));
+    console.log('DATA || =>', JSON.stringify(keysToCamel(data), null, 2));
 
     return { data: keysToCamel(data), status };
   } catch (error) {
@@ -658,7 +661,7 @@ export const deleteAccessRequest = async accessId => {
       data: {},
     });
 
-    console.log('DATA || =>', keysToCamel(data));
+    console.log('DATA || =>', JSON.stringify(keysToCamel(data), null, 2));
 
     return { data: keysToCamel(data), status };
   } catch (error) {
@@ -686,7 +689,7 @@ export const getAllUserDevices = async () => {
       environment: 'dev',
     },
   });
-  console.log('DATA || =>', keysToCamel(data));
+  console.log('DATA || =>', JSON.stringify(keysToCamel(data), null, 2));
 
   return keysToCamel(data);
 };
@@ -712,7 +715,7 @@ export const newDeviceRequest = async () => {
       },
     );
 
-    console.log('DATA || =>', keysToCamel(data));
+    console.log('DATA || =>', JSON.stringify(keysToCamel(data), null, 2));
 
     return { data: keysToCamel(data), status };
   } catch (error) {

@@ -1,4 +1,4 @@
-export const toCamel = s => s.replace(/([-_][a-z])/gi, $1 => $1.toUpperCase().replace('-', '').replace('_', ''));
+export const toCamel = s => s.replace(/([-_]\w)/gi, $1 => $1.toUpperCase().replace('-', '').replace('_', ''));
 
 export const isArray = a => Array.isArray(a);
 
