@@ -8,6 +8,7 @@ import styled from 'styled-components';
 import axios from 'axios';
 import AwesomeDebouncePromise from 'awesome-debounce-promise';
 import { Container } from '../../../components/Form/Elements';
+import { fetchPlaces } from '../../../redux/requests';
 
 const StyledHeadline = styled(Text)`
   width: 237px;
@@ -51,7 +52,16 @@ export default class SelectAddress extends Component {
         selected: false,
       },
       searchedPlaces: [],
+      savedPlaces: [],
     };
+  }
+
+  async componentDidMount() {
+    const savedPlaces = await fetchPlaces();
+
+    this.setState({
+      savedPlaces,
+    });
   }
 
   navigateTo = (destinationScreen, params = {}) => {
@@ -98,7 +108,8 @@ export default class SelectAddress extends Component {
             title={l.alias || l.name}
             subtitle={
               (l.address && l.address.split(',')[l.address.split(',').length - 1])
-              || l.vicinity.split(',')[l.vicinity.split(',').length - 1]
+              || (l.vicinity && l.vicinity.split(',')[l.vicinity.split(',').length - 1])
+              || l.address_1
             }
             checkBox={{
               iconType: 'material-community',
@@ -115,12 +126,16 @@ export default class SelectAddress extends Component {
               checked: placesStatus[type] === i,
             }}
             onPress={() => {
+              const place = places[i];
+              if (type === 'searchedPlaces' && place.id) {
+                delete place.id;
+              }
               this.setState(prevState => ({
                 activeIndex: {
                   ...prevState.activeIndex,
                   [type]: i,
                 },
-                selectedAddress: { ...places[i], selected: true },
+                selectedAddress: { ...place, selected: true },
               }));
             }}
             bottomDivider
@@ -153,18 +168,15 @@ export default class SelectAddress extends Component {
       },
     ];
 
-    const savedPlaces = [
-      {
-        name: 'Sunnyside Park',
-        address: '1735 Sunnyside Ave S, Salt Lake City, UT 84108',
-        latitude: 40.7469248,
-        longitude: -111.8573841,
-      },
-    ];
-
     const { navigation } = this.props;
     const {
-      addressPlaceholder, firstQuery, searchMode, activeIndex, searchedPlaces, selectedAddress,
+      addressPlaceholder,
+      firstQuery,
+      searchMode,
+      activeIndex,
+      searchedPlaces,
+      selectedAddress,
+      savedPlaces,
     } = this.state;
 
     return (
