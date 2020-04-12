@@ -69,9 +69,9 @@ export default class AddressDetails extends Component {
         && navigation.state.params.selectedAddress.formatted_address.split(','))
       || (navigation.state.params.selectedAddress.vicinity
         && navigation.state.params.selectedAddress.vicinity.split(',')) || [
-      navigation.state.params.selectedAddress.address_1,
-      navigation.state.params.selectedAddress.address_2,
-      navigation.state.params.selectedAddress.address_3,
+      navigation.state.params.selectedAddress.address1,
+      navigation.state.params.selectedAddress.address2,
+      navigation.state.params.selectedAddress.address3,
     ];
 
     this.state = {
