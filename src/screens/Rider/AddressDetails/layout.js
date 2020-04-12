@@ -207,8 +207,8 @@ export default class AddressDetails extends Component {
               onSubmit={values => {
                 const address = `${values.address1}, ${values.address2}, ${values.address3}`;
                 const newSelectedAddress = {
-                  longitude: selectedAddress.longitude || selectedAddress.geometry.location.lng,
-                  latitude: selectedAddress.latitude || selectedAddress.geometry.location.lat,
+                  longitude: parseFloat(selectedAddress.longitude || selectedAddress.geometry.location.lng),
+                  latitude: parseFloat(selectedAddress.latitude || selectedAddress.geometry.location.lat),
                   name: values.name,
                   note: values.note,
                   alias: locationAlias,
