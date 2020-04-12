@@ -109,7 +109,7 @@ export default class SelectAddress extends Component {
             subtitle={
               (l.address && l.address.split(',')[l.address.split(',').length - 1])
               || (l.vicinity && l.vicinity.split(',')[l.vicinity.split(',').length - 1])
-              || l.address_1
+              || l.address1
             }
             checkBox={{
               iconType: 'material-community',
