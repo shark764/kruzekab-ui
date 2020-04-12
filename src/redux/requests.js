@@ -10,8 +10,11 @@ import {
   getUserToken,
   getFCMToken,
   getUserId,
+  getNewRideData,
+  getCurrentPosition,
 } from './selectors';
 import { keysToCamel, urlencode } from '../utils/string';
+import { truncate } from '../utils/number';
 
 const environment = 'https://api.kruzekab.com/api';
 
@@ -745,6 +748,57 @@ export const deleteUserDevice = async ({ deviceId }) => {
         environment: 'dev',
       },
     });
+
+    return { data: keysToCamel(data), status };
+  } catch (error) {
+    const {
+      data: {
+        data: { result },
+      },
+      status,
+    } = error.response;
+
+    const errorResponse = { code: status, message: result };
+    throw errorResponse;
+  }
+};
+
+export const createRide = async () => {
+  const clientId = getClientId(store.getState());
+  const newRide = getNewRideData(store.getState());
+  const currentPosition = getCurrentPosition(store.getState());
+  const token = getUserToken(store.getState());
+
+  const latitude = newRide.getIn(['selectedAddress', 'latitude'], null)
+    || newRide.getIn(['selectedAddress', 'geometry', 'location', 'lat'], null);
+  const longitude = newRide.getIn(['selectedAddress', 'longitude'], null)
+    || newRide.getIn(['selectedAddress', 'geometry', 'location', 'lng'], null);
+
+  try {
+    const { data, status } = await Axios.post(
+      `${environment}/client/${clientId}/ride`,
+      {
+        is_for_group: 1,
+        group_id: newRide.get('groupId'),
+        is_origin_registered: 0,
+        // origin_place_id: 1,
+        is_destination_registered: 0,
+        // destination_place_id: 2,
+        origin_latitude: truncate(currentPosition.get('latitude'), 7),
+        origin_longitude: truncate(currentPosition.get('longitude'), 7),
+        destination_latitude: latitude,
+        destination_longitude: longitude,
+        riders: newRide.get('riders').toJS(),
+      },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `${token}`,
+        },
+      },
+    );
+
+    console.log('DATA || =>', JSON.stringify(keysToCamel(data), null, 2));
 
     return { data: keysToCamel(data), status };
   } catch (error) {

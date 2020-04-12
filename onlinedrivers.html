@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+	<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <title>Simple Markers</title>
+    <style>
+      /* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
+      #map {
+        height: 100%;
+      }
+      /* Optional: Makes the sample page fill the window. */
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+    </style>
+  </head>
+  <body>
+	<div>
+		<input type="text" id="location" value="13.730,-89.210"/>
+		<input type="button" id="getDrivers" value="Get Nearby Drivers" onclick="loadOnlineDrivers()"/>
+	</div>
+    <div id="map"></div>
+    <script>
+	
+		let api_url = 'https://api.kruzekab.com/api';
+		let map;
+		// self executing function here
+		(function() {
+		   // your page initialization code here
+		   // the DOM will be available here
+		   //getOnlineDrivers();
+
+		})();
+		
+		function loadOnlineDrivers(){
+		
+
+			let location = document.getElementById("location").value;
+			console.log(location);
+			let url = api_url +'/nearbyDrivers?location='+location;
+			axios.get(url)
+				.then((response) => {
+				loadDriverToMap(response.data.data);
+			});
+		
+		}
+
+		function initMap() {
+
+			let myLatLng = {lat:13.69275, lng: -89.24091};
+			
+			//loadOnlineDrivers();
+
+			map = new google.maps.Map(document.getElementById('map'), {
+			  zoom: 10,
+			  center: myLatLng
+			});
+
+			/*var marker = new google.maps.Marker({
+			  position: myLatLng,
+			  map: map,
+			  title: 'Hello World!'
+			});*/
+		}
+		
+		function loadDriverToMap(drivers){
+			let driverLocation;
+			let infowindow;
+			
+			drivers.forEach(function(driver) {
+				//console.log(driver);
+				driverLocation = {lat:parseFloat(driver.location.latitude), lng: parseFloat(driver.location.longitude)};
+				contentString = 
+					"<div>"+
+						"<p><strong>Name: </strong>"+driver.general_info.name+"</p>"+
+						"<p><strong>Location: </strong>"+driver.location.address+"</p>"+
+						"<p><strong>Distance: </strong>"+driver.travel_info.distance+"</p>"+
+						"<p><strong>Time: </strong>"+driver.travel_info.time+"</p>"+
+					"<div>";
+				infowindow = new google.maps.InfoWindow({
+					content: contentString
+				});
+				let marker = new google.maps.Marker({
+					position: driverLocation,
+					map: map,
+					title: driver.general_info.name
+				});
+				marker.addListener('click', function() {
+					infowindow.open(map, marker);
+				});				
+			});	
+		
+		}
+    </script>
+	
+	
+	
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB2K-1CRDnjWPZ5_uihE3doZ6_Lc5kmGrQ&callback=initMap">
+    </script>
+	
+  </body>
+</html>

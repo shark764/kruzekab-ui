@@ -83,6 +83,16 @@ export default class SelectAddress extends Component {
     });
   };
 
+  handleOnSelectAddress = selectedAddress => {
+    const { addToNewRide } = this.props;
+    addToNewRide({ selectedAddress });
+
+    this.navigateTo('AddressDetails', {
+      selectedAddress,
+      // setSelectedAddress: this.props.navigation.state.params.setSelectedAddress
+    });
+  };
+
   renderPlacesList = (places, type) => {
     const { activeIndex } = this.state;
     const placesStatus = activeIndex;
@@ -336,12 +346,7 @@ export default class SelectAddress extends Component {
             <Button
               title="Done"
               disabled={!selectedAddress.selected}
-              onPress={() => {
-                this.navigateTo('AddressDetails', {
-                  selectedAddress,
-                  // setSelectedAddress: this.props.navigation.state.params.setSelectedAddress
-                });
-              }}
+              onPress={() => this.handleOnSelectAddress(selectedAddress)}
             />
           </View>
         </ScrollView>
@@ -352,4 +357,5 @@ export default class SelectAddress extends Component {
 
 SelectAddress.propTypes = {
   currentPosition: PropTypes.shape.isRequired,
+  addToNewRide: PropTypes.func.isRequired,
 };

@@ -6,7 +6,6 @@ import styled from 'styled-components';
 import { Container } from '../../../../components/Form/Elements';
 import { ExtendedGoBackButton } from '../../../../components/Header/Navigator';
 import Form from './form';
-import validationSchema from './validation';
 import { fetchGroups } from '../../../../redux/requests';
 
 const StyledContainer = styled(Container)`
@@ -58,8 +57,9 @@ export default class SelectGroup extends Component {
 
   handleOnSubmit = async (values, actions) => {
     const { selected } = this.state;
-    const { setSelectedGroup } = this.props;
+    const { setSelectedGroup, addToNewRide } = this.props;
     setSelectedGroup(selected);
+    addToNewRide({ groupId: selected });
 
     const { navigation } = this.props;
 
@@ -71,17 +71,6 @@ export default class SelectGroup extends Component {
       groupId: selected,
       selectedAddress: navigation.state.params.selectedAddress,
     });
-  };
-
-  handleOnAddGroup = async (values, actions) => {
-    try {
-      setTimeout(() => {
-        const { navigation } = this.props;
-        navigation.navigate('NewGroup', { userType: 'rider' });
-      }, 1500);
-    } catch (error) {
-      actions.setFieldError('general', error.message);
-    }
   };
 
   handleOnSelected = key => {
@@ -99,12 +88,7 @@ export default class SelectGroup extends Component {
         <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
           <Form
             handleOnSubmit={this.handleOnSubmit}
-            initialValues={{
-              userType: 2,
-              selected: '',
-            }}
-            validationSchema={validationSchema}
-            handleOnAddGroup={this.handleOnAddGroup}
+            handleOnAddGroup={() => this.navigateTo('NewGroup', { context: 'select-group', userType: 'rider' })}
             handleOnSelected={this.handleOnSelected}
             groups={groups}
             selected={selected}
@@ -119,4 +103,5 @@ SelectGroup.propTypes = {
   groups: PropTypes.shape([]).isRequired,
   setGroups: PropTypes.func.isRequired,
   setSelectedGroup: PropTypes.func.isRequired,
+  addToNewRide: PropTypes.func.isRequired,
 };

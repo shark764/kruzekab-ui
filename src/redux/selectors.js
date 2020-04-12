@@ -79,3 +79,11 @@ export const getPushServerToken = state => state.getIn(['app', 'pushServerToken'
 export const getCurrentNotificationId = state => state.getIn(['app', 'currentNotificationId']);
 
 export const getCurrentNotification = state => getPushNotifications(state).find(notification => notification.get('id') === getCurrentNotificationId(state));
+
+export const getNewRideData = state => state.getIn(['app', 'newRide']);
+
+export const getCurrentRideId = state => state.getIn(['app', 'currentRideId']);
+
+export const getRides = state => state.getIn(['app', 'rides'], new List([]));
+
+export const getCurrentRide = state => getRides(state).find(ride => ride.get('id') === getCurrentRideId(state));
