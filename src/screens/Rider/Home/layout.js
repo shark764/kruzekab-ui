@@ -18,7 +18,6 @@ import goal from '../../../assets/goal.png';
 import pin from '../../../assets/ic_dest.png';
 import car from '../../../assets/car_.png';
 import Form from './form';
-import validationSchema from './validation';
 
 const styles = StyleSheet.create({
   map: {
@@ -117,7 +116,7 @@ export default class Home extends Component {
       carPosition: null,
       carAngle: 0,
       driveState: '',
-      photo: null,
+      isMapReady: false,
     };
   }
 
@@ -318,6 +317,10 @@ export default class Home extends Component {
     return (this.degrees(Math.atan2(dLong, dPhi)) + 360.0) % 360.0;
   };
 
+  onMapLayout = () => {
+    this.setState({ isMapReady: true });
+  };
+
   render() {
     const {
       mapLoaded,
@@ -330,10 +333,10 @@ export default class Home extends Component {
       latitudeDelta,
       longitudeDelta,
       driveState,
-      photo,
+      isMapReady,
     } = this.state;
     const {
-      currentPosition, selectedAddress, updateLocation, location,
+      currentPosition, selectedAddress, updateLocation, location, currentRide, selectedGroup,
     } = this.props;
 
     const MapContainer = driveState !== '' ? ImageContainer : ImageContainerFull;
@@ -356,76 +359,82 @@ export default class Home extends Component {
                 latitudeDelta,
                 longitudeDelta,
               }}
+              onMapReady={this.onMapLayout}
             >
-              {driveState === 'On trip' && (
-                <Marker.Animated
-                  ref={marker => {
-                    this.carMarker = marker;
-                  }}
-                  style={{ transform: [{ rotate: `${carAngle}deg` }] }}
-                  coordinate={carPosition}
-                  rotation={carPosition.angle}
-                >
-                  <Image source={car} style={{ height: 35, width: 30 }} />
-                </Marker.Animated>
-              )}
-              <Circle
-                key={(currentPosition.get('latitude') + currentPosition.get('longitude')).toString()}
-                center={currentPosition.toJS()}
-                radius={20}
-                strokeWidth={1}
-                strokeColor="#4CCA8D"
-                fillColor="rgba(134, 227, 154, 0.58)"
-              />
+              {isMapReady && (
+                <>
+                  {driveState === 'On trip' && (
+                    <Marker.Animated
+                      ref={marker => {
+                        this.carMarker = marker;
+                      }}
+                      style={{ transform: [{ rotate: `${carAngle}deg` }] }}
+                      coordinate={carPosition}
+                      rotation={carPosition.angle}
+                    >
+                      <Image source={car} style={{ height: 35, width: 30 }} />
+                    </Marker.Animated>
+                  )}
 
-              <Circle
-                key={(currentPosition.get('latitude') + currentPosition.get('longitude') + 1).toString()}
-                center={currentPosition.toJS()}
-                radius={8}
-                strokeWidth={4}
-                strokeColor="#FDFDFD"
-                fillColor="#4CCA8D"
-              />
+                  <Circle
+                    key={(currentPosition.get('latitude') + currentPosition.get('longitude')).toString()}
+                    center={currentPosition.toJS()}
+                    radius={20}
+                    strokeWidth={1}
+                    strokeColor="#4CCA8D"
+                    fillColor="rgba(134, 227, 154, 0.58)"
+                  />
 
-              {selectedAddress.getIn(['to', 'name']) && (
-                <Marker
-                  coordinate={{
-                    latitude: selectedAddress.getIn(['to', 'latitude']) || 37.78825,
-                    longitude: selectedAddress.getIn(['to', 'longitude']) || -122.4324,
-                  }}
-                >
-                  <Image source={goal} style={{ height: 30, width: 30 }} />
-                </Marker>
-              )}
+                  <Circle
+                    key={(currentPosition.get('latitude') + currentPosition.get('longitude') + 1).toString()}
+                    center={currentPosition.toJS()}
+                    radius={8}
+                    strokeWidth={4}
+                    strokeColor="#FDFDFD"
+                    fillColor="#4CCA8D"
+                  />
 
-              {selectedAddress.getIn(['from', 'name']) && (
-                <Marker
-                  coordinate={{
-                    latitude: selectedAddress.getIn(['from', 'latitude']) || 37.78825,
-                    longitude: selectedAddress.getIn(['from', 'longitude']) || -122.4324,
-                  }}
-                  pinColor="blue"
-                >
-                  <Image source={pin} style={{ height: 40, width: 25 }} />
-                </Marker>
-              )}
+                  {selectedAddress.getIn(['to', 'name']) && (
+                    <Marker
+                      coordinate={{
+                        latitude: selectedAddress.getIn(['to', 'latitude']) || 37.78825,
+                        longitude: selectedAddress.getIn(['to', 'longitude']) || -122.4324,
+                      }}
+                    >
+                      <Image source={goal} style={{ height: 30, width: 30 }} />
+                    </Marker>
+                  )}
 
-              {coords.length > 0 && (
-                <Polyline
-                  coordinates={[
-                    {
-                      latitude: selectedAddress.getIn(['from', 'latitude']),
-                      longitude: selectedAddress.getIn(['from', 'longitude']),
-                    }, // optional
-                    ...coords,
-                    {
-                      latitude: selectedAddress.getIn(['to', 'latitude']),
-                      longitude: selectedAddress.getIn(['to', 'longitude']),
-                    }, // optional
-                  ]}
-                  strokeWidth={4}
-                  strokeColor="#6B768D"
-                />
+                  {selectedAddress.getIn(['from', 'name']) && (
+                    <Marker
+                      coordinate={{
+                        latitude: selectedAddress.getIn(['from', 'latitude']) || 37.78825,
+                        longitude: selectedAddress.getIn(['from', 'longitude']) || -122.4324,
+                      }}
+                      pinColor="blue"
+                    >
+                      <Image source={pin} style={{ height: 40, width: 25 }} />
+                    </Marker>
+                  )}
+
+                  {coords.length > 0 && (
+                    <Polyline
+                      coordinates={[
+                        {
+                          latitude: selectedAddress.getIn(['from', 'latitude']),
+                          longitude: selectedAddress.getIn(['from', 'longitude']),
+                        }, // optional
+                        ...coords,
+                        {
+                          latitude: selectedAddress.getIn(['to', 'latitude']),
+                          longitude: selectedAddress.getIn(['to', 'longitude']),
+                        }, // optional
+                      ]}
+                      strokeWidth={4}
+                      strokeColor="#6B768D"
+                    />
+                  )}
+                </>
               )}
             </MapView>
           ) : (
@@ -545,16 +554,7 @@ export default class Home extends Component {
         {driveState !== '' && (
           <StyledContainer2 enabled behavior="">
             <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
-              <Form
-                handleOnSubmit={this.handleOnSubmit}
-                initialValues={{
-                  userType: 2,
-                  name: '',
-                }}
-                validationSchema={validationSchema}
-                handleChoosePhoto={this.handleChoosePhoto}
-                photo={photo}
-              />
+              <Form handleOnSubmit={this.handleOnSubmit} currentRide={currentRide} selectedGroup={selectedGroup} />
             </ScrollView>
           </StyledContainer2>
         )}
@@ -648,4 +648,6 @@ Home.propTypes = {
     get: PropTypes.func,
   }).isRequired,
   updateLocation: PropTypes.func.isRequired,
+  currentRide: PropTypes.shape({}).isRequired,
+  selectedGroup: PropTypes.shape({}).isRequired,
 };

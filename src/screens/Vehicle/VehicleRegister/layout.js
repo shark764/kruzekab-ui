@@ -28,11 +28,10 @@ export default class VehicleRegister extends Component {
 
   handleOnSubmit = async (values, actions) => {
     try {
-      const { addToNewUser, createUser } = this.props;
+      const { addToNewUser } = this.props;
       const { photo } = this.state;
       addToNewUser({ ...values, carInsurancePicture: photo });
       await createDriver();
-      createUser(values);
 
       // This is avoiding submit button loading icon
       actions.setSubmitting(false);
@@ -82,5 +81,4 @@ export default class VehicleRegister extends Component {
 VehicleRegister.propTypes = {
   initialValues: PropTypes.shape({}).isRequired,
   addToNewUser: PropTypes.func.isRequired,
-  createUser: PropTypes.func.isRequired,
 };

@@ -29,20 +29,14 @@ const PhotoAvatar = props => (
   />
 );
 
-const ridersList = [
-  { key: 'edit-rider1', imgPath: require('../../../assets/edit-rider.png'), name: 'Claire' },
-  { key: 'edit-rider2', imgPath: require('../../../assets/edit-rider2.png'), name: 'Ben' },
-];
-
-const Form = ({ handleOnSubmit, initialValues, validationSchema }) => (
+const Form = ({ handleOnSubmit, currentRide, selectedGroup }) => (
   <Formik
     enableReinitialize
-    initialValues={initialValues}
+    initialValues={{}}
     onSubmit={(values, actions) => {
       console.log('values =>', values);
       handleOnSubmit(values, actions);
     }}
-    validationSchema={validationSchema}
   >
     {({
       handleSubmit, errors, isValid, isSubmitting,
@@ -50,9 +44,23 @@ const Form = ({ handleOnSubmit, initialValues, validationSchema }) => (
       <>
         <View style={{ flexDirection: 'column' }}>
           <IconContainer>
-            <PhotoAvatar source={require('../../../assets/driver-photo.png')} />
-            <View style={{}}>
-              <Text style={{ marginLeft: 10, marginTop: 5 }}>Patrick L.</Text>
+            <PhotoAvatar
+              source={{
+                uri: `https://${currentRide.getIn(['driver', 'generalInfo', 'profilePictureUrl'])}`,
+              }}
+            />
+            <View
+              style={{
+                textAlign: 'left',
+                alignSelf: 'flex-start',
+                alignItems: 'flex-start',
+                flexDirection: 'row',
+                justifyContent: 'flex-start',
+              }}
+            >
+              <Text style={{ marginLeft: 10, marginTop: 5 }}>
+                {currentRide.getIn(['driver', 'generalInfo', 'name'])}
+              </Text>
               <Icon style={{ marginLeft: 5 }} name="ios-star" type="ionicon" color="#4cca8d" />
             </View>
           </IconContainer>
@@ -67,7 +75,7 @@ const Form = ({ handleOnSubmit, initialValues, validationSchema }) => (
             }}
           >
             <Badge
-              value="HS785K"
+              value={currentRide.getIn(['driver', 'vehicle', 'automaker'], '').toUpperCase()}
               badgeStyle={{
                 color: '#212226',
                 backgroundColor: '#a8b4cd',
@@ -78,18 +86,6 @@ const Form = ({ handleOnSubmit, initialValues, validationSchema }) => (
               }}
               textStyle={{ fontSize: 18 }}
             />
-          </View>
-          <View
-            style={{
-              flexDirection: 'row',
-              flex: 1,
-              marginLeft: 25,
-              marginTop: 5,
-              fontSize: 20,
-              color: '#3e4958',
-            }}
-          >
-            <Text>Volkswagen Jetta</Text>
           </View>
 
           <View style={{ flexDirection: 'row', flex: 1, marginTop: 15 }}>
@@ -117,7 +113,7 @@ const Form = ({ handleOnSubmit, initialValues, validationSchema }) => (
             }}
           >
             <Badge
-              value="2"
+              value={currentRide.get('riders').size}
               badgeStyle={{
                 color: '#212226',
                 backgroundColor: '#a8b4cd',
@@ -140,7 +136,11 @@ const Form = ({ handleOnSubmit, initialValues, validationSchema }) => (
                 color: '#6b768d',
               }}
             >
-              Claire, Ben
+              {currentRide
+                .get('riders')
+                .toJS()
+                .map(rider => rider.name)
+                .join(', ')}
             </Text>
           </View>
           <View
@@ -164,14 +164,16 @@ const Form = ({ handleOnSubmit, initialValues, validationSchema }) => (
                 color: '#6b768d',
               }}
             >
-              Kid&apos;s School
+              {selectedGroup.get('name')}
             </Text>
             <View style={{ flexDirection: 'row', flex: 1, marginLeft: 25 }}>
-              {ridersList.map(riderItem => (
+              {currentRide.get('riders').map(rider => (
                 <Avatar
-                  key={riderItem.key}
+                  key={rider.get('id')}
                   rounded
-                  source={riderItem.imgPath}
+                  source={{
+                    uri: `https://${rider.get('pictureUrl')}`,
+                  }}
                   showEditButton={false}
                   icon={{
                     name: 'md-person',
@@ -206,8 +208,16 @@ const Form = ({ handleOnSubmit, initialValues, validationSchema }) => (
 
 Form.propTypes = {
   handleOnSubmit: PropTypes.func.isRequired,
-  initialValues: PropTypes.shape({}).isRequired,
-  validationSchema: PropTypes.shape({}).isRequired,
+  currentRide: PropTypes.shape({
+    toJS: PropTypes.func,
+    getIn: PropTypes.func,
+    get: PropTypes.func,
+  }).isRequired,
+  selectedGroup: PropTypes.shape({
+    toJS: PropTypes.func,
+    getIn: PropTypes.func,
+    get: PropTypes.func,
+  }).isRequired,
 };
 
 export default Form;

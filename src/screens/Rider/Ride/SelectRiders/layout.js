@@ -2,12 +2,16 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Text, View, ScrollView } from 'react-native';
 import styled from 'styled-components';
-
 import { Icon } from 'react-native-elements';
-import { Container } from '../../../../components/Form/Elements';
 import { ExtendedGoBackButton } from '../../../../components/Header/Navigator';
 import Form from './form';
-import validationSchema from './validation';
+import {
+  fetchGroup,
+  createRide,
+  // createRide
+} from '../../../../redux/requests';
+import { Container } from '../../../../components/Form/Elements';
+import { getInitials } from '../../../../utils/string';
 
 const StyledContainer = styled(Container)`
   margin-top: 30px;
@@ -45,26 +49,100 @@ export default class SelectRiders extends Component {
     super(props);
 
     this.state = {
-      selected: [],
+      loading: false,
+      refreshing: false,
+      dataSource: [],
     };
   }
+
+  componentDidMount() {
+    this.getGroupRiders();
+  }
+
+  getGroupRiders = async () => {
+    this.setState({
+      loading: true,
+    });
+
+    const { setGroupRiders, groupId } = this.props;
+    setGroupRiders(groupId, []);
+
+    const { data } = await fetchGroup(groupId);
+
+    setGroupRiders(groupId, data.groupRiders);
+    const dataSource = data.groupRiders.map(item => ({
+      isSelect: false,
+      initials: getInitials(item.name),
+      ...item,
+    }));
+    this.setState({
+      loading: false,
+      refreshing: false,
+      dataSource,
+    });
+  };
 
   navigateTo = (destinationScreen, params = {}) => {
     const { navigation } = this.props;
     navigation.navigate(destinationScreen, params);
   };
 
+  handleRefresh = () => {
+    this.setState(
+      {
+        refreshing: true,
+      },
+      () => {
+        this.getGroupRiders();
+      },
+    );
+  };
+
+  handleOnSelected = selected => {
+    const { dataSource } = this.state;
+
+    const index = dataSource.findIndex(item => selected.id === item.id);
+    const newDataSource = [...dataSource];
+    const isSelect = !selected.isSelect;
+
+    newDataSource[index] = { ...selected, isSelect };
+
+    this.setState({
+      dataSource: newDataSource,
+    });
+  };
+
   handleOnSubmit = async (values, actions) => {
     try {
-      const { selected } = this.state;
-      const { updateSelectedAddress, location, navigation } = this.props;
+      const { dataSource } = this.state;
+      const {
+        updateSelectedAddress,
+        location,
+        navigation,
+        addToNewRide,
+        groupId,
+        setCurrentRide,
+        addRide,
+      } = this.props;
 
+      const mapRiders = dataSource
+        .filter(rider => rider.isSelect)
+        .map(rider => ({
+          id: rider.id,
+        }));
+      addToNewRide({ riders: mapRiders });
+      const { data } = await createRide();
+      addRide(data.data);
+      setCurrentRide(data.data.id);
+
+      // For some reason, this has to be here, after all redux changes
+      // otherwise, it'll fail
       updateSelectedAddress(location, navigation.state.params.selectedAddress);
 
       // This is avoiding submit button loading icon
       actions.setSubmitting(false);
 
-      navigation.navigate('Home', { userType: 'rider', groupId: selected });
+      navigation.navigate('Home', { userType: 'rider', groupId });
     } catch (error) {
       actions.setFieldError('general', error.message);
 
@@ -73,27 +151,12 @@ export default class SelectRiders extends Component {
     }
   };
 
-  handleOnAddRiderToGroup = async (values, actions) => {
-    try {
-      setTimeout(() => {
-        const { navigation } = this.props;
-        navigation.navigate('NewGroup', { userType: 'rider' });
-      }, 1500);
-    } catch (error) {
-      actions.setFieldError('general', error.message);
-    }
-  };
-
-  handleOnSelected = key => {
-    this.setState(prevState => ({
-      selected: prevState.selected.includes(key)
-        ? prevState.selected.splice(prevState.selected.indexOf(key), 1)
-        : [...prevState.selected, key],
-    }));
-  };
-
   render() {
-    const { selected } = this.state;
+    const { dataSource, loading, refreshing } = this.state;
+    const { selectedGroup } = this.props;
+    const groupName = selectedGroup && selectedGroup.get('name');
+    const countSelected = dataSource.filter(rider => rider.isSelect).length;
+
     return (
       <StyledContainer enabled behavior="">
         <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
@@ -109,19 +172,18 @@ export default class SelectRiders extends Component {
               disabled={false}
             />
 
-            <GroupTitle>Kid&apos;s School</GroupTitle>
+            <GroupTitle>{groupName}</GroupTitle>
           </IconContainer>
 
           <Form
+            dataSource={dataSource}
             handleOnSubmit={this.handleOnSubmit}
-            initialValues={{
-              userType: 2,
-              selected: '',
-            }}
-            validationSchema={validationSchema}
-            handleOnAddRiderToGroup={this.handleOnAddRiderToGroup}
+            handleOnAddRiderToGroup={() => this.navigateTo('NewGroup', { context: 'select-riders', userType: 'rider' })}
             handleOnSelected={this.handleOnSelected}
-            selected={selected}
+            loading={loading}
+            refreshing={refreshing}
+            handleRefresh={this.handleRefresh}
+            countSelected={countSelected}
           />
         </ScrollView>
       </StyledContainer>
@@ -130,6 +192,16 @@ export default class SelectRiders extends Component {
 }
 
 SelectRiders.propTypes = {
-  updateSelectedAddress: PropTypes.shape.isRequired,
-  location: PropTypes.shape.isRequired,
+  groupId: PropTypes.number.isRequired,
+  selectedGroup: PropTypes.shape({
+    toJS: PropTypes.func,
+    getIn: PropTypes.func,
+    get: PropTypes.func,
+  }).isRequired,
+  addToNewRide: PropTypes.func.isRequired,
+  setGroupRiders: PropTypes.func.isRequired,
+  updateSelectedAddress: PropTypes.func.isRequired,
+  location: PropTypes.string.isRequired,
+  setCurrentRide: PropTypes.func.isRequired,
+  addRide: PropTypes.func.isRequired,
 };

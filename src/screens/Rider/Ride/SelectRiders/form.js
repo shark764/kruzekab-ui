@@ -1,139 +1,151 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { View, Text, TouchableOpacity } from 'react-native';
 import { Formik } from 'formik';
-import { Avatar } from 'react-native-elements';
 import styled from 'styled-components';
-import FormButton from '../../../../components/Form/FormButton';
+import { ListItem, Icon } from 'react-native-elements';
+import {
+  View, FlatList, ActivityIndicator, Text,
+} from 'react-native';
 import { FormattedError } from '../../../../components/Form/ErrorMessage';
-import { BottomButtonContainer } from '../../../../components/Form/Elements';
+import { BottomButtonContainer, ButtonContainer } from '../../../../components/Form/Elements';
+import FormButton from '../../../../components/Form/FormButton';
 
-const SelectionContainer = styled(View)`
-  flex-direction: row;
-  margin-left: 35px;
-  margin-right: 35px;
-`;
 const ListContainer = styled(View)`
+  margin-left: 10px;
+  margin-right: 10px;
   flex: 1;
-  margin-left: 35px;
-  margin-right: 35px;
-  flex-direction: row;
-  justify-content: center;
+  position: relative;
+  border-top-width: 1px;
+  border-color: #bbb;
+  background-color: white;
 `;
-const OptionContainer = styled(View)`
-  margin-top: 10px;
+const LoadingIcon = styled(View)`
+  padding-vertical: 20px;
+  border-top-width: 1px;
+  border-color: #ced0ce;
+`;
+const IconContainer = styled(ButtonContainer)`
   margin-bottom: 5px;
-  padding-left: 5px;
-  padding-right: 5px;
-  padding-top: 20px;
-  padding-bottom: 10px;
-  background: #ffffff;
-  border: ${props => (props.selected ? '1px solid #5280E2;' : '1px solid #dde5f7')};
-  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.08);
-  border-radius: 6px;
+  flex-direction: row;
   align-items: center;
-  height: 150px;
-  width: 155px;
+  margin-left: 10px;
 `;
-const ContainerText = styled(View)`
-  flex: 1;
-  align-items: center;
-  flex-direction: column;
-  justify-content: center;
-`;
-const RiderTitle = styled(Text)`
+const LabelText = styled(Text)`
   font-family: Open Sans;
   font-style: normal;
-  font-size: 15px;
-  display: flex;
+  font-weight: normal;
+  font-size: 14px;
+  color: #6b768d;
+  justify-content: center;
   align-items: center;
-  font-weight: ${props => (props.selected ? '600' : 'normal')};
-  color: ${props => (props.selected ? '#5280e2' : '#6b768d')};
 `;
 
-const PhotoAvatar = props => (
-  <Avatar
-    rounded
-    icon={{
-      name: 'md-person',
-      type: 'ionicon',
-      color: '#5280e2',
+const CountSelected = styled(Text)`
+  font-family: Open Sans;
+  font-style: normal;
+  font-weight: normal;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  font-size: 16px;
+  color: #6b768d;
+  letter-spacing: 0.2px;
+`;
+
+const renderItem = (item, handleOnSelected) => (
+  <ListItem
+    roundAvatar
+    title={item.name}
+    leftAvatar={{
+      source: {
+        uri: `https://${item.pictureUrl}`,
+      },
+      title: item.initials,
+      size: 55,
     }}
-    overlayContainerStyle={{ backgroundColor: '#dde5f7' }}
-    activeOpacity={0.7}
-    size={80}
-    {...props}
+    onPress={() => handleOnSelected(item)}
+    // bottomDivider
+    titleStyle={{
+      width: 200,
+      fontFamily: 'Open Sans',
+      fontStyle: 'normal',
+      fontWeight: 'normal',
+      fontSize: 14,
+      color: '#6b768d',
+    }}
+    rightIcon={
+      item.isSelect
+        ? {
+          name: 'ios-checkmark-circle',
+          type: 'ionicon',
+          color: '#5280e2',
+        }
+        : {}
+    }
   />
 );
 
-const riders = [{ key: 1, title: 'Ben', imgPath: require('../../../../assets/edit-rider2.png') }];
-const riders2 = [
-  { key: 2, title: 'Claire', imgPath: require('../../../../assets/edit-rider.png') },
-  { key: 3, title: 'Amelia', imgPath: require('../../../../assets/edit-rider3.png') },
-];
+const renderFooter = loading => {
+  if (!loading) {
+    return null;
+  }
+
+  return (
+    <LoadingIcon>
+      <ActivityIndicator animating size="large" />
+    </LoadingIcon>
+  );
+};
 
 const Form = ({
-  handleOnSubmit,
-  initialValues,
-  validationSchema,
+  dataSource,
   handleOnSelected,
-  selected,
+  handleOnSubmit,
+  handleRefresh,
+  loading,
+  refreshing,
   handleOnAddRiderToGroup,
+  countSelected,
 }) => (
   <Formik
     enableReinitialize
-    initialValues={initialValues}
+    initialValues={{}}
     onSubmit={(values, actions) => {
       console.log('values =>', values);
       handleOnSubmit(values, actions);
     }}
-    validationSchema={validationSchema}
   >
     {({
       handleSubmit, errors, isValid, isSubmitting,
     }) => (
       <>
-        <SelectionContainer>
-          <ListContainer>
-            <TouchableOpacity onPress={handleOnAddRiderToGroup}>
-              <OptionContainer>
-                <PhotoAvatar />
+        <ListContainer>
+          <IconContainer>
+            <Icon
+              raised
+              reverse
+              type="ionicon"
+              name="md-person"
+              color="#dde5f7"
+              reverseColor="#5280e2"
+              size={25}
+              onPress={handleOnAddRiderToGroup}
+              disabled={false}
+            />
+            <LabelText>Add rider</LabelText>
+          </IconContainer>
 
-                <ContainerText>
-                  <RiderTitle>Add rider</RiderTitle>
-                </ContainerText>
-              </OptionContainer>
-            </TouchableOpacity>
-          </ListContainer>
+          <FlatList
+            data={dataSource}
+            renderItem={({ item }) => renderItem(item, handleOnSelected)}
+            keyExtractor={item => item.id.toString()}
+            ListFooterComponent={() => renderFooter(loading)}
+            onRefresh={handleRefresh}
+            refreshing={refreshing}
+          />
+        </ListContainer>
 
-          {riders.map(rider => (
-            <ListContainer key={rider.key}>
-              <TouchableOpacity onPress={() => handleOnSelected(rider.key)}>
-                <OptionContainer selected={selected.includes(rider.key)}>
-                  <PhotoAvatar source={rider.imgPath} />
-                  <ContainerText>
-                    <RiderTitle selected={selected.includes(rider.key)}>{rider.title}</RiderTitle>
-                  </ContainerText>
-                </OptionContainer>
-              </TouchableOpacity>
-            </ListContainer>
-          ))}
-        </SelectionContainer>
-
-        <SelectionContainer>
-          {riders2.map(rider => (
-            <ListContainer key={rider.key}>
-              <TouchableOpacity onPress={() => handleOnSelected(rider.key)}>
-                <OptionContainer selected={selected.includes(rider.key)}>
-                  <PhotoAvatar source={rider.imgPath} />
-                  <ContainerText>
-                    <RiderTitle selected={selected.includes(rider.key)}>{rider.title}</RiderTitle>
-                  </ContainerText>
-                </OptionContainer>
-              </TouchableOpacity>
-            </ListContainer>
-          ))}
-        </SelectionContainer>
+        <CountSelected>{`${countSelected} riders selected`}</CountSelected>
 
         {errors.general && <FormattedError errorValue={errors.general} />}
 
@@ -152,12 +164,23 @@ const Form = ({
 );
 
 Form.propTypes = {
-  handleOnSubmit: PropTypes.func.isRequired,
-  initialValues: PropTypes.shape({}).isRequired,
-  validationSchema: PropTypes.shape({}).isRequired,
   handleOnSelected: PropTypes.func.isRequired,
-  selected: PropTypes.shape([]).isRequired,
+  handleOnSubmit: PropTypes.func.isRequired,
+  dataSource: PropTypes.arrayOf(
+    PropTypes.shape({
+      name: PropTypes.string,
+      id: PropTypes.number,
+    }),
+  ).isRequired,
+  handleRefresh: PropTypes.func.isRequired,
+  loading: PropTypes.bool.isRequired,
+  refreshing: PropTypes.bool.isRequired,
   handleOnAddRiderToGroup: PropTypes.func.isRequired,
+  countSelected: PropTypes.number,
+};
+
+Form.defaultProps = {
+  countSelected: 0,
 };
 
 export default Form;

@@ -16,10 +16,6 @@ export const addToNewUser = payload => ({
   payload,
 });
 
-export const createUser = () => ({
-  type: 'CREATE_USER',
-});
-
 export const setUserData = payload => ({
   type: 'SET_USER_DATA',
   payload,
@@ -204,4 +200,19 @@ export const setPushServerToken = pushServerToken => ({
 export const setCurrentNotification = currentNotificationId => ({
   type: 'SET_CURRENT_NOTIFICATION',
   currentNotificationId,
+});
+
+export const addToNewRide = payload => ({
+  type: 'ADD_TO_NEW_RIDE',
+  payload,
+});
+
+export const addRide = payload => ({
+  type: 'ADD_RIDE',
+  payload,
+});
+
+export const setCurrentRide = rideId => ({
+  type: 'SET_CURRENT_RIDE',
+  rideId,
 });

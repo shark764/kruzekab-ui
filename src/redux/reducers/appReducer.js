@@ -31,6 +31,9 @@ const INITIAL_STATE = fromJS({
   notifications: [],
   currentNotificationId: '',
   pushServerToken: '',
+  newRide: {},
+  rides: [],
+  currentRideId: '',
 });
 
 const getItemIndex = (state, entity, itemId) => state.get(entity).findIndex(item => item.get('id') === itemId);
@@ -148,14 +151,6 @@ const appReducer = (state = INITIAL_STATE, action) => {
       return state.set('location', action.location);
     case 'UPDATE_CURRENT_POSITION':
       return state.set('currentPosition', fromJS(action.currentPosition));
-    case 'CREATE_USER': {
-      // const newUser = state.get('newUser').toJS();
-      // console.log('new user', newUser);
-
-      // sendData(newUser);
-
-      return state;
-    }
     case 'SET_EXTERNAL_CLIENTS': {
       console.log(JSON.stringify(action, null, 2));
 
@@ -211,6 +206,20 @@ const appReducer = (state = INITIAL_STATE, action) => {
       console.log(JSON.stringify(action, null, 2));
 
       return state.set('currentNotificationId', fromJS(action.currentNotificationId));
+    }
+    case 'ADD_TO_NEW_RIDE':
+      console.log(JSON.stringify(action, null, 2));
+
+      return state.mergeIn(['newRide'], fromJS(action.payload));
+    case 'SET_CURRENT_RIDE': {
+      console.log(JSON.stringify(action, null, 2));
+
+      return state.set('currentRideId', fromJS(action.rideId));
+    }
+    case 'ADD_RIDE': {
+      console.log(JSON.stringify(action, null, 2));
+
+      return state.update('rides', rides => rides.push(fromJS(action.payload)));
     }
     default:
       return state;
